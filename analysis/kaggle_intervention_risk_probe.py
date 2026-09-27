@@ -16,6 +16,8 @@ GENERATOR = Path("analysis/intervention_probe.py")
 DEST = Path("results/kaggle-intervention-risk-probe.json")
 EXPECTED_KIND = "frozen_synthetic_intervention_risk_vs_confidence_screen_not_benchmark_or_model_win"
 EXPECTED_GENERATOR_SHA256 = "0203b3157c322ecf5050af898b71ba8a78512e0bdb1f05e8c42a155c9a5422ae"
+EXPECTED_RECORDS_SHA256 = "6612571e3625e412eb24f3549e0d21dd3bcc0a609990a13e34ed3314aaa794d1"
+EXPECTED_SCREEN_SHA256 = "e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c"
 
 
 def _require(condition: bool, message: str) -> None:
@@ -31,6 +33,8 @@ def validate_report(report: dict, generator_sha256: str) -> dict:
     _require(report.get("composition_group_size") == 8, "Unexpected group size")
     _require(report.get("generator_sha256") == generator_sha256,
              "Kaggle used a different intervention generator")
+    _require(report.get("generated_records_sha256") == EXPECTED_RECORDS_SHA256,
+             "Kaggle generated different records than the pre-score audit")
     _require(generator_sha256 == EXPECTED_GENERATOR_SHA256,
              "Local generator changed after preregistration; revise before running")
     _require(report.get("sentence_model") == "sentence-transformers/all-MiniLM-L6-v2",
@@ -114,6 +118,9 @@ def main() -> None:
     if not SOURCE.is_file() or not GENERATOR.is_file():
         raise FileNotFoundError("Run from the repository root")
     generator_sha256 = hashlib.sha256(GENERATOR.read_bytes()).hexdigest()
+    screen_sha256 = hashlib.sha256(SOURCE.read_bytes()).hexdigest()
+    _require(screen_sha256 == EXPECTED_SCREEN_SHA256,
+             "Experiment screen changed after preregistration")
     _require(generator_sha256 == EXPECTED_GENERATOR_SHA256,
              "Generator hash differs from the frozen preregistration")
     _require(bool(os.environ.get("KAGGLE_API_TOKEN")), "KAGGLE_API_TOKEN is missing")
@@ -171,7 +178,7 @@ def main() -> None:
         DEST.write_text(json.dumps({
             "kaggle_ref": pinned,
             "github_sha": os.environ.get("GITHUB_SHA"),
-            "screen_source_sha256": hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
+            "screen_source_sha256": screen_sha256,
             "generator_sha256": generator_sha256,
             "orchestrator_validation": validation,
             **report,
