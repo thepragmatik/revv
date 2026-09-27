@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: kaggle-gpu-smoke
+  cancel-in-progress: false
+
 jobs:
   smoke:
     runs-on: ubuntu-latest
