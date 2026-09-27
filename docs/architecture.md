@@ -71,6 +71,25 @@ $L=\sum_{(s,\mathbf y)}\sum_{q,k}\alpha_k CE(p_{q,k}(s),y_q)+\beta\sum_{(s,s^e),
 
 The labels for both pair members teach affected fields to flip; the masked Jensen-Shannon term controls spillover elsewhere. Option-to-evidence contrastive loss is optional and requires reliable proof spans. This is close to published counterfactual and QA-consistency methods; only the verified sparse field mask coupled to stage-specific risk routing is being tested as a possible new interaction.
 
+## Follow-on hypothesis: local rebase before verifier routing
+
+This is a separate research candidate, not part of the frozen synthetic screen. After an edit, refresh the edited span and known dependent representation first. Then route only the expensive verifier by expected gold-loss reduction per measured CPU cost. If the model cannot bound which local representations depend on an edit, enlarge the refresh region or run the full encoder.
+
+```mermaid
+flowchart LR
+  E["Fact edit"] --> R["Refresh edited local representation"]
+  R --> H["Recompute cheap typed answers"]
+  H --> V["Verify fields with positive expected value"]
+```
+
+For field $j$, estimate the change in expected task loss from verification:
+
+$V_j=\mathbb E[L(p_j^{local},y'_j)-L(p_j^{verify},y'_j)\mid x_j]$.
+
+With independent per-field cost $c_j$, a Lagrange policy verifies when $V_j>\lambda c_j$. At a fixed cardinality budget, choosing the highest expected loss reductions is optimal by an exchange argument. If fields share retrieval or batching costs, optimize the measured set cost; independent gates may waste budget. The current registered screen tests $P(y'_j\ne y_j)$, which is only a proxy for this value because a verifier may fix or damage the cached answer.
+
+An optional low-rank edit-to-logit correction could reduce the cheap stage further, but it must be compared with exact local refresh and full recomputation. Repeated edits need drift measurements and a periodic exact rebase or calibrated fallback. None of these mechanisms has been validated on an independent workload yet.
+
 ## Stability and risk
 
 A margin-versus-drift bound can prove that an early head has the same argmax as the final head on the event every probability coordinate stays within a calibrated $\delta$. It does not prove the shared answer is correct. Keep it as an agreement diagnostic.
