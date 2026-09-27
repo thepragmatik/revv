@@ -2,7 +2,7 @@
 
 **[Plain explanation](../../docs/start-here.md) · [Lexical floor](../data/2026-09-27-clinc-lexical.md) · [CER-1 hypothesis](../../docs/ideas.md) · [Source access preflight](2026-09-27-internet-preflight.md) · [Codex handoff](../../codex/RESUME.md)**
 
-**Status: registered; one free T4 run pending.** This inexpensive falsifier asks whether token evidence improves a pooled representation on a real labelled decision task. It tests one component of CER-1, not the whole architecture, trained quality, or local CPU speed.
+**Status: complete, 27 September 2026.** This inexpensive falsifier asked whether token evidence improves a pooled representation on a real labelled decision task. It tests one component of CER-1, not the whole architecture, trained quality, or local CPU speed.
 
 ## Frozen comparison and fixed budget
 
@@ -19,3 +19,20 @@ Record known-intent closed accuracy, accuracy after deferral, known deferral, OO
 ## Falsifier and decision after the run
 
 Advance token evidence to a supervised comparison only if it has a positive paired benefit with meaningful uncertainty or a specific, reproducible OOS/related-label error reduction worth its extra measured compute. A broad cluster interval crossing zero or a slow MaxSim without a clear error benefit points to plain pooling for the first trained control. Favoring a method on these development examples does **not** earn a locked-test win; document selection bias. Both methods may lose to a fitted lexical baseline because natural-language label names are crude descriptors. Next train matched pooled and cross controls, test a multi-question evidence dataset, then measure an actual local CPU process under 8 GiB. Keep the 4 GiB quantized profile separate.
+
+## Observations and adversarial reading
+
+The [successful Actions run](https://github.com/thepragmatik/revv/actions/runs/36293473497) collected **one** private Kaggle `rathworx/revv-frozen-matching/1` T4 kernel. [Aggregate raw metrics](2026-09-27-frozen-matching.json) and [1,547 hashed predictions](2026-09-27-frozen-matching-predictions.jsonl) preserve its result. Pinned dataset hash, model revision, fold counts and GPU assertions passed. There were zero state inputs truncated at 64 tokens.
+
+| Development measure | Pooled cosine | Token MaxSim |
+| --- | ---: | ---: |
+| Known-intent closed accuracy, n=1,497 | **70.94%** | 67.67% |
+| Known accuracy after threshold; known deferred | 69.07%; 4.28% | 66.27%; 4.28% |
+| OOS recall, n=50 | **64%** (Wilson 95%: 50.1–75.9%) | 50% (36.6–63.4%) |
+| Synchronized GPU scoring per 32-example batch, median | 0.061 ms | 0.298 ms |
+
+On paired known cases, MaxSim minus pooled closed accuracy is **−3.27 percentage points** (1,000-label-cluster bootstrap 95%: −6.54 to −0.20). The MaxSim scoring kernel took about **4.9×** the pooled kernel's median time under this shared-encoding T4 setup. Those submillisecond values exclude encoding and CPU serving costs, include synchronization, and cannot establish a local latency ratio. The full 3,097 development/calibration input batch inference took 1.00 second on this GPU; the peak PyTorch CUDA allocation was 123,460,608 bytes, excluding all CPU process memory and CUDA context/allocator overhead.
+
+The [lexical development floor](../data/2026-09-27-clinc-lexical.md) attained 82.43% known closed accuracy and 36% OOS recall at a similarly calibrated known defer rate. Thus even pooled pretrained label matching trades *lower known accuracy* for *higher OOS recall* on these cases, not a quality win. A joined hashed-example check found 322 known utterances where lexical was correct and pooled failed, versus 148 in the other direction; 20 OOS examples rejected by pooled but missed by lexical versus six in the other direction. OOS has only 50 examples and wide intervals; do not claim an OOS population advantage yet. Both methods confuse related names: pooled `user_name → what_is_your_name` ten times and `calendar_update → calendar` ten times.
+
+**Decision:** reject untrained all-token MaxSim with underscore-derived label text as the default component. The pretrained checkpoint was tuned for sentence embeddings, and label names need not describe the user phrasing: these facts are plausible explanations, *not proven causes*. Before training a heavier verifier, screen frozen **class prototypes fit on labelled training utterances** against the same label-text vectors, and report first-stage candidate recall at `k=1,2,5,10`, OOS under the fixed threshold, and embedding acquisition cost. If prototypes recover known accuracy cheaply, the bottleneck was likely candidate representation; if not, move to a small supervised control and evidence-bearing dataset. This result neither disproves all learned token interaction nor validates CER-1 on long shared states. The locked test remains sealed.

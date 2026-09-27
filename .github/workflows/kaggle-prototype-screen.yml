@@ -1,0 +1,38 @@
+name: Kaggle frozen prototype screen
+
+on:
+  push:
+    branches: [research/decision-model-plan]
+    paths: [.github/workflows/kaggle-prototype-screen.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Kaggle CLI
+        run: python -m pip install --disable-pip-version-check kaggle==2.2.4
+      - name: Compare frozen label descriptions with fitted class prototypes on T4
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "KAGGLE_API_TOKEN missing from Actions secrets" >&2
+            exit 1
+          fi
+          python analysis/kaggle_prototype_screen.py
+      - name: Preserve aggregate report and hashed predictions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaggle-prototype-screen
+          path: results/kaggle-prototype-screen.json
+          if-no-files-found: ignore
