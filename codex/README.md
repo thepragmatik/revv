@@ -2,7 +2,7 @@
 
 **[Home](../README.md) · [Plain-English idea](../docs/start-here.md) · [Technical design](../docs/architecture.md)**
 
-This folder is the starting point for a new Codex session. It contains the present facts, working rules and a prompt you can paste into Codex. It is updated as experiments produce results.
+This folder is the starting point for a new Codex session. It preserves the user's original research brief, the explicit goal of inventing and testing novel architectures, the present facts, working rules and a prompt you can paste into Codex. It is updated as experiments produce results.
 
 ```mermaid
 flowchart TD
@@ -16,6 +16,7 @@ flowchart TD
 
 | Need | Read | Why |
 | --- | --- | --- |
+| Recover the original intent | [Original prompt](ORIGINAL_PROMPT.md), [research charter](MISSION.md) | Research temperament, novelty and later corrections. |
 | Tell Codex what to do | [Pasteable prompt](PROMPT.md) | Start a fresh session. |
 | See the actual state | [Resume brief](RESUME.md) | Evidence, current run and next action. |
 | Keep experiments honest | [Working rules](WORK_RULES.md) | Spending gates and evidence standards. |

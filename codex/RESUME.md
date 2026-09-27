@@ -1,10 +1,10 @@
 # Resume brief — 27 September 2026
 
-**[Handoff index](README.md) · [Pasteable prompt](PROMPT.md) · [Working rules](WORK_RULES.md) · [Plain explanation](../docs/start-here.md) · [Research sources](../docs/sources.md)**
+**[Original prompt](ORIGINAL_PROMPT.md) · [Research charter](MISSION.md) · [Handoff index](README.md) · [Pasteable prompt](PROMPT.md) · [Working rules](WORK_RULES.md) · [Plain explanation](../docs/start-here.md) · [Research sources](../docs/sources.md)**
 
 ## Mission and target
 
-Build and test a fast local text **decision model**: given a state and independent typed questions, return choice, yes/no or ordered-score probabilities, with a way to abstain when evidence is missing. Favor a single state encoding reused across questions only when it earns its speed *and* quality. Deployment gate is peak entire local CPU process RSS **below 8 GiB**; a separate quantized compact profile is **below 4 GiB**. English text is phase one; do not infer image, language or open-ended planning support. See the [reader-friendly overview](../docs/start-here.md) and [technical architecture](../docs/architecture.md).
+Invent and rigorously test **novel architectural ideas** for a fast local text **decision model**: given a state and independent typed questions, return choice, yes/no or ordered-score probabilities, with a way to abstain when evidence is missing. Research ModernBERT, CLIP-style contrastive learning, Laya, Kev and adjacent prior art; combine ideas only with a falsifiable reason and adversarial review. Favor a single state encoding reused across questions only when it earns its speed *and* quality. Deployment gate is peak entire local CPU process RSS **below 8 GiB**; a separate quantized compact profile is **below 4 GiB**. English text is phase one; do not infer image, language or open-ended planning support. See the [reader-friendly overview](../docs/start-here.md), [research charter](MISSION.md) and [technical architecture](../docs/architecture.md).
 
 The user has ChatGPT Pro and wants Codex to research, orchestrate and evaluate GPU experiments. Kaggle supplies free GPU capacity separately; Codex is the controller. The user has verified the Kaggle account by phone and already set `KAGGLE_API_TOKEN` as a **GitHub Actions repository secret**. The Actions bridge works; do not ask for the token again. Free Colab agent integration is optional and unvalidated here. Never spend money or start a long train cycle without a specific registered budget.
 
