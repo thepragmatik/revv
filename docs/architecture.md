@@ -2,6 +2,8 @@
 
 **[Home](../README.md) · [Plain explanation](start-here.md) · [Evidence](research.md) · [Tests](evaluation.md)**
 
+The [conditional evidence reuse hypothesis ledger](ideas.md) records a possible novel task-specific combination, its closest known alternatives and cheap falsifiers. It is not a validated model.
+
 ## First candidate: a shared-state decision encoder
 
 ```mermaid
