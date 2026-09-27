@@ -24,6 +24,7 @@
     "pass": true
   },
   "generator_sha256": "0203b3157c322ecf5050af898b71ba8a78512e0bdb1f05e8c42a155c9a5422ae",
+  "registered_screen_sha256": "e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c",
   "generated_records_sha256": "6612571e3625e412eb24f3549e0d21dd3bcc0a609990a13e34ed3314aaa794d1",
   "model_scores_computed": false,
   "limitations": [
