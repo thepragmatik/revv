@@ -1,70 +1,88 @@
 # Architecture hypotheses
 
-**[Home](../README.md) · [Plain explanation](start-here.md) · [Research](research.md) · [Ideas](ideas.md) · [Evaluation](evaluation.md)**
+**[Home](../README.md) · [Plain-English view](start-here.md) · [Research](research.md) · [Novelty audit](novelty-audit.md) · [Ideas](ideas.md) · [Evaluation](evaluation.md)**
 
-The original mission is to find a genuinely useful new local decision model, not to relabel familiar parts as a new architecture. The strongest remaining technical question is whether a set of independent typed questions about one state can use different exit depths while paying to encode that state only once. The exact novelty gap is unverified.
+The mission is a very fast local model for typed text decisions. The design must earn both quality and speed. Small size, GPU throughput or agreement with a model's own full-depth answer is not enough.
 
-## Candidate: question exits over one shared state pass
+## Candidate to screen: shared state and selective typed verification
 
-~~~~mermaid
+Encode a long state once into token or sentence features. Each request-time field first uses a low-cost typed scorer. If that field's calibrated risk warrants it, run question-conditioned evidence verification over selected cached spans or a compact field-specific adapter, then return a choice/boolean/ordinal distribution or abstain. Minimal fact-edit pairs with verified changed-field masks supervise sensitivity and stability.
+
+Candidate backbones include ModernBERT-like bidirectional encoders and compact recurrent/state-space models such as Primus Decision. Do not commit to ModernBERT solely because it is named in the original prompt: compare size, preprocessing, CPU kernels, long-state behavior and task quality first. Laya, Kev, Typical, Decider, Primus and RSI-Jev are direct baselines where task contracts align.
+
+A CLIP-style dual encoder is a candidate for the cheap field/evidence match, not a foregone choice. Train it only if exact support evidence and hard negatives are available and retrieval recall clears a preregistered floor. Our untrained token-MaxSim pilot lost to pooled scoring, and earlier ContractNLI evidence retrieval did not establish a deployable verifier. A high-scoring cheap retriever with missed decisive evidence cannot be repaired by downstream confidence.
+
+## Risk-priced verification and shared cost
+
+For a request with features $x$, question $q$ at depth $d_q$ has estimated conditional task loss $r_q(x,d_q)$ and measured or profiled branch cost $B_q(x,d_q)$. Advancing the shared state encoder once to depth $m$ costs $A_x(m)$, where $m=\max_q d_q$. The separable expected-loss objective is:
+
+$J_x(\mathbf d)=\sum_qr_q(x,d_q)+\lambda\left[A_x(\max_qd_q)+\sum_qB_q(x,d_q)\right].$
+
+Interpret each depth $d_q$ as a verification stage: cheap typed match, selective evidence cross-attention, then optional full field verifier. Choose $\lambda$ on development data to expose a latency/task-risk frontier, not on locked labels. Estimate $r_q$ against gold task labels, using cross-fitting and a separate calibration split; confidence or agreement with the final model is only an input feature. Evaluate request-level any-error rate separately because it is not separable.
+
+For a per-field stage change from $k$ to $k+1$, the Lagrangian test is:
+
+$r_q(x,k)-r_q(x,k+1)>\lambda\left(B_q(x,k+1)-B_q(x,k)\right).$
+
+In words, spend more only when the expected gold-loss reduction exceeds the measured extra compute price. With no shared-depth term and no hard bundle cap, this decision separates by field. A hard per-request budget couples fields and becomes a small discrete allocation problem; a shared deeper trunk reintroduces the maximum-depth cost handled by the exact $O(QL)$ solver below. Measure which regime the implementation actually has.
+
+For each possible maximum depth $m$, define $g_q(x,d)=r_q(x,d)+\lambda B_q(x,d)$ and $G_q(x,m)=\min_{d\le m}g_q(x,d)$. One question must reach $m$, so force the least-cost question to do so:
+
+$J_{x,m}=\lambda A_x(m)+\sum_qG_q(x,m)+\min_q[g_q(x,m)-G_q(x,m)].$
+
+Choose the minimum across $m$. This gives an exact $O(QL)$ allocator for the stated additive objective. See [analysis/check_shared_cost_solver.py](../analysis/check_shared_cost_solver.py), which checks it against exhaustive search on deterministic randomized small problems. The derivation assumes additive per-question loss, deterministic cumulative costs and no unmodeled joint execution overhead. If all fields use the same shared encoder depth, the maximum-depth externality remains. If only the state cache is shared and verifiers are separate, the shared cost is constant and a request budget becomes a small multiple-choice knapsack; compare against independent thresholds. Do not force a joint optimizer where it adds no value.
+
+```mermaid
 flowchart TD
-    D["Document state"] --> E["Advance shared layers once"]
-    E --> C["Cached state at layer l"]
-    C --> Q["Score active typed questions"]
-    Q --> X{"Exit rule passes?"}
-    X -->|Yes| F["Freeze this answer"]
-    X -->|No| E
-    F --> A{"Any active question?"}
-    A -->|Yes| E
-    A -->|No| P["Return distributions"]
-~~~~
+    S["Long state"] --> E["Shared encoder/cache"]
+    Q["Typed fields and options"] --> C["Cheap evidence matching"]
+    E --> C
+    C --> R["Gold-task risk estimate"]
+    R --> P["Selective compute policy"]
+    P --> V["Verify high-risk fields"]
+    E --> V
+    V --> O["Typed probabilities or abstention"]
+```
 
-For each depth l, compute a state representation or prefix cache $D^{(l)}$ once. Every unfinished question q reads that representation and its own options through a contextual scoring head, producing $p_q^{(l)}$. A question branch stops when its registered output-stability rule passes. Questions that stop no longer consume branch computation. The shared state advances only to serve questions that remain unresolved.
+## Why bundle size matters
 
-A causal prefix model naturally reuses layerwise state key/value caches. A compact encoder with a separate state path and question cross-attention is another implementation. Choose one only after reading the exact competitor code and measuring an operation-count prototype; do not mix both in the first experiment.
+If per-question exit depth has cumulative distribution $F$, then under independence the probability that the whole bundle exits by layer $m$ is $F(m)^Q$. Real question difficulty is correlated, so this is only intuition; measure maximum depth by actual request bundle.
 
-### Stability and calibration
+Example, not a measurement: if each question has an 80% chance of exiting by layer $m$, only about 33% of five-question bundles and 1.2% of twenty-question bundles have every branch exit by that layer. Average exit rate alone cannot show shared-encoder savings.
 
-For calibration bundle i, define:
+## Candidate comparison matrix
 
-$Z_i = max_{l in E, q in Q_i, c in C_{iq}} |p_{iqc}^{(l)} - p_{iqc}^{(L)}|$
+| Path | Shared trunk | Question head | Purpose |
+| --- | --- | --- | --- |
+| Full-depth shared | One state pass to final layer | All questions score at final depth | Accuracy and latency reference |
+| Fixed shallow tap | One state pass to chosen depth | All questions score there | Static early-depth baseline |
+| Independent threshold | Questions choose exits separately | Each q uses confidence/stability gate | Tests joint cost accounting |
+| Intervention/risk-gated verification | State cached once | Only high-risk typed fields pay verifier cost | Candidate weave to screen |
+| Direct compact model | Architecture-specific | Native typed outputs | Strongest practical competitor |
+| IPPD on generative models | Shared context in one packed prompt | Parallel autoregressive outputs | Relevant GPU prior art, not the same CPU typed task |
 
-E is the finite set of allowed exit layers; L is the final layer. A conformal quantile of these whole-bundle maxima gives a marginal bound under exchangeability of calibration and deployment bundles. Use the same held-out calibration set for all question types and option counts only if the bundle construction reflects deployment; otherwise stratify or report coverage failures.
+For adaptive execution, verify dynamic compaction or bucketing. Merely masking exited questions in a dense batch may save no CPU work.
 
-At inference, a categorical branch can exit when its current top-two probability margin is greater than twice the calibrated coordinate-drift bound. On the event that every coordinate changes by at most delta, the top class cannot change:
+## Intervention-supervised training idea
 
-$p_{top}^{(L)} - p_{runner}^{(L)} \geq (p_{top}^{(l)} - p_{runner}^{(l)}) - 2 delta$
+For each verified state edit $e$, annotate the field set $A(e)$ whose gold labels change. At each stage $k$, supervise both factual/counterfactual gold distributions and regularize only unaffected fields:
 
-This preserves the full model's argmax under the stated event. It does not prove the full model's answer is true, and it does not prove early probability vectors are calibrated. Report both reference agreement and task correctness. For ordinal decisions, bound expected score drift directly; a top-level category guarantee alone is insufficient.
+$L=\sum_{(s,\mathbf y)}\sum_{q,k}\alpha_k CE(p_{q,k}(s),y_q)+\beta\sum_{(s,s^e),k}\sum_{q\notin A(e)}JS(p_{q,k}(s),p_{q,k}(s^e)).$
 
-Use intermediate heads trained with a small combination of gold-label loss and distillation from the same model's full-depth outputs. Distillation only teaches the student to approximate its teacher. Keep human/exact labels in the objective where available. Counterfactual fact edits and criterion changes are useful checks, but Nimble already publishes a related data-curation method, so they are not a novelty claim.
+The labels for both pair members teach affected fields to flip; the masked Jensen-Shannon term controls spillover elsewhere. Option-to-evidence contrastive loss is optional and requires reliable proof spans. This is close to published counterfactual and QA-consistency methods; only the verified sparse field mask coupled to stage-specific risk routing is being tested as a possible new interaction.
 
-## Compute model
+## Stability and risk
 
-Let A(l) be state encoding cost through layer l, B_q(l) question and option cost through l, and H all control, calibration and serving overhead:
+A margin-versus-drift bound can prove that an early head has the same argmax as the final head on the event every probability coordinate stays within a calibrated $\delta$. It does not prove the shared answer is correct. Keep it as an agreement diagnostic.
 
-$T_{fixed}=A(L)+sum_q B_q(L)$
+Primary risk measures are gold-task loss, probability quality, abstention coverage and request-level probability of at least one incorrect decision. Calibrate on separate bundles grouped by state, source and question composition; keep locked tests unopened until the policy is fixed.
 
-$T_{adaptive}=A(max_q d_q)+sum_q B_q(d_q)+H$
+## Ablation order
 
-$T_{separate}=sum_q [A(d_q)+B_q(d_q)]$
+1. Profile a shared context pass, typed field head, evidence retrieval and cross-attention verifier separately. If per-field work is negligible, stop the routing idea.
+2. Build grouped RuleTaker/ProofWriter examples with theorem-prover gold evidence, fact edits and verified affected-field sets.
+3. Collect cheap and deep outputs, gold loss and end-to-end CPU costs without updating the backbone.
+4. Compare cheap-only, fixed verification, per-field margin threshold, calibrated task-risk routing and direct compact models on Q=1/5/20.
+5. Train intervention/contrastive/risk components only if the frozen probe shows an external-source quality gap and useful branch-level compute headroom.
 
-The first possible benefit is avoiding repeated state encoding compared with separately running each question. The second is dropping easy question branches before the deepest active layer. The cost of per-layer checks and cache management must be included. If one query requires the last layer, A(max d_q) still reaches L; query-branch savings may remain, but state-layer savings do not. For a single short question, a direct model can remain faster.
-
-Measure tokens-to-output wall time on CPU for state lengths 128/512/2,048, Q=1/5/20 questions and K=2/5/20 options. Record p50/p95/p99, cold and warm start, per-state and per-decision latency, throughput, peak process RSS, and the exit-depth distribution. Test batch 1 and the registered concurrency separately.
-
-## Smallest experiment ladder
-
-| Variant | What it answers | Disposition |
-| --- | --- | --- |
-| Full-depth typed baseline | Quality and speed reference | Required. |
-| Static shallow tap | Does a fixed cut already give most of the speed? | Required cheap control. |
-| Per-question early exit without state reuse | Value of adaptive depth alone | Required control. |
-| Shared state, fixed depth | Value of state reuse | Required control. |
-| Shared state, question exits | Value of the proposed interaction | Run only after a layerwise probe shows headroom. |
-| Criterion/evidence factorization | Potential quality gain and compositional transfer | Secondary ablation, after direct overlap checks. |
-| Quantized runtime | Compact-device behavior and quality drift | Separate final profile. |
-
-The primary memory gate is full process RSS below 8 GiB. A separate quantized profile must be measured below 4 GiB. Do not equate parameter count, GPU memory or model file size with deployed process memory.
-
-Python/PyTorch remains the research and training path. Start CPU inference comparisons with the checkpoint's supported runtime; use ONNX Runtime for an encoder only when an export has equivalent outputs. A Rust wrapper is warranted only if profiling finds Python overhead large enough to change the end-to-end result.
+Training and export details are gated in [next steps](next-steps.md); the task contract and memory limits are in [evaluation](evaluation.md).

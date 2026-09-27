@@ -15,6 +15,7 @@ flowchart LR
 | Friendly explanation | [The idea](docs/start-here.md) | [Roadmap](docs/roadmap.md) |
 | Evidence and competitors | [Research landscape](docs/research.md) | [Source ledger](docs/sources.md) |
 | Technical design | [Architecture](docs/architecture.md) | [Evaluation contract](docs/evaluation.md) |
+| Novelty and nearest prior art | [Third overlap audit](docs/novelty-audit.md) | [Hypothesis ledger](docs/ideas.md) |
 | Novel hypotheses to test | [Idea ledger](docs/ideas.md) | [Next steps and gates](docs/next-steps.md) |
 | Challenge a promising result | [Red-team ledger](docs/red-team.md) | [Evaluation contract](docs/evaluation.md) |
 | Feasibility and compute costs | [Analytical screen](docs/feasibility.md) | [Roadmap](docs/roadmap.md) |
@@ -23,7 +24,7 @@ flowchart LR
 | See what happened so far | [Findings in plain English](docs/start-here.md#what-the-first-experiments-found) | [Raw experimental records](codex/RESUME.md#verified-evidence-and-current-status) |
 | To resume in Codex | [Codex handoff](codex/README.md) | [Current brief](codex/RESUME.md) |
 
-**Research question:** can an **under-8 GiB peak-memory** local CPU process make typed text decisions faster, with acceptable or superior accuracy and probabilities, than eligible open decision models on the **same tasks and hardware**? A separate **under-4 GiB quantized profile** tests constrained devices. Our current, unproven hypothesis is that several questions can share one state pass while each question exits at its own depth under a bundle-level stability check. Shared state, typed scoring and early exit each have prior art, so this exact intersection needs a direct overlap search and a cheap layerwise probe before any training. Direct baselines now include Primus Decision, RSI-Jev, Laya, Kev, Typical and Decider. Hosted Jev is a separate quality comparator; its network time is not a local CPU speed result. “Fastest” will always be qualified by hardware and workload.
+**Research question:** can an **under-8 GiB peak-memory** local CPU process make typed text decisions faster, with acceptable or superior accuracy and probabilities, than eligible open decision models on the **same tasks and hardware**? A separate **under-4 GiB quantized profile** tests constrained devices. The higher-upside hypothesis is a shared state encoding, cheap typed/evidence scores, verified fact-edit masks, and risk-gated selective verification. AdaMTL already covers task-aware compute over a shared encoder; Nimble covers typed multi-field reuse and fact-edit data; QA cascades cover progressive verification. We will test this weave without calling it novel unless code review and matched evidence justify that claim. See the [novelty audit](docs/novelty-audit.md), [architecture](docs/architecture.md) and [gated plan](docs/next-steps.md). “Fastest” will always be qualified by hardware and workload.
 
 **Initial choices:** Python for research and training, ONNX Runtime for first CPU inference; consider a Rust wrapper only after profiling. English text first; multilingual and multimodal claims need separate tests. No benchmark has yet established a win.
 
