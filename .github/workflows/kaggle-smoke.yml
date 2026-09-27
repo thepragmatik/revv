@@ -1,6 +1,9 @@
 name: Kaggle GPU smoke
 
 on:
+  push:
+    branches: [research/decision-model-plan]
+    paths: [.github/workflows/kaggle-smoke.yml]
   workflow_dispatch:
 
 permissions:
