@@ -31,10 +31,13 @@ jobs:
           reference = f'{api.config_values["username"]}/revv-gpu-smoke/1'
           response = api.kernels_status(reference)
           print(f'Status: {response.status}; failure: {response.failure_message}')
-          with tempfile.TemporaryDirectory() as folder:
-              api.kernels_pull(reference, folder, metadata=True)
-              metadata = json.loads(next(Path(folder).rglob('kernel-metadata.json')).read_text())
-              print({key: metadata.get(key) for key in ('enable_gpu', 'machine_shape', 'is_private', 'enable_internet')})
+          try:
+              with tempfile.TemporaryDirectory() as folder:
+                  api.kernels_pull(reference, folder, metadata=True)
+                  metadata = json.loads(next(Path(folder).rglob('kernel-metadata.json')).read_text())
+                  print({key: metadata.get(key) for key in ('enable_gpu', 'machine_shape', 'is_private', 'enable_internet')})
+          except Exception as error:
+              print(f'Metadata unavailable: {type(error).__name__}: {error}')
           print('Last 8000 characters of kernel execution log:')
           print(api.kernels_logs(reference)[-8000:])
           PY
@@ -42,3 +45,4 @@ jobs:
         env:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
         run: kaggle quota
+        continue-on-error: true
