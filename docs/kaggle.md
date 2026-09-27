@@ -13,3 +13,5 @@ The secret belongs in **repository Settings → Secrets and variables → Action
 Kaggle staff say accelerator use requires a phone-verified account. If a different account has no accelerator option, check [Kaggle account settings](https://www.kaggle.com/settings) and reload the **notebook editor** after verification. The saved output page and account settings are different views.
 
 See [the roadmap](roadmap.md) for the model experiment stages and [the evaluation contract](evaluation.md) for what counts as a decision model result.
+
+**Next bounded experiment:** the [registered synthetic forward-pass pilot](../experiments/kaggle/2026-09-27-forward-pilot.md) compares repeated cross encoding with state reuse on the T4. Its [Actions workflow](../.github/workflows/kaggle-forward-pilot.yml) has a five-minute Kaggle cap and stores raw timing rows as an artifact. This only screens GPU compute topology; quality, CPU speed and the deployment memory target require separate measurements.

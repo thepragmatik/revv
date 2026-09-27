@@ -12,8 +12,6 @@ A [quota check](https://github.com/thepragmatik/revv/actions/runs/36290063376) r
 
 **Account follow-up:** the owner confirmed the Kaggle account is not phone verified and sees no Accelerator option under notebook Settings. Kaggle staff [state that phone verification is required](https://www.kaggle.com/discussions/product-feedback/451678) for accelerator use and recommend reloading the editor after completing it. This explains the missing UI control; the failed API allocation has not been isolated independently from account eligibility.
 
-## Decision
-
 ## After verification
 
 The [second run](https://github.com/thepragmatik/revv/actions/runs/36290661389) reached CUDA but failed when the probe reset its peak-memory counter before allocating tensors. This is a probe implementation error. We removed that optional reset, leaving the calculation and post-run memory read intact.
