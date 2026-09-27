@@ -1,6 +1,6 @@
 # Edit-aware typed-output refresh screen
 
-**Status: pre-score power check passed; both Kaggle collection windows expired while the same private kernel remained QUEUED. No inference, model scores, or result artifact.**
+**Status: the held-out changed-label count passed its registered minimum (74 fields across 22 groups), but no effect-size power analysis was performed. Both Kaggle collection windows expired while the same private kernel remained QUEUED; no inference, model scores, or result artifact.**
 
 **Execution log:** [Initial Action 36314796409](https://github.com/thepragmatik/revv/actions/runs/36314796409) submitted private kernel `rathworx/revv-intervention-risk-probe/1`; it stayed QUEUED for the full 14-minute collector window and ended before inference. [Recovery Action 36315661095](https://github.com/thepragmatik/revv/actions/runs/36315661095) checked the same version 99 times over 25 minutes; every observation was QUEUED. It timed out at 11:50:18 UTC, before inference. Neither attempt produced model scores or a result artifact, and no duplicate kernel was submitted. Details: [initial queue record](2026-09-27-intervention-risk-queue-timeout.json) · [recovery timeout record](2026-09-27-intervention-risk-recovery-timeout.json). This is provider scheduling, not a model result; preregistered methods and gates remain unchanged.
 
@@ -48,7 +48,7 @@ Also report fresh full shared-head recomputation, direct full-state NLI after th
 
 **Primary outcome:** on the held-out Q=20 fields, change recall at a 25% verification budget. Compare edit-risk routing with confidence-only routing using a paired bootstrap that resamples whole rule-composition groups (2,000 replicates).
 
-The pre-score audit has 74 positives among 4,800 held-out Q20 fields (1.54%). A uniform random 25% selector has expected change recall 25%, or 18.5 selected changed fields; this is a mathematical expectation, while the run reports its deterministic hash-control result. The registered +10-point minimum over confidence corresponds to roughly eight additional changed fields at this sample size.
+The pre-score audit has 74 positives among 4,800 held-out Q20 fields (1.54%). A uniform random 25% selector has expected change recall 25%, or 18.5 selected changed fields; this is a mathematical expectation, while the run reports its deterministic hash-control result. The registered +10-point minimum over confidence corresponds to roughly eight additional changed fields at this sample size. The count screen does not estimate power for the +10-point effect plus positive-bootstrap-lower-bound gate: risk/confidence discordance and group-level variance are unknown until scores exist. Passing the count minimum is not a statistical-power guarantee.
 
 Keep this risk feature for a real-data discriminator only if all conditions hold:
 
