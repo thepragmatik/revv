@@ -12,6 +12,7 @@ def valid_report():
         "composition_group_size": 8,
         "composition_groups": 128,
         "generator_sha256": collector.EXPECTED_GENERATOR_SHA256,
+        "generated_records_sha256": collector.EXPECTED_RECORDS_SHA256,
         "groups_by_split": {"fit": 81, "calibration": 17, "heldout": 30},
         "states_by_split": {"heldout": 240},
         "sentence_model": "sentence-transformers/all-MiniLM-L6-v2",
