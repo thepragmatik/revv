@@ -8,7 +8,7 @@ A request has state, independently evaluated questions and typed responses (`yes
 
 | Role | Candidate primary dataset | Split rule / caveat |
 | --- | --- | --- |
-| Intent, unknown | [CLINC150](sources.md#s12), [BANKING77](sources.md#s13) | Train/dev on designated domains, reserve other domains and label descriptions for transfer. CLINC's out-of-scope examples test `NONE`; audit BANKING77 label errors. |
+| Intent, unknown | [CLINC150](sources.md#s12), [BANKING77](sources.md#s13) | Train/dev on designated domains, reserve other domains and label descriptions for transfer. CLINC's out-of-scope examples test `NONE`; its [first train/validation audit](../experiments/data/2026-09-27-clinc-audit.md) found three exact normalized overlaps across splits, two with conflicting labels. Quarantine before baselines. Audit BANKING77 label errors. |
 | Boolean evidence | [BoolQ](sources.md#s14), [ANLI](sources.md#s15) | Use supplied context; adversarial negation/entailment as separate slices. Keep related passages and templates in one partition. |
 | Multi-label | [GoEmotions](sources.md#s16) | Treat labels as independent binary targets, not one forced softmax. Ordinal score needs its own annotated rubric; do not recast emotions as severity without labels. |
 | Multilingual, later | [MASSIVE](sources.md#s17) | Per-language reporting; keep translated siblings together across splits. |

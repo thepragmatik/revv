@@ -1,0 +1,49 @@
+{
+  "kind": "pinned_public_clinc_train_val_integrity_audit_not_model_result",
+  "source_commit": "828f8093932c8fe6ca7936c3d2e52903b1c523de",
+  "source_url": "https://raw.githubusercontent.com/clinc/oos-eval/828f8093932c8fe6ca7936c3d2e52903b1c523de/data",
+  "data_blob_sha1": "7a7b26c5f2dfbbf213f3e67d2dd0727e1af545aa",
+  "data_sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0",
+  "domains_blob_sha1": "60a74358e52060e60b6128ae4efe679e9d6ba69c",
+  "domains_sha256": "b947b579d3b8e74b06f93b01083d8efaff2888b43a3e362533bd88a6e1211b3a",
+  "license": "CC BY 3.0 (upstream LICENSE); attribute original authors; do not commit raw examples",
+  "examined_partitions": [
+    "train",
+    "val",
+    "oos_train",
+    "oos_val"
+  ],
+  "locked_test_examples_examined": 0,
+  "train_examples": 15100,
+  "val_examples": 3100,
+  "train_oos": 100,
+  "val_oos": 100,
+  "in_scope_intents": 150,
+  "domain_intent_counts": {
+    "banking": 15,
+    "credit_cards": 15,
+    "kitchen_and_dining": 15,
+    "home": 15,
+    "auto_and_commute": 15,
+    "travel": 15,
+    "utility": 15,
+    "work": 15,
+    "small_talk": 15,
+    "meta": 15
+  },
+  "train_in_scope_min_max": [
+    100,
+    100
+  ],
+  "val_in_scope_min_max": [
+    20,
+    20
+  ],
+  "train_normalized_duplicate_rows": 0,
+  "val_normalized_duplicate_rows": 0,
+  "train_conflicting_label_texts": 0,
+  "val_conflicting_label_texts": 0,
+  "train_val_exact_normalized_overlap_texts": 3,
+  "train_val_conflicting_label_texts": 2,
+  "scope_limit": "Exact normalized duplicates only; does not detect paraphrase/template families. Test examples and benchmark quality are not audited."
+}
