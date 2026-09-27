@@ -89,7 +89,25 @@ For field \(i\), the relevant target is the expected *signed* change in task los
 v_i = \mathbb{E}\left[\ell(\hat{y}^{\mathrm{cached}}_i,y_i)-\ell(\hat{y}^{\mathrm{refresh}}_i,y_i)\mid z_i\right].
 \]
 
-Here \(z_i\) contains the pre-edit state, query, edit and available cached evidence. Positive \(v_i\) means refreshing is expected to correct more loss than it introduces. For an **at-most** budget with equal per-field cost, select the largest positive \(v_i\) values up to the limit. The current preregistered exact 10/25/50% screens instead select exactly the top \(k\), regardless of sign. With variable per-field costs, solve:
+Here \(z_i\) contains the pre-edit state, query, edit and available cached evidence. For 0–1 loss, define \(y_i^-\) and \(y_i^+\) as the old and edited gold labels. The per-field utility is:
+
+\[
+u_i =
+\mathbf{1}[\hat y_i^{\mathrm{cached}}\ne y_i^+]
+-
+\mathbf{1}[\hat y_i^{\mathrm{refresh}}\ne y_i^+].
+\]
+
+Positive \(u_i\) is a repair; negative \(u_i\) is a verifier regression. A label-flip indicator equals utility only in the special case where the cached answer is correct on the old state and the refreshed answer is correct on the edited state. Otherwise a flip may yield no repair, and a non-flip may still allow correction:
+
+| Gold old → edited | Cached answer | Refreshed answer | Gold flips? | Utility |
+| --- | --- | --- | --- | --- |
+| false → true | false | true | Yes | +1 |
+| false → true | false | false | Yes | 0 |
+| true → true | false | true | No | +1 |
+| true → true | true | false | No | -1 |
+
+So the target \(v_i=\mathbb{E}[u_i\mid z_i]\) is stricter than predicting whether the gold label changes. For an **at-most** budget with equal per-field cost, select the largest positive \(v_i\) values up to the limit. The current preregistered exact 10/25/50% screens instead select exactly the top \(k\), regardless of sign. With variable per-field costs, solve:
 
 \[
 \max_{a_i\in\{0,1\}} \sum_i a_i v_i
