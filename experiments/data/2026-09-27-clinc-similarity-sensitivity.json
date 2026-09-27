@@ -1,0 +1,61 @@
+{
+  "kind": "clinc_dev_nearest_train_char_tfidf_similarity_sensitivity_not_new_test",
+  "source_sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0",
+  "prediction_artifacts": [
+    "experiments/data/2026-09-27-clinc-lexical-predictions.jsonl",
+    "experiments/kaggle/2026-09-27-prototype-screen-predictions.jsonl"
+  ],
+  "train_rows_including_oos": 15100,
+  "development_rows": 1547,
+  "features_fit": 44516,
+  "nearest_train_char_3_to_5gram_cosine_median_p90_p95": [
+    0.5675007971826347,
+    0.7993403658714228,
+    0.8495404755715211
+  ],
+  "strata": {
+    "low_lt_0.8": {
+      "rows": 1394,
+      "known": 1344,
+      "oos": 50,
+      "nearest_train_label_matches_known": 0.7849702380952381,
+      "known_after_defer_lexical": 0.7931547619047619,
+      "known_after_defer_prototype": 0.8779761904761905,
+      "oos_recall_lexical": 0.36,
+      "oos_recall_prototype": 0.86
+    },
+    "middle_0.8_to_lt_0.95": {
+      "rows": 145,
+      "known": 145,
+      "oos": 0,
+      "nearest_train_label_matches_known": 0.9793103448275862,
+      "known_after_defer_lexical": 0.9379310344827586,
+      "known_after_defer_prototype": 0.9310344827586207,
+      "oos_recall_lexical": null,
+      "oos_recall_prototype": null
+    },
+    "high_ge_0.95": {
+      "rows": 8,
+      "known": 8,
+      "oos": 0,
+      "nearest_train_label_matches_known": 1.0,
+      "known_after_defer_lexical": 0.75,
+      "known_after_defer_prototype": 0.875,
+      "oos_recall_lexical": null,
+      "oos_recall_prototype": null
+    },
+    "all": {
+      "rows": 1547,
+      "known": 1497,
+      "oos": 50,
+      "nearest_train_label_matches_known": 0.8049432197728791,
+      "known_after_defer_lexical": 0.8069472277889111,
+      "known_after_defer_prototype": 0.8830995323981295,
+      "oos_recall_lexical": 0.36,
+      "oos_recall_prototype": 0.86
+    }
+  },
+  "sklearn_version": "1.7.2",
+  "locked_test_examined": 0,
+  "limits": "Character n-gram proximity is neither proven paraphrase leakage nor an independent source shift; stratification uses public development text and two already-selected models. Thresholds fixed before computation; no training or threshold tuning on this screen."
+}
