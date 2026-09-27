@@ -16,7 +16,7 @@ DEST = Path("results/kaggle-intervention-risk-probe.json")
 EXPECTED_KIND = "frozen_synthetic_intervention_risk_vs_confidence_screen_not_benchmark_or_model_win"
 EXPECTED_GENERATOR_SHA256 = "0203b3157c322ecf5050af898b71ba8a78512e0bdb1f05e8c42a155c9a5422ae"
 EXPECTED_RECORDS_SHA256 = "6612571e3625e412eb24f3549e0d21dd3bcc0a609990a13e34ed3314aaa794d1"
-EXPECTED_SCREEN_SHA256 = "e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c"
+EXPECTED_SCREEN_SHA256 = "07b54ccace7a190fa36ddd1b853021a45a76305f782d7ba29f366859c7361482"
 
 
 def _require(condition: bool, message: str) -> None:
