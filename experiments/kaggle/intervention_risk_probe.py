@@ -603,6 +603,12 @@ def main() -> None:
     torch.manual_seed(SEED)
     if not torch.cuda.is_available():
         raise RuntimeError("Expected Kaggle T4 GPU is unavailable")
+    torch.cuda.init()
+    torch.cuda.set_device(0)
+    warmup = torch.empty(1, device="cuda:0")
+    del warmup
+    torch.cuda.synchronize(0)
+    print(f"CUDA preflight passed: {torch.cuda.get_device_name(0)}", flush=True)
     torch.set_num_threads(2)
     torch.cuda.reset_peak_memory_stats(0)
     started = time.monotonic()
