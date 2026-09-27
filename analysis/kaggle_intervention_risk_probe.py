@@ -5,7 +5,6 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import shutil
 import tempfile
 import time
 from pathlib import Path
@@ -23,6 +22,42 @@ EXPECTED_SCREEN_SHA256 = "e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise ValueError(message)
+
+
+def build_standalone_script(screen_source: str, generator_source: str, generator_sha256: str) -> str:
+    """Bundle the pinned generator into Kaggle's single executable code file."""
+    _require(generator_source.count("\ndef run(") == 1,
+             "Could not identify the generator library/CLI boundary")
+    _require(screen_source.count("from __future__ import annotations\n") == 1,
+             "Unexpected screen future-import layout")
+    _require(screen_source.count("from intervention_probe import generate_state\n") == 1,
+             "Unexpected screen generator import")
+    old_hash_block = (
+        "generator_path = Path(__import__(\"intervention_probe\").__file__)\n"
+        "    generator_sha = hashlib.sha256(generator_path.read_bytes()).hexdigest()"
+    )
+    _require(screen_source.count(old_hash_block) == 1,
+             "Unexpected screen generator-hash block")
+
+    generator_core = generator_source.split("\ndef run(", 1)[0].rstrip()
+    screen_body = screen_source.replace("from __future__ import annotations\n", "", 1)
+    screen_body = screen_body.replace("from intervention_probe import generate_state\n", "", 1)
+    screen_body = screen_body.replace(old_hash_block, "generator_sha = GENERATOR_SHA256", 1)
+    bundle = (
+        generator_core
+        + "\n\nGENERATOR_SHA256 = "
+        + json.dumps(generator_sha256)
+        + "\\n\\n"
+        + screen_body
+    )
+    _require("intervention_probe" not in bundle,
+             "Kaggle script still depends on an unbundled sibling module")
+    _require("def generate_state(" in bundle,
+             "Standalone Kaggle script is missing the frozen state generator")
+    _require(bundle.count('if __name__ == "__main__":') == 1,
+             "Standalone Kaggle script has an unexpected entry point count")
+    compile(bundle, "<revv-kaggle-intervention-risk-bundle>", "exec")
+    return bundle
 
 
 def validate_report(report: dict, generator_sha256: str) -> dict:
@@ -128,8 +163,12 @@ def main() -> None:
 
     with tempfile.TemporaryDirectory(prefix="revv-intervention-risk-") as directory:
         work = Path(directory)
-        shutil.copyfile(SOURCE, work / "intervention_risk_probe.py")
-        shutil.copyfile(GENERATOR, work / "intervention_probe.py")
+        screen_source = SOURCE.read_text(encoding="utf-8")
+        generator_source = GENERATOR.read_text(encoding="utf-8")
+        bundle = build_standalone_script(screen_source, generator_source, generator_sha256)
+        bundle_bytes = bundle.encode("utf-8")
+        bundle_sha256 = hashlib.sha256(bundle_bytes).hexdigest()
+        (work / "intervention_risk_probe.py").write_bytes(bundle_bytes)
         metadata_path = Path(api.kernels_initialize(str(work)))
         metadata = json.loads(metadata_path.read_text())
         owner = metadata["id"].split("/", 1)[0]
@@ -147,7 +186,7 @@ def main() -> None:
             "machine_shape": "NvidiaTeslaT4",
         })
         metadata_path.write_text(json.dumps(metadata, indent=2) + "\n")
-        print(f"Submitting private {reference}, 600-second Kaggle cap", flush=True)
+        print(f"Submitting private {reference}, 600-second Kaggle cap, script sha256 {bundle_sha256}", flush=True)
         submission = api.kernels_push(str(work), timeout="600", acc="NvidiaTeslaT4")
         if getattr(submission, "error", None):
             raise RuntimeError(f"Kaggle rejected intervention screen: {submission.error}")
@@ -180,6 +219,9 @@ def main() -> None:
             "github_sha": os.environ.get("GITHUB_SHA"),
             "screen_source_sha256": screen_sha256,
             "generator_sha256": generator_sha256,
+            "kaggle_script_sha256": bundle_sha256,
+            "kaggle_script_bytes": len(bundle_bytes),
+            "kaggle_script_bundle_format": "standalone_concat_v1",
             "orchestrator_validation": validation,
             **report,
         }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
