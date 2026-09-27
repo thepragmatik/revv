@@ -2,7 +2,7 @@
 
 **[Home](../README.md) · [Research synthesis](research.md) · [Evaluation](evaluation.md)**
 
-Primary papers, author repositories and official documentation consulted **27 September 2026**. Live pages change: pin commits, checkpoint revisions and dataset versions in experiment records. Evidence labels: paper = author-reported study; project benchmark = author-run; independent benchmark = third-party harness with its own assumptions. No `revv` measurements exist yet.
+Primary papers, author repositories and official documentation consulted **27 September 2026**. Live pages change: pin commits, checkpoint revisions and dataset versions in experiment records. Evidence labels: paper = author-reported study; project benchmark = author-run; independent benchmark = third-party harness with its own assumptions. Our own [synthetic T4 compute screen](../experiments/kaggle/2026-09-27-forward-pilot.md) is separate from all model quality or local CPU measurements.
 
 | ID | Primary source | Use |
 | --- | --- | --- |

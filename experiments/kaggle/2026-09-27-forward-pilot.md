@@ -2,7 +2,7 @@
 
 **[Plain explanation](../../docs/start-here.md) · [Architecture](../../docs/architecture.md) · [Evaluation](../../docs/evaluation.md) · [Handoff](../../codex/RESUME.md)**
 
-**Registered 27 September 2026 before submission. Status: registered.** This is a synthetic architecture screen, not a trained decision model or local CPU benchmark.
+**Registered 27 September 2026 before submission. Status: complete.** This is a synthetic architecture screen, not a trained decision model or local CPU benchmark.
 
 ## Question and falsifier
 
@@ -18,4 +18,16 @@ Given identical untrained transformer body weights, does encoding the state once
 
 ## Result and limitations
 
-The [first Actions attempt](https://github.com/thepragmatik/revv/actions/runs/36291723816) submitted kernel version 1, then immediately failed to poll it: its human title resolves to a different URL slug than the submitted ID. **No result was collected, and the kernel may still have run.** A read-only recovery now checks the title-derived slug before deciding whether a second submission is needed. The registered slices and gates above are unchanged. Raw result will be attached to a subsequent Actions run and, if valid, committed beside this record. Outputs are different mathematical functions, with a shared compute body only; this is a **cost topology comparison**, not functional parity or a head-to-head quality contest.
+The [first Actions attempt](https://github.com/thepragmatik/revv/actions/runs/36291723816) submitted kernel `rathworx/revv-bounded-forward-pilot/1`, then immediately failed to poll it: its human title resolved to a different URL slug than the requested ID. The [read-only recovery run](https://github.com/thepragmatik/revv/actions/runs/36291800978) polled that title-derived slug, found the **completed original kernel**, and collected the [raw timing JSON](2026-09-27-forward-pilot.json). No second GPU session was started. The workflow is now manual-only so changing the result record does not automatically rerun GPU work.
+
+| State tokens, options | Shared median, ms | Cross median, ms | Cross/shared | Linear-work proxy |
+| --- | ---: | ---: | ---: | ---: |
+| 128, 2 | 1.36 | 1.15 | 0.84× | 1.67× |
+| 128, 40 | 3.01 | 10.36 | 3.44× | 4.55× |
+| 512, 2 | 2.13 | 2.91 | 1.36× | 1.89× |
+| 512, 40 | 2.57 | 28.48 | 11.07× | 12.14× |
+| 2,048, 8 | 6.18 | 38.38 | 6.21× | 7.22× |
+
+All five registered slices completed in one T4 session using PyTorch `2.10.0+cu128`. The body has **1,579,520 untrained parameters**; the pilot recorded five paired timings per slice after two warm-up pairs, with alternating execution order. For the short state with two options, the cross path was faster despite the arithmetic proxy. State reuse was faster in the other slices, particularly at 40 options. A measured 512-token, 40-option shared median below the 128-token, 40-option median also shows why tiny GPU timings should not be extrapolated monotonically. The [raw JSON](2026-09-27-forward-pilot.json) preserves all samples and exact hardware; the GitHub Actions artifact is [here](https://github.com/thepragmatik/revv/actions/runs/36291800978).
+
+**Verdict against the preregistered gate:** keep shared-state scoring in the *next labelled-data comparison* for high option counts; retain the cross encoder as a serious control for small workloads and quality. Five timings from one GPU session have no confidence interval. These paths implement different functions even though the body weights are shared. Synthetic vectors omit tokenization, actual pretrained checkpoints, probabilities, labels, CPU process RSS and CPU end-to-end p95. No claim about decision quality, superiority to Laya/Kev or the 8 GiB deployment target follows.
