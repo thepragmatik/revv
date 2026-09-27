@@ -1,4 +1,4 @@
-"""Recover only the original registered Kaggle version without resubmitting."""
+"""Read-only recovery poll for the CUDA-initialized Kaggle version 3."""
 
 from __future__ import annotations
 
@@ -10,16 +10,17 @@ import time
 from pathlib import Path
 
 from kaggle_intervention_risk_probe import (
+    EXPECTED_BUNDLE_SHA256,
     EXPECTED_GENERATOR_SHA256,
+    EXPECTED_SCREEN_SHA256,
     GENERATOR,
     SOURCE,
     validate_report,
 )
 
 
-KAGGLE_REF = "rathworx/revv-intervention-risk-probe/1"
-SOURCE_ACTION_RUN = 36314796409
-ORIGINAL_SCREEN_SHA256 = "e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c"
+KAGGLE_REF = "rathworx/revv-intervention-risk-probe/3"
+SOURCE_ACTION_RUN = 36319051136
 DEST = Path("results/kaggle-intervention-risk-probe.json")
 COLLECTOR_SECONDS = 25 * 60
 
@@ -29,8 +30,8 @@ def main() -> None:
 
     generator_sha = hashlib.sha256(GENERATOR.read_bytes()).hexdigest()
     screen_sha = hashlib.sha256(SOURCE.read_bytes()).hexdigest()
-    if generator_sha != EXPECTED_GENERATOR_SHA256 or screen_sha != ORIGINAL_SCREEN_SHA256:
-        raise ValueError("The registered generator or scoring screen changed")
+    if generator_sha != EXPECTED_GENERATOR_SHA256 or screen_sha != EXPECTED_SCREEN_SHA256:
+        raise ValueError("The pinned generator or CUDA-initialized screen source changed")
     if not os.environ.get("KAGGLE_API_TOKEN"):
         raise RuntimeError("KAGGLE_API_TOKEN is missing")
     api.authenticate()
@@ -64,6 +65,7 @@ def main() -> None:
             "recovered_from_action_run": SOURCE_ACTION_RUN,
             "screen_source_sha256": screen_sha,
             "generator_sha256": generator_sha,
+            "kaggle_script_sha256": EXPECTED_BUNDLE_SHA256,
             "orchestrator_validation": validation,
             **report,
         }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
