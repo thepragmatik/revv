@@ -8,7 +8,9 @@ The original prompt asks us to invent and rigorously challenge combinations of M
 
 A broad hypothesis—reuse one state across typed fields and let each question exit at its own layer—is too weak. Nimble already has shared-context multi-field scoring and minimal fact-edit pairs; AdaMTL has task-aware compute policies over a shared encoder and merges task demands; cascaded QA rankers share partial encodings. Global allocation, deployment-tuned exits and token-level routing add still more overlap. See the [overlap audit](novelty-audit.md) and [source ledger](sources.md).
 
-The higher-upside candidate is **intervention-supervised, task-risk-gated verification for typed fields over a shared long state**. Reuse one compact state encoding; score options/evidence cheaply; use verified fact edits to label which fields should flip; escalate only fields for which additional verification is predicted to lower gold-task error enough to pay its measured CPU cost. This is a creative combination, not yet a distinct contribution. The shared-cost depth optimizer remains a screening tool if later layers are genuinely shared; it is not the novelty claim.
+The candidate remains a **hypothesis**, and the closest prior art is now sharper. Incremental Transformer reuses cached state representations for appended questions; Contiguity, Not Importance directly studies edit-aware cache repair and reports that local unconditional repair can beat importance-based selection when edits are answer-relevant; NormWorlds-CF and CRPO already supervise answer changes and invariance; and No Universal Signal compares confidence against update-regression signals. The current preregistered screen therefore asks only whether typed-output-level refresh selection after an input edit adds value at a fixed verifier budget. It is not a novelty claim and may be a small systems variation.
+
+A crucial distinction: the screen learned signal is probability of a label change, not expected benefit from running the verifier. It also measures whether routed refreshes improve answer quality over cached answers and whether end-to-end reference CPU time falls. A change-recall win without a quality gain and measured savings is a no-go. Its uniform edit sampler includes many no-effect edits, so a passing result still needs a relevant-edit and independent-data challenge. See the [primary-source overlap entries](sources.md#fourth-overlap-pass-edit-aware-inference-and-answer-changes) and [preregistration](../experiments/kaggle/2026-09-27-intervention-risk-probe.md).
 
 ## Candidate architecture weave to screen
 
@@ -28,6 +30,14 @@ For request features $x$, question depths $d_q$, shared cost $A_x$, branch costs
 $J_x(\mathbf d)=\sum_q r_q(x,d_q)+\lambda\left[A_x(\max_q d_q)+\sum_q B_q(x,d_q)\right].$
 
 For additive expected loss, fixing maximum depth makes per-question choices separable, with one question forced to reach that maximum. The exact $O(QL)$ solver and assumptions are in the [novelty audit](novelty-audit.md) and [technical derivation](architecture.md). Bundle-any-error constraints are not separable and need separate held-out risk evaluation.
+
+## Cost-sensitive repair value (derived target, not yet tested)
+
+For a cached answer $a_j^0$, a verifier answer $a_j^1$, post-edit gold label $y_j'$, and task loss $\ell$, the useful target is the conditional value of refreshing:
+
+$V_j=\mathbb{E}[\ell(a_j^0,y_j')-\ell(a_j^1,y_j')\mid s,e,q_j].$
+
+With additive per-field cost $c_j$ and a Lagrange price $\lambda$, refresh field $j$ only when $V_j>\lambda c_j$. Under a fixed cardinality budget, sorting by expected loss reduction is optimal by an exchange argument; with a shared batch/setup cost, the cost is coupled and this separability no longer holds. A change-probability head $P(y_j'\ne y_j)$ is only a proxy: it can rank a field high even when the verifier is likely to make a correct cached answer wrong, or low when the cache is already wrong but a verifier could fix it. This motivates a later repair-value head only if the current frozen screen shows a real quality/savings gap. It is a derivation and test proposal, not a novelty or empirical claim.
 
 ## Secondary quality weave: intervention-local bundle learning
 
