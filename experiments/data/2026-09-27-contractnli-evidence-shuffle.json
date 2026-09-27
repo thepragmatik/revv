@@ -1,0 +1,93 @@
+{
+  "kind": "contractnli_matched_hypothesis_only_and_cross_document_evidence_shuffle_cpu_negative_controls",
+  "source_sha256": "e03fc77bbf8b53e2976a250e81d8a294bc3d5e5fb014521e477dee9340d6287b",
+  "train_documents": 423,
+  "development_documents": 61,
+  "hypotheses": 17,
+  "train_rows": 7191,
+  "development_rows": 1037,
+  "crossfit_document_fold_counts": {
+    "2": 80,
+    "1": 96,
+    "0": 76,
+    "4": 73,
+    "3": 98
+  },
+  "evidence_k": 5,
+  "retriever_features_fit": 30000,
+  "classifier_features_fit": 30000,
+  "classifier": "multinomial logistic regression, C=1, lbfgs max_iter=250; hypothesis-only trained without evidence, pooled evidence trained with crossfit retrieval; shared training-only TF-IDF vocabulary from registered original two arms, and question onehot",
+  "classifier_iterations": {
+    "hypothesis_only": 34,
+    "pooled_evidence": 65
+  },
+  "methods": {
+    "hypothesis_only": {
+      "accuracy": 0.6808100289296046,
+      "macro_f1": 0.632527291333521,
+      "class_f1": {
+        "Entailment": 0.7528089887640449,
+        "Contradiction": 0.5161290322580645,
+        "NotMentioned": 0.6286438529784537
+      },
+      "class_recall": {
+        "Entailment": 0.7745664739884393,
+        "Contradiction": 0.5894736842105263,
+        "NotMentioned": 0.5862884160756501
+      },
+      "multiclass_brier_sum": 0.43545976421971494,
+      "nll": 0.7023819945017383
+    },
+    "pooled_evidence": {
+      "accuracy": 0.7020250723240116,
+      "macro_f1": 0.6587908259170189,
+      "class_f1": {
+        "Entailment": 0.7675675675675676,
+        "Contradiction": 0.5658536585365853,
+        "NotMentioned": 0.6429512516469038
+      },
+      "class_recall": {
+        "Entailment": 0.8208092485549133,
+        "Contradiction": 0.6105263157894737,
+        "NotMentioned": 0.5768321513002365
+      },
+      "multiclass_brier_sum": 0.38654395862504337,
+      "nll": 0.6386870194479048
+    },
+    "shuffled_development_document_evidence": {
+      "accuracy": 0.6634522661523626,
+      "macro_f1": 0.6212575440571199,
+      "class_f1": {
+        "Entailment": 0.736936936936937,
+        "Contradiction": 0.5365853658536586,
+        "NotMentioned": 0.5902503293807642
+      },
+      "class_recall": {
+        "Entailment": 0.7880539499036608,
+        "Contradiction": 0.5789473684210527,
+        "NotMentioned": 0.5295508274231678
+      },
+      "multiclass_brier_sum": 0.45859175952518255,
+      "nll": 0.7438615595672364
+    }
+  },
+  "paired_pooled_minus_hypothesis_only_accuracy": 0.02121504339440694,
+  "paired_pooled_minus_hypothesis_only_document_bootstrap95": [
+    0.0,
+    0.04341851494696237
+  ],
+  "paired_pooled_minus_shuffled_evidence_accuracy": 0.03857280617164893,
+  "paired_pooled_minus_shuffled_evidence_document_bootstrap95": [
+    0.007714561234329798,
+    0.07041947926711666
+  ],
+  "shuffle": "For each development document d and fixed hypothesis h, replace the selected evidence text with the same hypothesis evidence from development document (d+1) modulo 61, leaving hypothesis text and onehot unchanged; no label lookup or refitting",
+  "test_documents_examined": 0,
+  "libraries": {
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "sklearn": "1.7.2"
+  },
+  "elapsed_seconds": 24.557338731999998,
+  "limitations": "The shuffled evidence comes from another development document with unknown label and is an out-of-distribution input, not independent-domain generalization. Fixed 17 hypotheses and sparse head. Hypothesis-only uses same vocabulary fitted on full training examples, never dev. No causal identification of evidence use, separate probability calibration, local deployment latency/RSS, GPU or locked test."
+}
