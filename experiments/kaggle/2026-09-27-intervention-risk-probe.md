@@ -46,6 +46,8 @@ Also report fresh full shared-head recomputation, direct full-state NLI after th
 
 **Primary outcome:** on the held-out Q=20 fields, change recall at a 25% verification budget. Compare edit-risk routing with confidence-only routing using a paired bootstrap that resamples whole rule-composition groups (2,000 replicates).
 
+The pre-score audit has 74 positives among 4,800 held-out Q20 fields (1.54%). A uniform random 25% selector has expected change recall 25%, or 18.5 selected changed fields; this is a mathematical expectation, while the run reports its deterministic hash-control result. The registered +10-point minimum over confidence corresponds to roughly eight additional changed fields at this sample size.
+
 Keep this risk feature for a real-data discriminator only if all conditions hold:
 
 1. At least 50 held-out Q=20 fields changed label across at least 10 held-out rule groups. Otherwise mark the run **inconclusive**; do not change the seed after seeing the model scores.
