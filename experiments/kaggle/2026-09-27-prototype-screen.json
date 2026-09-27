@@ -1,0 +1,77 @@
+{
+  "kaggle_ref": "rathworx/revv-prototype-screen/2",
+  "kind": "frozen_clinc_label_vs_prototype_development_not_model_win",
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "model_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+  "model_parameters": 22713216,
+  "data_commit": "828f8093932c8fe6ca7936c3d2e52903b1c523de",
+  "data_sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0",
+  "split_seed": "revv-clinc-calibration-v1",
+  "training_known": 15000,
+  "development_rows": 1547,
+  "calibration_rows": 1550,
+  "development_oos": 50,
+  "gpu": "Tesla T4",
+  "torch_version": "2.10.0+cu128",
+  "transformers_version": "5.0.0",
+  "python_version": "3.12.13",
+  "state_token_limit": 64,
+  "label_token_limit": 16,
+  "train_rows_truncated": 0,
+  "validation_rows_truncated": 0,
+  "label_rows_truncated": 0,
+  "peak_torch_gpu_allocated_bytes": 156083200,
+  "model_load_seconds": 5.40667363099999,
+  "train_encode_and_centroid_seconds": 3.410438835999969,
+  "validation_encode_and_score_seconds": 0.54686024800003,
+  "methods": {
+    "label_text": {
+      "known_calibration_5th_percentile": 0.29751554131507874,
+      "known_closed_accuracy": 0.7094188376753507,
+      "known_closed_wilson95": [
+        0.685906316849896,
+        0.7318593280921577
+      ],
+      "known_after_defer_accuracy": 0.6907147628590514,
+      "known_defer_rate": 0.04275217100868404,
+      "oos_recall": 0.64,
+      "oos_wilson95": [
+        0.501410168761127,
+        0.7586125034815325
+      ],
+      "known_candidate_recall_at_k": {
+        "1": 0.7094188376753507,
+        "2": 0.8203072812291249,
+        "5": 0.9091516366065464,
+        "10": 0.9425517702070808
+      }
+    },
+    "training_prototype": {
+      "known_calibration_5th_percentile": 0.4504452049732208,
+      "known_closed_accuracy": 0.9111556446225785,
+      "known_closed_wilson95": [
+        0.8956705143740736,
+        0.9245360389332119
+      ],
+      "known_after_defer_accuracy": 0.8830995323981295,
+      "known_defer_rate": 0.04542418169672679,
+      "oos_recall": 0.86,
+      "oos_wilson95": [
+        0.7381380628941446,
+        0.9304916657298371
+      ],
+      "known_candidate_recall_at_k": {
+        "1": 0.9111556446225785,
+        "2": 0.9732798931195725,
+        "5": 0.9899799599198397,
+        "10": 0.9933199732798931
+      }
+    }
+  },
+  "known_closed_paired_prototype_minus_label": 0.2017368069472278,
+  "known_closed_paired_cluster_bootstrap95": [
+    0.15841981422738524,
+    0.24080328914928795
+  ],
+  "limitations": "Frozen sentence encoder; prototypes use labelled CLINC training text. Public development fold, label-source overlap may favor semantic names, no local CPU serving latency/RSS or probability calibration, no locked test or multi-question evidence."
+}
