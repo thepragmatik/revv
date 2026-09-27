@@ -45,8 +45,8 @@ The key distinction is **rights and fit are separate gates**. RuleTaker is espec
 
 ## Chosen low-cost path
 
-1. **Mechanism set:** author a compact generator from scratch in this repository. It will create small contexts, typed question bundles, a single controlled edit, and exact labels for both worlds using a deterministic evaluator. Keep templates and rules original; record the generator seed and license the generated examples explicitly. Do not copy released RuleTaker, CAD, or Contrast Sets rows.
-2. **Independent groups:** split by world family and held-out rule/template compositions before making pairs. A parent and every edited child stay in one partition. Include bundle sizes (Q=1,5,20), no-effect edits, one-field changes, and multi-field changes; report each stratum.
+1. **Mechanism set:** reuse the existing [in-repository deterministic generator](../../analysis/intervention_probe.py) and its [mask-integrity probe](2026-09-27-intervention-mask-probe.md). It already creates typed question bundles, one-fact paired edits, exact labels, proof traces and a stable held-out rule-composition split. Do not create a duplicate or import third-party data for this mechanism check.
+2. **Independent groups:** keep each parent world and its edited children together. Preserve the generator's held-out composition groups and report seen and held-out results separately. Retain bundle sizes Q=1, 5, 20 and separate uniform-edit from edit-conditioned positive-control strata.
 3. **Separate signal from value:** first test whether signals find fields whose labels flip. Then test whether they find fields where an actual refresh reduces loss. A label flip can make a correct old prediction wrong, or leave an incorrect old prediction incorrect, so flip recall is not expected benefit.
 4. **Policy baselines:** compare stale-cache, refresh-all, local-edit refresh, calibrated confidence/margin, edit/query similarity, label-flip rank, and a cross-fitted expected-benefit selector. Include an oracle selector only as an upper bound.
 5. **Verifier ladder:** start with a deterministic oracle refresher to measure the maximum possible benefit on the controlled set. Then replace it with a distinct, imperfect compact verifier; measure both verifier errors and selector errors. Never present the oracle result as model performance.
@@ -68,6 +68,10 @@ A policy should select a field only when its cross-fitted estimate of (b_q) exce
 - If no real-text paired-label set passes provenance, annotation and rights checks, report the limitation; do not imply synthetic success transfers to user documents.
 - Do not schedule training or another GPU run until the free-provider preflight starts promptly and the CPU-side discriminator can change a concrete decision.
 
+## Follow-up CPU mechanism screen
+
+The existing generator was reused in the [28 September value-of-refresh screen](2026-09-28-refresh-value-screen.md). At Q=20 and half-budget on held-out compositions, the unproved-output signal avoided 443/620 post-edit errors in the uniform stratum, versus 310 expected from random selection. The post-hoc audit found 610 of those 620 errors were already present before the edit; only 10 were newly introduced. The screen therefore exposes a weak-predictor confound and does not establish a useful refresh model. See the [pre-registered method](2026-09-28-refresh-value-screen-prereg.md), [aggregate results](2026-09-28-refresh-value-screen.json) and [error decomposition](2026-09-28-refresh-value-screen-redteam.json).
+
 ## Research records
 
-The access findings and boundaries are recorded in [S82–S84](../../docs/sources.md#eighth-overlap-pass-contrast-sets-and-local-decision-boundaries). The current Kaggle edit-risk screen remains inconclusive: its recovery timed out while the exact kernel was QUEUED and no inference artifact exists. This benchmark choice does not retroactively turn that screen into a result.
+The access findings and boundaries are recorded in [S82–S84](../../docs/sources.md#dataset-rights-and-benchmark-fit-preflight). The current Kaggle edit-risk screen remains inconclusive: its recovery timed out while the exact kernel was QUEUED and no inference artifact exists. This benchmark choice does not retroactively turn that screen into a result.
