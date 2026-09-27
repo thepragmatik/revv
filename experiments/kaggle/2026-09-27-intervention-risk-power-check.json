@@ -37,6 +37,12 @@
   "limitations": [
     "This inspects only synthetic change-mask prevalence and group membership.",
     "It is a power screen, not a predictor, verifier, quality, novelty, or deployment result.",
-    "The generated grammar is reused by the registered model-scoring run."
-  ]
+    "The generated grammar is reused by the registered model-scoring run.",
+    "The registered effect-size/CI gate has no prospective power estimate; do not interpret the minimum-count pass as a power guarantee."
+  ],
+  "effect_size_power_analysis": {
+    "performed": false,
+    "reason": "This audit checked only held-out label-change and group counts. Before predictor scores exist, risk-versus-confidence selection discordance and group-bootstrap variance cannot be estimated.",
+    "interpretation": "sample_size_gate.pass means the minimum count gate passed; it is not statistical power for the registered +10 percentage-point effect and confidence-interval criterion."
+  }
 }
