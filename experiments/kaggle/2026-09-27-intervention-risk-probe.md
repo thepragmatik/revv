@@ -26,7 +26,7 @@ The input slate must repeat the previously scored questions. This experiment doe
 | Frozen verifier | `cross-encoder/nli-MiniLM2-L6-H768`, revision `c4d86af4493123990d7762712de9ed730c876161`; canonical labels are entailment→true, contradiction→false, neutral→unknown |
 | Learned components | Two CPU logistic readouts only: a shared pre-edit ternary head and a class-balanced edit-risk ranker. Both use frozen MiniLM vectors; no backbone training or quantization |
 | Calibration | Route cutoffs for each Q and budget fit on calibration compositions only; no held-out labels used for routing |
-| Compute | One private Kaggle T4 inference run; no paid compute; collector cap 14 minutes and Actions job cap 35 minutes |
+| Compute | One private Kaggle T4 inference run; no paid compute; initial collector cap 14 minutes, no-resubmit recovery cap 25 minutes, Actions job cap 35 minutes |
 
 The generated-record audit and inference screen are content-pinned: generator SHA-256 `0203b3157c322ecf5050af898b71ba8a78512e0bdb1f05e8c42a155c9a5422ae`, generated-record SHA-256 `6612571e3625e412eb24f3549e0d21dd3bcc0a609990a13e34ed3314aaa794d1`, and screen SHA-256 `e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c`. The collector rejects any mismatch.
 
@@ -76,4 +76,5 @@ Do not train a backbone or claim a model win from this run. If its gate passes, 
 - Grouped generator: [`analysis/intervention_probe.py`](../../analysis/intervention_probe.py)
 - Local policy tests: [`analysis/test_intervention_risk_probe.py`](../../analysis/test_intervention_risk_probe.py)
 - Kaggle submit/collect: [`analysis/kaggle_intervention_risk_probe.py`](../../analysis/kaggle_intervention_risk_probe.py)
+- Recovery of the already submitted queued version, without resubmission: [`analysis/kaggle_collect_intervention_risk_probe.py`](../../analysis/kaggle_collect_intervention_risk_probe.py)
 - Machine result will be preserved as a GitHub Actions artifact and, after validation, as `results/kaggle-intervention-risk-probe.json`.
