@@ -1,4 +1,5 @@
 name: ContractNLI evidence-removal and shuffle controls
+# Run 2 preserves the original gate and prints the pooled reproduction score on mismatch.
 
 on:
   push:

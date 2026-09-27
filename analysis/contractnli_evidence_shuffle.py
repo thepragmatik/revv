@@ -140,10 +140,11 @@ def main():
             shuffled_raw = classifier.predict_proba(features(shuffled, hdev))
             shuffled_probs = shuffled_raw[:, [list(classifier.classes_).index(label) for label in LABELS]]
             outputs["shuffled_development_document_evidence"], predictions["shuffled_development_document_evidence"] = results(ydev, shuffled_probs)
+    print(f"Reproduction check: pooled accuracy {outputs['pooled_evidence']['accuracy']:.12f}, macro F1 {outputs['pooled_evidence']['macro_f1']:.12f}, solver steps {iterations['pooled_evidence']}", flush=True)
     if abs(outputs["pooled_evidence"]["accuracy"] - 0.7020250723240116) > 1e-12:
-        raise ValueError("Pooled control failed to reproduce registered accuracy")
+        raise ValueError(f"Pooled control failed to reproduce registered accuracy: observed={outputs['pooled_evidence']['accuracy']:.12f}")
     if abs(outputs["pooled_evidence"]["macro_f1"] - 0.6587908259170189) > 1e-12:
-        raise ValueError("Pooled control failed to reproduce registered macro F1")
+        raise ValueError(f"Pooled control failed to reproduce registered macro F1: observed={outputs['pooled_evidence']['macro_f1']:.12f}")
     effects_by_doc = np.zeros((len(dev), 3), dtype=int)
     for i, truth in enumerate(ydev):
         effects_by_doc[docdev[i], 0] += int(predictions["pooled_evidence"][i] == truth) - int(predictions["hypothesis_only"][i] == truth)
