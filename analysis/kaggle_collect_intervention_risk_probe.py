@@ -1,4 +1,4 @@
-"""Collect an existing queued Kaggle version without submitting new compute."""
+"""Recover only the original registered Kaggle version without resubmitting."""
 
 from __future__ import annotations
 
@@ -11,7 +11,6 @@ from pathlib import Path
 
 from kaggle_intervention_risk_probe import (
     EXPECTED_GENERATOR_SHA256,
-    EXPECTED_SCREEN_SHA256,
     GENERATOR,
     SOURCE,
     validate_report,
@@ -20,6 +19,7 @@ from kaggle_intervention_risk_probe import (
 
 KAGGLE_REF = "rathworx/revv-intervention-risk-probe/1"
 SOURCE_ACTION_RUN = 36314796409
+ORIGINAL_SCREEN_SHA256 = "e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c"
 DEST = Path("results/kaggle-intervention-risk-probe.json")
 COLLECTOR_SECONDS = 25 * 60
 
@@ -29,7 +29,7 @@ def main() -> None:
 
     generator_sha = hashlib.sha256(GENERATOR.read_bytes()).hexdigest()
     screen_sha = hashlib.sha256(SOURCE.read_bytes()).hexdigest()
-    if generator_sha != EXPECTED_GENERATOR_SHA256 or screen_sha != EXPECTED_SCREEN_SHA256:
+    if generator_sha != EXPECTED_GENERATOR_SHA256 or screen_sha != ORIGINAL_SCREEN_SHA256:
         raise ValueError("The registered generator or scoring screen changed")
     if not os.environ.get("KAGGLE_API_TOKEN"):
         raise RuntimeError("KAGGLE_API_TOKEN is missing")
