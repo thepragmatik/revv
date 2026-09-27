@@ -83,10 +83,10 @@ Continue prior-art search and small probes; do not start training to validate no
 
 ## Cost-aware repair target: useful test, not novelty
 
-For field \(i\), the relevant target is the expected *signed* change in task loss after verification:
+For field \(i\), let \(y_i^+\) be the post-edit gold label, \(\hat y_i^{\mathrm{cached}}\) the cached pre-edit prediction, and \(\hat y_i^{\mathrm{refresh}}\) the prediction after evidence verification. The decision value is the expected signed change in per-field loss:
 
 \[
-v_i = \mathbb{E}\left[\ell(\hat{y}^{\mathrm{cached}}_i,y_i)-\ell(\hat{y}^{\mathrm{refresh}}_i,y_i)\mid z_i\right].
+v_i = \mathbb{E}\left[\ell(\hat{y}^{\mathrm{cached}}_i,y_i^+)-\ell(\hat{y}^{\mathrm{refresh}}_i,y_i^+)\mid z_i\right].
 \]
 
 Here \(z_i\) contains the pre-edit state, query, edit and available cached evidence. For 0–1 loss, define \(y_i^-\) and \(y_i^+\) as the old and edited gold labels. The per-field utility is:
