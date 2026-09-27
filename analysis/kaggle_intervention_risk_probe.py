@@ -47,7 +47,7 @@ def build_standalone_script(screen_source: str, generator_source: str, generator
         generator_core
         + "\n\nGENERATOR_SHA256 = "
         + json.dumps(generator_sha256)
-        + "\\n\\n"
+        + "\n\n"
         + screen_body
     )
     _require("intervention_probe" not in bundle,
