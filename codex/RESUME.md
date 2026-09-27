@@ -17,6 +17,7 @@ The user has ChatGPT Pro and wants Codex to research, orchestrate and evaluate G
 | Kaggle authentication and GPU access | Verified; third smoke run executed on one T4 | [Run 36290758927](https://github.com/thepragmatik/revv/actions/runs/36290758927), [raw JSON](../experiments/kaggle/2026-09-27-gpu-smoke.json) |
 | Decision model weights, real dataset benchmark, CPU RSS | **Not yet measured** | [Evaluation gates](../docs/evaluation.md) |
 | Synthetic forward-pass crossover pilot | **Complete.** Original T4 kernel recovered without a second GPU run: cross faster for 128 tokens/2 options; shared faster on four other slices. No accuracy or CPU result. | [Experiment record](../experiments/kaggle/2026-09-27-forward-pilot.md), [raw JSON](../experiments/kaggle/2026-09-27-forward-pilot.json), [recovery run 36291800978](https://github.com/thepragmatik/revv/actions/runs/36291800978) |
+| First public labelled dataset integrity | CLINC train/validation audit registered; CPU run pending. Test examples remain uninspected. | [Audit plan](../experiments/data/2026-09-27-clinc-audit.md), [script](../analysis/audit_clinc.py) |
 
 The smoke run performed eight tiny matrix multiplications. Its submillisecond GPU time and memory counters are **not** model or CPU numbers. Do not turn it into a performance headline.
 
@@ -24,7 +25,7 @@ The working GitHub branch is `research/decision-model-plan`; [draft PR #1](https
 
 ## Next concrete actions
 
-1. Freeze a first small, licensed labelled task with group-aware train/dev/calibration/test partitions and a lexical/majority control; choose a public dataset from [evaluation](../docs/evaluation.md) after auditing its rights and labels. Prefer one domain where abstention matters. No data or benchmark training has happened yet.
+1. Collect the [pinned CLINC train/validation audit](../experiments/data/2026-09-27-clinc-audit.md). Use its duplicate and domain findings to freeze group-aware train/dev/calibration/test partitions and lexical/majority controls. CLINC tests out-of-scope intent; it does not cover policy grounding or multiple questions. No data or benchmark training has happened yet.
 2. Run a real pretrained small cross-encoder baseline and a pooled shared-state control on *the same labelled cases*. Start with one-batch tests, bounded Kaggle pilot, then local CPU RSS/end-to-end latency on a specified machine. Keep a locked test sealed until the candidate and margins are registered. The [synthetic pilot](../experiments/kaggle/2026-09-27-forward-pilot.md) justifies testing reuse at large option counts, while retaining cross encoding for short two-option cases.
 3. Compare to eligible published Laya, Kev and leading open decision models under a matched contract, precision and local RSS. Broader CLIP-style contrastive or distillation work comes only after actual errors identify a reason.
 
