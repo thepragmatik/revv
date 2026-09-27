@@ -1,5 +1,6 @@
 """Submit and collect the registered synthetic forward-pass pilot on Kaggle."""
 
+import argparse
 import json
 import shutil
 import tempfile
@@ -16,6 +17,9 @@ WAIT_SECONDS = 12 * 60
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--recover-first-submission", action="store_true", help="Collect the already submitted v1 without a new GPU job")
+    args = parser.parse_args()
     api.authenticate()
     with tempfile.TemporaryDirectory(prefix="revv-forward-") as temporary:
         work = Path(temporary)
@@ -28,7 +32,7 @@ def main():
         reference = f"{owner}/{SLUG}"
         metadata.update({
             "id": reference,
-            "title": "revv bounded forward pilot",
+            "title": "revv forward pilot",
             "code_file": "forward_pilot.py",
             "language": "python",
             "kernel_type": "script",
@@ -37,13 +41,17 @@ def main():
             "enable_internet": "false",
             "machine_shape": "NvidiaTeslaT4",
         })
-        metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
-        print(f"Submitting private {reference} with a 300-second kernel cap", flush=True)
-        submitted = api.kernels_push(str(work), timeout="300", acc="NvidiaTeslaT4")
-        if getattr(submitted, "error", None):
-            raise RuntimeError(f"Kaggle rejected submission: {submitted.error}")
-        version = getattr(submitted, "version_number", None)
-        pinned = f"{reference}/{version}" if version else reference
+        if args.recover_first_submission:
+            pinned = f"{owner}/revv-bounded-forward-pilot/1"
+            print(f"Read-only recovery of first submission {pinned}; no new kernel push", flush=True)
+        else:
+            metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+            print(f"Submitting private {reference} with a 300-second kernel cap", flush=True)
+            submitted = api.kernels_push(str(work), timeout="300", acc="NvidiaTeslaT4")
+            if getattr(submitted, "error", None):
+                raise RuntimeError(f"Kaggle rejected submission: {submitted.error}")
+            version = getattr(submitted, "version_number", None)
+            pinned = f"{reference}/{version}" if version else reference
         deadline = time.monotonic() + WAIT_SECONDS
         while time.monotonic() < deadline:
             response = api.kernels_status(pinned)

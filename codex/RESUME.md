@@ -16,7 +16,7 @@ The user has ChatGPT Pro and wants Codex to research, orchestrate and evaluate G
 | Architecture arithmetic and weight floors | Reproducible analytical proxies; **not** measured quality or latency | [Feasibility](../docs/feasibility.md), [`analysis/screen.py`](../analysis/screen.py) |
 | Kaggle authentication and GPU access | Verified; third smoke run executed on one T4 | [Run 36290758927](https://github.com/thepragmatik/revv/actions/runs/36290758927), [raw JSON](../experiments/kaggle/2026-09-27-gpu-smoke.json) |
 | Decision model weights, real dataset benchmark, CPU RSS | **Not yet measured** | [Evaluation gates](../docs/evaluation.md) |
-| Synthetic forward-pass crossover pilot | Registered; **submission and result pending** | [Experiment record](../experiments/kaggle/2026-09-27-forward-pilot.md), [runner](../analysis/kaggle_forward_pilot.py) |
+| Synthetic forward-pass crossover pilot | Version 1 submitted; initial collector failed on a Kaggle title/slug mismatch. Read-only recovery pending; no valid result yet. | [Failed collector run 36291723816](https://github.com/thepragmatik/revv/actions/runs/36291723816), [experiment record](../experiments/kaggle/2026-09-27-forward-pilot.md) |
 
 The smoke run performed eight tiny matrix multiplications. Its submillisecond GPU time and memory counters are **not** model or CPU numbers. Do not turn it into a performance headline.
 
@@ -24,7 +24,7 @@ The working GitHub branch is `research/decision-model-plan`; [draft PR #1](https
 
 ## Next concrete actions
 
-1. Submit the registered [synthetic pilot](../experiments/kaggle/2026-09-27-forward-pilot.md) through [its workflow](../.github/workflows/kaggle-forward-pilot.yml). A workflow pushed only to a feature branch may require a matching branch push; confirm an actual Actions run. Read its JSON artifact; report every planned slice or a partial run, and update this brief.
+1. Recover the already submitted [synthetic pilot](../experiments/kaggle/2026-09-27-forward-pilot.md) through [its workflow](../.github/workflows/kaggle-forward-pilot.yml), using read-only status/output calls before spending another GPU session. If it is inaccessible, fix the Kaggle title/slug and run one bounded submission. Read the JSON artifact; report every planned slice or a partial run, and update this brief.
 2. Freeze a first small, licensed labelled task with group-aware train/dev/calibration/test partitions and a lexical/majority control; choose a public dataset from [evaluation](../docs/evaluation.md) after auditing its rights and labels. Prefer one domain where abstention matters. No data or benchmark training has happened yet.
 3. Run a real pretrained small cross-encoder baseline and a pooled shared-state control on *the same labelled cases*. Start with one-batch tests, bounded Kaggle pilot, then local CPU RSS/end-to-end latency on a specified machine. Keep a locked test sealed until the candidate and margins are registered.
 4. Compare to eligible published Laya, Kev and leading open decision models under a matched contract, precision and local RSS. Broader CLIP-style contrastive or distillation work comes only after actual errors identify a reason.

@@ -33,7 +33,7 @@ jobs:
             echo "KAGGLE_API_TOKEN missing from repository Actions secrets." >&2
             exit 1
           fi
-          python analysis/kaggle_forward_pilot.py
+          python analysis/kaggle_forward_pilot.py --recover-first-submission
       - name: Upload raw pilot JSON
         if: always()
         uses: actions/upload-artifact@v4
