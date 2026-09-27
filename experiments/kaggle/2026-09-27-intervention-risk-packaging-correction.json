@@ -1,7 +1,7 @@
 {
   "record_type": "pre-inference Kaggle packaging correction",
   "recorded_on": "2026-09-27",
-  "status": "cuda_initialization_order_fixed_locally_validated_ready_for_one_free_run",
+  "status": "cuda_initialized_corrected_free_submission_running",
   "scope": "Packaging correction only. The frozen hypothesis, data, models, seed, splits, metrics, thresholds, and analysis plan are unchanged.",
   "failed_attempts": [
     {
@@ -66,12 +66,15 @@
     "pinned_standalone_bundle_sha256": "3ff1b04460b4fa05b8382c8ccff2d11f2a13fc72ef60cafe0bbc08f406d3477c",
     "model_inference_run_locally": false
   },
-  "next_action": "Submit exactly one further corrected private Kaggle T4 version through the existing free GitHub Actions workflow. The script now initializes CUDA before resetting allocator stats. Print and record the exact Kaggle version. No paid compute.",
+  "next_action": "Inspect the exact Kaggle version and either validate the complete output or preserve the precise pre-inference/runtime failure. No more run will be launched from this screen if CUDA setup fails again.",
   "current_submission": {
-    "github_actions_run": 36318581843,
-    "github_job": 108617886796,
+    "github_actions_run": 36319051136,
+    "github_job": "pending_job_lookup",
+    "github_head_sha": "bdf3d77fe092a7e8c41a96e691b6ae2d4ee5db8c",
     "kernel_slug": "rathworx/revv-intervention-risk-probe",
-    "reported_version": "not emitted by this attempt",
-    "status": "failed_before_model_loading"
+    "kernel_version": "will be printed by the updated submitter",
+    "standalone_script_sha256": "3ff1b04460b4fa05b8382c8ccff2d11f2a13fc72ef60cafe0bbc08f406d3477c",
+    "status": "workflow_running",
+    "cost": "free private Kaggle T4; no paid compute"
   }
 }
