@@ -42,16 +42,13 @@ The working GitHub branch is `research/decision-model-plan`; [draft PR #1](https
 
 ## Next concrete actions
 
-The third overlap pass found AdaMTL's task-aware shared-encoder routing and QA cascades close the remaining generic per-field-exit gap. The current testable weave is sparse intervention supervision plus gold-task-risk-gated per-field verification over one shared long state. See the [novelty audit](../docs/novelty-audit.md), [research map](../docs/research.md), [hypothesis ledger](../docs/ideas.md) and [gated plan](../docs/next-steps.md).
+The closest prior art now includes append-only incremental encoding, edit-local KV-cache repair, solver-verified paired answer-change worlds, and confidence-versus-update-regression routing. This makes broad edit sensitivity or cache reuse non-novel; the active, unproven question is typed-output-level refresh selection under equal verifier budget. The pre-score power check passed, but the Kaggle encoder/verifier screen has not yet run.
 
-1. Finish code-level comparison of IPPD, global passage allocation, direct typed models, and shared-backbone adaptive exits; log exact scope boundaries.
-2. Audit Typed Decisions/JevBench and a RuleTaker/ProofWriter composition split, grouping by state/source/template and preserving locked labels.
-3. Pin a checkpoint and reference CPU with accessible layer outputs; estimate per-depth task loss, branch/shared CPU costs, and request-level any-error.
-4. Compare cheap-only, fixed verifier, margin-gated and task-risk-gated policies for Q=1/5/20. Measure evidence recall, field-level verifier cost, bundle risk and end-to-end CPU latency.
-5. Compare surviving settings against Primus Decision, RSI-Jev, Laya, Kev, Typical and Decider on identical requests and hardware.
-6. Only if the held-out task-quality/latency frontier still has a trainable gap, run a one-batch smoke then one capped free Kaggle T4 adaptation pilot. No paid compute.
-7. Red-team source/Q shift, one hard question in an easy bundle, evidence/negation, options, abstention, and whole-process RSS below 8 GiB; measure a separate quantized profile below 4 GiB.
+1. Submit one private free Kaggle T4 run for the frozen synthetic screen; preserve results even if its preregistered gate fails. Do not train a backbone.
+2. Require both the registered Q20 changed-field recall comparison and evidence that NLI refresh improves cached gold-label accuracy without erasing CPU savings. Change recall alone is insufficient.
+3. If it passes, treat the uniform-edit mix as a possible bias: the recent cache-repair preprint reports unconditional local repair may win for answer-relevant edits. Audit NormWorlds-CF availability and license, then evaluate on an independent, rights-clear, relevant-edit workload against unconditional local repair and full recomputation.
+4. Only after that result, benchmark eligible compact models on the same declared local CPU workload and measure whole-process RSS below 8 GiB; test a separate quantized profile below 4 GiB.
 
-No neural training or Kaggle GPU run was launched in this research pass. AdaMTL and cascade rankers weakened the generic adaptive-exit claim further. The new weave is still a hypothesis. The next discriminator is a frozen CPU response-surface probe: prove there is enough retrievable evidence and per-field verifier cost to allocate before any training or Kaggle pilot.
+No paid compute is authorized. The 8 GiB / 4 GiB targets remain deployment gates, not claims from Kaggle.
 
 **Update discipline:** after a run, record the observed versus predicted crossover, timing distributions, exact hardware, limits and any errors in its experiment record. Add the commit/run/artifact links here, change status and next action. Do not overwrite preregistered gates. Link technical notes back to the [plain explanation](../docs/start-here.md).
