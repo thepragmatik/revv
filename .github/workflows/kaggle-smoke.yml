@@ -1,4 +1,5 @@
 name: Kaggle GPU smoke
+run-name: Bounded Kaggle GPU availability probe
 
 on:
   push:

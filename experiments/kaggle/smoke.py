@@ -14,7 +14,6 @@ def main():
 
     torch.manual_seed(17)
     device = torch.device("cuda:0")
-    torch.cuda.reset_peak_memory_stats(device)
     a = torch.randn((512, 512), device=device)
     b = torch.randn((512, 512), device=device)
     for _ in range(3):
@@ -26,11 +25,16 @@ def main():
     torch.cuda.synchronize()
     seconds = time.perf_counter() - started
 
+    try:
+        peak_allocated = torch.cuda.max_memory_allocated(device)
+    except RuntimeError:
+        peak_allocated = None
+
     report = {
         "kind": "gpu_availability_probe_not_model_benchmark",
         "gpu": torch.cuda.get_device_name(device),
         "gpu_total_bytes": torch.cuda.get_device_properties(device).total_memory,
-        "peak_allocated_bytes": torch.cuda.max_memory_allocated(device),
+        "peak_allocated_bytes": peak_allocated,
         "torch_version": torch.__version__,
         "python_version": platform.python_version(),
         "seed": 17,
