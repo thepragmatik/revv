@@ -161,3 +161,10 @@ This pass narrows the architectural claim further. A selector that estimates net
 | ID | Primary source | Relevance and limit |
 | --- | --- | --- |
 | <a id="s80"></a>S80 | [CF-TriviaQA repository](https://github.com/google-research-datasets/cf_triviaqa), [HAR paper](https://arxiv.org/abs/2311.07424), and [official TriviaQA source page](https://nlp.cs.washington.edu/triviaqa/) | The archived repository reports 16,853 counterfactual open-book QA examples and an Apache 2.0 dataset license. Its listed schema includes the question, generated counterfactual paragraph/answer, and question ID, but not the original passage or edit operation. The official TriviaQA page says UW does not own copyright in the included questions/documents, so the upstream rights of the derivative contents and any join remain unresolved. Consider only as a secondary context-grounding test after provenance and rights review, not as the primary typed-output refresh benchmark. See the [access and fit preflight](../experiments/data/2026-09-27-cf-triviaqa-access-preflight.md). |
+
+
+## Eighth overlap pass: contrast sets and local decision boundaries
+
+| ID | Primary source | Relevance and limit |
+| --- | --- | --- |
+| <a id="s81"></a>S81 | [Evaluating Models’ Local Decision Boundaries via Contrast Sets](https://aclanthology.org/2020.findings-emnlp.117/) and the [AllenAI contrast-set collection](https://github.com/allenai/contrast-sets) | Findings of EMNLP 2020 uses small, meaningful edits that typically change the gold label to probe local decision boundaries across 10 NLP tasks, reporting performance drops of up to 25%. This establishes edit sensitivity and contrast-set testing as prior art. It does not test cached typed-output refresh, whether refresh reduces gold-task loss, or its latency/cost. The collection has task-specific provenance and licensing; no root-level license was found in the inspected repository, so do not treat the data as rights-cleared. See the [novelty audit](novelty-audit.md#eighth-overlap-pass-contrast-sets-and-local-decision-boundaries). |
