@@ -32,7 +32,7 @@ First reference workload to pin during the baseline: laptop-class x86 CPU, one p
 
 ## Comparison and claim gates
 
-Measure lexical, small cross-encoder and pooled dual-encoder controls plus supported Laya and Kev-0.8B configurations **if they fit** on identical hardware, data and precision disclosures. Show ineligible models' quality separately. Compare hosted Jev on the same valid labelled tasks where access permits, with network latency in its own category. Pre-register the primary mix and an unseen-source mix before choosing a favorable result.
+Measure lexical, small cross-encoder and pooled dual-encoder controls plus supported Laya and Kev-0.8B configurations **if they fit** on identical hardware, data and precision disclosures. Before a claimed win, refresh the pinned [JevBench](sources.md#s10) board and include leading open systems (currently Plumb-4B and decider-4b v2) if their *whole local process* fits 4 GiB; a parameter or weight count cannot establish eligibility. Show ineligible models' quality separately. Compare hosted Jev on the same valid labelled tasks where access permits, with network latency in its own category. Pre-register the primary mix and an unseen-source mix before choosing a favorable result.
 
 1. **Local fit:** under 4 GiB RSS at declared maximum workload, without a remote call or hidden helper process.
 2. **Quality floor:** locked new-source accuracy and Brier non-inferior to the strongest eligible local comparator under pre-registered margins and paired 95% intervals. Fix margins after the baseline pilot's variability, **before** training the candidate.
