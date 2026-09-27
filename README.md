@@ -16,6 +16,7 @@ flowchart LR
 | Evidence and competitors | [Research landscape](docs/research.md) | [Source ledger](docs/sources.md) |
 | Technical design | [Architecture](docs/architecture.md) | [Evaluation contract](docs/evaluation.md) |
 | Feasibility and compute costs | [Analytical screen](docs/feasibility.md) | [Roadmap](docs/roadmap.md) |
+| Free GPU setup | [Kaggle connection](docs/kaggle.md) | [Roadmap](docs/roadmap.md) |
 | To review an experiment | [Roadmap](docs/roadmap.md) | [Experiment template](templates/experiment.md) |
 
 **Research question:** can an **under-8 GiB peak-memory** local CPU process make typed text decisions faster, with acceptable or superior accuracy and probabilities, than eligible open decision models on the **same tasks and hardware**? A separate **under-4 GiB quantized profile** tests more constrained devices without weakening the primary quality comparison. Hosted Jev is a separate quality comparator; its network time is not a local CPU speed result. “Fastest” will always be qualified by hardware and workload.

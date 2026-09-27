@@ -1,0 +1,28 @@
+name: Kaggle connection check
+
+on:
+  push:
+    branches: [research/decision-model-plan]
+    paths: [.github/workflows/kaggle-connection.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Install pinned Kaggle CLI
+        run: python -m pip install --disable-pip-version-check kaggle==2.2.4
+      - name: Verify the repository secret authenticates
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "KAGGLE_API_TOKEN is missing from repository Actions secrets." >&2
+            exit 1
+          fi
+          kaggle kernels list --mine --page-size 1 > /dev/null
+          echo "Kaggle API authentication succeeded."
