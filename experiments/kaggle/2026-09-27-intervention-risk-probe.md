@@ -26,6 +26,8 @@ The input slate must repeat the previously scored questions. This experiment doe
 | Calibration | Route cutoffs for each Q and budget fit on calibration compositions only; no held-out labels used for routing |
 | Compute | One private Kaggle T4 inference run; no paid compute; collector cap 14 minutes and Actions job cap 35 minutes |
 
+The generated-record audit and inference screen are content-pinned: generator SHA-256 `0203b3157c322ecf5050af898b71ba8a78512e0bdb1f05e8c42a155c9a5422ae`, generated-record SHA-256 `6612571e3625e412eb24f3549e0d21dd3bcc0a609990a13e34ed3314aaa794d1`, and screen SHA-256 `e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c`. The collector rejects any mismatch.
+
 For field $j$, the exact synthetic target is
 
 `changed_j = 1[label_j(before) != label_j(after)]`.
