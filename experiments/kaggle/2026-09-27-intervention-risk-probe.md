@@ -2,7 +2,7 @@
 
 **Status: pre-score power check passed; first private T4 submission is queue-blocked; read-only recovery is monitoring the same kernel. No model or verifier scores yet.**
 
-**Execution log:** [GitHub Actions run 36314796409](https://github.com/thepragmatik/revv/actions/runs/36314796409) submitted private kernel rathworx/revv-intervention-risk-probe/1, which remained QUEUED for the full 14-minute collector window. The job ended before inference and produced no result artifact. [Recovery run 36315661095](https://github.com/thepragmatik/revv/actions/runs/36315661095) checks that exact kernel version for up to 25 minutes; it does not submit a duplicate or change the preregistered method/gates.
+**Execution log:** [GitHub Actions run 36314796409](https://github.com/thepragmatik/revv/actions/runs/36314796409) submitted private kernel rathworx/revv-intervention-risk-probe/1, which remained QUEUED for the full 14-minute collector window. The job ended before inference and produced no result artifact. The exact observations and terminal error are preserved in the [machine-readable queue record](2026-09-27-intervention-risk-queue-timeout.json). [Recovery run 36315661095](https://github.com/thepragmatik/revv/actions/runs/36315661095) checks that exact kernel version for up to 25 minutes; it does not submit a duplicate or change the preregistered method/gates.
 
 **[Plain-English overview](../../docs/start-here.md) · [Idea ledger](../../docs/ideas.md) · [Research gates](../../docs/next-steps.md) · [Codex handoff](../../codex/RESUME.md)**
 
