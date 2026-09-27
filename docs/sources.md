@@ -168,3 +168,14 @@ This pass narrows the architectural claim further. A selector that estimates net
 | ID | Primary source | Relevance and limit |
 | --- | --- | --- |
 | <a id="s81"></a>S81 | [Evaluating Models’ Local Decision Boundaries via Contrast Sets](https://aclanthology.org/2020.findings-emnlp.117/) and the [AllenAI contrast-set collection](https://github.com/allenai/contrast-sets) | Findings of EMNLP 2020 uses small, meaningful edits that typically change the gold label to probe local decision boundaries across 10 NLP tasks, reporting performance drops of up to 25%. This establishes edit sensitivity and contrast-set testing as prior art. It does not test cached typed-output refresh, whether refresh reduces gold-task loss, or its latency/cost. The collection has task-specific provenance and licensing; no root-level license was found in the inspected repository, so do not treat the data as rights-cleared. See the [novelty audit](novelty-audit.md#eighth-overlap-pass-contrast-sets-and-local-decision-boundaries). |
+
+
+## Dataset rights and benchmark fit preflight
+
+| ID | Primary source | Relevance and limit |
+| --- | --- | --- |
+| <a id="s82"></a>S82 | [RuleTaker official code and README](https://github.com/allenai/ruletaker), [official RuleTaker page](https://rule-reasoning.apps.allenai.org/about) | The generator produces natural-language theories and prover-derived labels/proofs, so it is a strong design precedent for controlled paired worlds. The repository states Apache 2.0 for its software and links a separate dataset archive without separate data terms in the README; the official page says its dataset includes synthetic rules and some crowdsourced data. Do not infer a data license from the code license or a mirror. |
+| <a id="s83"></a>S83 | [Counterfactually Augmented Data repository and README](https://github.com/acmi-lab/counterfactually-augmented-data) | The collection describes human revisions intended to change labels without unrelated edits, useful as a linguistic stress-test design. Its root license is Apache 2.0, but the NLI subset is based on SNLI; per-example provenance and downstream compatibility must be checked. It supplies single premise/hypothesis decisions rather than multiple typed outputs over one shared state. |
+| <a id="s84"></a>S84 | [Official Stanford SNLI page](https://nlp.stanford.edu/projects/snli/) and [SNLI paper](https://nlp.stanford.edu/pubs/snli_paper.pdf) | Stanford describes the corpus as human-written NLI data and identifies Flickr30k and VisualGenome sources; the paper states the corpus is under CC BY-SA. This source license is relevant to any CAD-derived reuse and must be preserved in a provenance review. |
+
+No released dataset was downloaded during this preflight. The selection and proposed controlled/transfer split are documented in the [benchmark fit report](../experiments/data/2026-09-27-edit-benchmark-selection.md).
