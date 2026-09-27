@@ -16,8 +16,15 @@
     "heldout": 240
   },
   "heldout_q20_changed_fields": 74,
+  "heldout_q20_field_count": 4800,
+  "heldout_q20_changed_field_fraction": 0.015416666666666667,
   "heldout_q20_changed_rule_groups": 22,
   "heldout_states_with_any_q20_change": 51,
+  "random_25pct_budget_reference": {
+    "expected_changed_field_recall": 0.25,
+    "expected_changed_fields_selected": 18.5,
+    "basis": "uniform selection over 4,800 fields; expectation, not the deterministic hash-control result"
+  },
   "sample_size_gate": {
     "minimum_changed_fields": 50,
     "minimum_changed_rule_groups": 10,
