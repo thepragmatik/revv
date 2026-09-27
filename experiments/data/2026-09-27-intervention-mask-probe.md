@@ -1,5 +1,7 @@
 # Intervention-mask generator smoke
 
+**[Plain-English overview](../../docs/start-here.md) · [Gated research plan](../../docs/next-steps.md) · [Codex handoff](../../codex/RESUME.md)**
+
 **Status: passed data-integrity checks; no model-quality or speed result.** This is the first small artifact for the intervention-supervised, risk-gated verifier hypothesis. It tests whether we can generate grouped typed questions, exact labels and proof evidence, and single-fact edits with correct field-change masks. It does not test a neural model.
 
 **Plain English:** We made 256 small rule-based situations, asked 20 yes/no/unknown questions about each one, and changed one fact. A deterministic reasoner supplied the answers and proof trails. We checked that the mask marks exactly the questions whose answers changed. This verifies the dataset plumbing only.
