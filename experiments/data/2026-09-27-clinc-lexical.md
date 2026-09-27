@@ -2,7 +2,7 @@
 
 **[Plain explanation](../../docs/start-here.md) · [First dataset audit](2026-09-27-clinc-audit.md) · [Architecture idea](../../docs/ideas.md) · [Evaluation contract](../../docs/evaluation.md)**
 
-**Status: registered before execution, 27 September 2026.** CPU and public dataset only; no Kaggle GPU and no pretrained checkpoint. This is a labelled-data floor for later controlled model comparisons, not an eligible local model claim.
+**Status: complete, 27 September 2026.** CPU and public dataset only; no Kaggle GPU and no pretrained checkpoint. This is a labelled-data floor for later controlled model comparisons, not an eligible local model claim.
 
 ## Fixed input, split and method
 
@@ -14,4 +14,16 @@
 
 ## Result
 
-Pending. Add the Actions run, aggregate JSON, raw hashed predictions, failure analysis and the next discriminating Kaggle experiment. Keep any failed attempts in the record.
+The [Actions run](https://github.com/thepragmatik/revv/actions/runs/36293013709) completed at source commit `df1f89ed0f1c5578a9a088081405cbb93783f46e`. It saved [aggregate metrics](2026-09-27-clinc-lexical.json) and [1,547 hashed development predictions](2026-09-27-clinc-lexical-predictions.jsonl). The three known overlaps were excluded, producing 1,547 development and 1,550 calibration rows, each with 50 out-of-scope examples. The held-out test was not inspected.
+
+| Development finding | Observed |
+| --- | ---: |
+| Majority-label accuracy over all 151 labels | 0.65% |
+| Known-intent closed-set accuracy, 1,497 rows | 82.43% (Wilson 95%: 80.42–84.28%) |
+| Known accuracy after abstention | 80.69%; 4.21% of known rows deferred |
+| Out-of-scope recall, 50 rows | 36.0% (Wilson 95%: 24.14–49.86%) |
+| Known-score calibration threshold | 0.1561 cosine, chosen at the in-scope calibration 5th percentile |
+
+Paired error inspection of hashed predictions identifies related-intent confusions: `insurance → insurance_change` occurred seven times, `next_song → what_song` five times, and `bill_due → pay_bill` five times. Seven OOS utterances were labelled `calculator`. Without seeing original utterances we cannot tell whether these are annotation errors, lexical shortcuts or genuinely ambiguous requests. The low OOS recall plus broad interval makes answerability the **next failure to attack**, but the risk threshold should remain fixed when comparing new encoders. This result does not show calibrated probabilities, end-to-end per-request CPU latency, RSS, new-source generalization or the decision quality of any pretrained model.
+
+**Next discriminating experiment:** with the same exact development/calibration split, compare frozen pretrained sentence-level pooling and token-level late interaction using the same checkpoint and separate calibration thresholds. First check Kaggle model/data access without consuming GPU. Keep the lexical floor as a matched reference. Do not describe a gain on this public development fold as a locked-test win.
