@@ -46,9 +46,9 @@ The working GitHub branch is `research/decision-model-plan`; [draft PR #1](https
 The closest prior art now includes append-only incremental encoding, edit-local KV-cache repair, solver-verified paired answer-change worlds, and confidence-versus-update-regression routing. This makes broad edit sensitivity or cache reuse non-novel; the active, unproven question is typed-output-level refresh selection under equal verifier budget. The count screen passed its minimum, but no prospective power analysis for the +10pp/CI gate exists. Versions 1 and 2 failed before scoring; version 3 includes both fixes but remained QUEUED across its full 14-minute collector window. Read-only recovery Action 36319968934 then polled that version for 25 minutes: all 100 checks were QUEUED, it timed out before inference, and no artifact was created. The screen is inconclusive; there are no model scores.
 
 1. Close the current Kaggle screen as inconclusive: the exact version remained QUEUED in 100/100 checks for 25 minutes, timed out before inference, and produced no artifact. Do not submit a fourth screen kernel or use paid compute.
-2. Continue CPU-side work: verify data rights and availability for an independent relevant-edit workload, then define the next experiment around signed expected gold-loss reduction rather than label flips alone. Change recall alone is insufficient.
+2. Continue CPU-side work: verify data rights and availability for an independent relevant-edit workload, then define the next experiment around signed expected gold-loss reduction rather than label flips alone.
 3. Before any future GPU experiment, require a minimal free-provider availability preflight to start promptly. Keep the paid-compute prohibition in force.
-4. Only after that result, benchmark eligible compact models on the same declared local CPU workload and measure whole-process RSS below 8 GiB; test a separate quantized profile below 4 GiB.
+4. After a rights-clear workload is established, compare eligible compact models on the same declared local CPU task. Require matched quality and latency with whole-process RSS below 8 GiB; measure a separate quantized profile below 4 GiB.
 
 No paid compute is authorized. The 8 GiB / 4 GiB targets remain deployment gates, not claims from Kaggle.
 
