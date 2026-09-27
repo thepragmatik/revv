@@ -83,12 +83,20 @@ Continue prior-art search and small probes; do not start training to validate no
 
 ## Cost-aware repair target: useful test, not novelty
 
-For field (i), the relevant target is the expected *signed* change in task loss after verification:
+For field \(i\), the relevant target is the expected *signed* change in task loss after verification:
 
-[
-v_i = mathbb{E}left[ell(hat{y}^{\mathrm{cached}}_i,y_i)-ell(hat{y}^{\mathrm{refresh}}_i,y_i)\mid z_i\right],
-]
+\[
+v_i = \mathbb{E}\left[\ell(\hat{y}^{\mathrm{cached}}_i,y_i)-\ell(\hat{y}^{\mathrm{refresh}}_i,y_i)\mid z_i\right].
+\]
 
-where (z_i) contains the pre-edit state, query, edit and available cached evidence. Positive (v_i) means refreshing is expected to correct more loss than it introduces. Under an equal-cost fixed budget, route the largest positive (v_i); with different per-field costs (c_i), choose a subset maximizing (sum_i a_i v_i) subject to (sum_i a_i c_i\leq B). Charge shared edit encoding once, outside the per-field branch cost.
+Here \(z_i\) contains the pre-edit state, query, edit and available cached evidence. Positive \(v_i\) means refreshing is expected to correct more loss than it introduces. For an **at-most** budget with equal per-field cost, select the largest positive \(v_i\) values up to the limit. The current preregistered exact 10/25/50% screens instead select exactly the top \(k\), regardless of sign. With variable per-field costs, solve:
 
-This is a decision-theoretic evaluation target, not a novel routing principle: adaptive model/sample routing, theoretically analyzed cost/quality cascades, and feature-cost-aware cascades already exist. The specific unresolved question is whether solver-verified before/after labels for arbitrary edits make (v_i) predictable for cached typed outputs, and whether that beats confidence and unconditional local repair on an independent workload. The current screen predicts label changes only and cannot establish this.
+\[
+\max_{a_i\in\{0,1\}} \sum_i a_i v_i
+\quad\text{subject to}\quad
+\sum_i a_i c_i \leq B.
+\]
+
+Charge shared edit encoding once, outside the per-field branch cost. These additive equations assume per-field loss; if the deployed decision has interacting fields, optimize joint bundle loss.
+
+This is a decision-theoretic evaluation target, not a novel routing principle: adaptive model/sample routing, theoretically analyzed cost/quality cascades, and feature-cost-aware cascades already exist. The specific unresolved question is whether solver-verified before/after labels for arbitrary edits make \(v_i\) predictable for cached typed outputs, and whether that beats confidence and unconditional local repair on an independent workload. The current screen predicts label changes only and cannot establish this.
