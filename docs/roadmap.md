@@ -2,30 +2,31 @@
 
 **[Home](../README.md) · [Plain explanation](start-here.md) · [Design](architecture.md) · [Evaluation](evaluation.md) · [Executable next steps](next-steps.md)**
 
-```mermaid
+~~~~mermaid
 flowchart TD
-    A["Freeze task and data rules"] --> B["Measure cheap baselines"]
-    B --> C{"Gap justifies training?"}
-    C -->|Yes| D["Train one small candidate"]
-    C -->|No| A
-    D --> E["Calibrate and red-team"]
-    E --> F{"Locked test and 8 GiB gate pass?"}
-    F -->|Yes| G["Export and publish model card"]
-    F -->|No| H["Record failure and revise"]
-```
+    A["Revisit prior art and freeze task"] --> B["Audit data and estimate cost"]
+    B --> C["Run matched CPU baselines"]
+    C --> D{"Candidate survives cheap tests?"}
+    D -->|No| E["Record failure and revise"]
+    D -->|Yes| F["One small free GPU pilot"]
+    F --> G["Calibrate and red-team"]
+    G --> H{"Quality, speed and memory gates pass?"}
+    H -->|No| E
+    H -->|Yes| I["Export and publish evidence"]
+~~~~
 
 | Phase | Artifact | Exit gate |
 | --- | --- | --- |
-| 0. Scope | [Matched comparison contract](next-steps.md#0-freeze-the-comparison-contract), target CPU, workload and error costs | Frozen schema/splits/metrics/hardware; no claim without named comparison conditions. |
-| 1. Audit | Dataset cards, split manifests, competitor revisions, one independent evidence workload | Rights and leakage checked; holdout untouched; baseline contract runs end to end. |
-| 2. Matched baselines | CPU quality/latency/RSS for direct scorer, Laya shortlist, Kev if eligible, and current controls | Identify an evidenced gap on same examples/hardware; otherwise stop. |
-| 3. No-training discriminator | Compare fixed evidence coverage/counterevidence routes to confidence-only and always-verify | Coverage-aware route wins paired quality–latency frontier and survives negation/missing-evidence slices. |
-| 4. Prototype | One small model, one changed variable, one-batch smoke then short pilot | Only unlock if phase 3 identifies a trainable failure; retain gain on an independent-source workload. |
-| 5. Red-team and deploy | Calibration, adversarial slices, full-process 8 GiB CPU and separate quantized 4 GiB profile | Pass registered risk, quality, memory and latency criteria; test remains sealed until freeze. |
-| 6. Report | Reproducible method, source pins, raw metrics, accessible summary and model/data cards | Qualified claim with hardware/task/quality uncertainty; publish failures as well as wins. |
+| 0. Mission and novelty | [Original prompt](../codex/ORIGINAL_PROMPT.md), primary-source overlap ledger and candidate board | No established component is mislabelled as novel; one falsifiable candidate survives. |
+| 1. Data and cost audit | Exact schemas, rights/splits, rule-composition manifest, analytical compute and memory estimate | No leakage or invalid label conversion; candidate has plausible headroom. |
+| 2. Matched baselines | CPU quality/latency/RSS for Primus, RSI-Jev, compact encoder, direct cross scorer, Laya, Kev, Typical and Decider where eligible | Same inputs/hardware; identify a real gap or stop without training. |
+| 3. No-training discriminator | Layerwise typed probes, per-question exit depth and maximum probability drift across the whole bundle | Useful early exits survive calibration and task-quality checks. |
+| 4. Bounded prototype | One compact student, one-batch smoke and short free-Kaggle pilot | Paired gains survive a natural source and an unseen rule composition. |
+| 5. Calibrate and red-team | Separate calibration split, counterfactuals, model export and CPU profiles | Registered quality/calibration/risk gates and full-process <8 GiB gate pass; separate quantized <4 GiB gate measured. |
+| 6. Report | Reader-friendly explanation, expert method, configs, hashes, raw aggregates and failure analysis | Every win is tied to a named model, revision, task, CPU, precision, uncertainty and timing boundary. |
 
-Follow the detailed [next-step plan](next-steps.md). Before any long run, write an [experiment record](../templates/experiment.md): hypothesis, single changed variable, exact hashes, time/cost estimate, maximum spend and stop trigger. First run a one-batch forward/backward/save/load/inference smoke. Inspect stratified development errors before a full epoch. Measure a pilot epoch before setting a budget; **no cost number here authorizes spending**. Read the locked test only after registering a final candidate.
+Before any experiment, use the [experiment template](../templates/experiment.md) to record hypothesis, one changed variable, exact hashes, maximum runtime and free-provider quota. Start with dataset checks and algebra, then a short inference or one-batch smoke. No cost estimate in this roadmap authorizes paid compute.
 
-When the baseline exists, add `src/revv/` (schema/model/adapters), `tests/` (contract and export parity), `bench/` (hardware and raw metrics), `experiments/` (immutable manifests) and `docs/results/` (plain summaries and technical cards). Commit scripts, configurations and small metrics; retain large datasets/checkpoints in versioned artifact storage with hashes and rights. Every result page links to its experiment record and raw metrics, and back to the [plain explanation](start-here.md).
+The current lead is a **research hypothesis**: share one state pass across multiple typed questions, let each question branch stop at its own depth, and calibrate the maximum intermediate-to-full drift over the whole question bundle. Shared state, early exit and conformal stopping each have prior art; the combination is not yet checked exhaustively. It may fail because early predictions stabilize too late, one hard question keeps the state at full depth, calibration is too conservative, or control overhead erases the savings. See the [novelty review](research.md) and [idea ledger](ideas.md).
 
-**Questions for the project owner at phase 0:** reference local machine, decision domain and error costs, initial English-only scope, whether 8 GiB constrains system RAM, accelerator memory or both, and the available experiment budget. Working assumptions: x86 CPU process RSS, English text and support/policy decisions; a second quantized <4 GiB profile. These can change without discarding the research framework.
+**Open project choices:** exact target CPU, domain/error costs, whether 8 GiB means full host or model process, English-only phase-one use, and dataset rights. Until a target is provided, select a named reproducible reference CPU and limit claims to that machine. Free Kaggle T4 is for a justified training pilot; it does not substitute for local CPU measurement.

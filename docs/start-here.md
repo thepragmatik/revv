@@ -15,7 +15,7 @@ flowchart TD
     R -->|No| H["Human review"]
 ```
 
-Our first candidate reads shared text once, then compares each question and answer option with that reading. This may save work when several questions concern one document. It might also miss negation, exceptions, or a decisive detail buried late in the text. [The design](architecture.md) explains both the proposal and its falsifying tests.
+Our newest research candidate asks whether one state pass can serve several typed questions while each question stops at a different model depth. A calibration rule would check that early answers match the same model's full-depth answers across the whole question bundle. Early exit and shared-state scoring are established techniques; we have not shown this exact combination is new. It may be useful only if it saves real CPU time without degrading answer quality or probabilities. [The technical design](architecture.md), [prior-art review](research.md) and [test plan](next-steps.md) explain the tests and stop rules.
 
 The main local limit is **under 8 GiB peak memory for the entire process**, including the tokenizer, runtime and working buffers. We will also test a **quantized under-4 GiB version** for smaller devices. This is a separate profile: quantization might change both speed and answers. A small model file alone does not prove either version fits. The first reference device is a laptop-class CPU. We will measure cold start, warm requests, multiple questions and long text separately; GPU and hosted API timings get their own comparisons. [See the memory and compute arithmetic](feasibility.md).
 

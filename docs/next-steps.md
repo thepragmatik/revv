@@ -1,96 +1,90 @@
-# Next steps: evidence before architecture
+# Next steps: a novelty-led, low-cost decision-model programme
 
-**[Home](../README.md) · [Plain explanation](start-here.md) · [Research landscape](research.md) · [Idea ledger](ideas.md) · [Codex handoff](../codex/RESUME.md)**
+**[Home](../README.md) · [Plain explanation](start-here.md) · [Research landscape](research.md) · [Idea ledger](ideas.md) · [Architecture](architecture.md) · [Codex handoff](../codex/RESUME.md)**
 
-Research snapshot: 27 September 2026. This plan follows the [original mission](../codex/ORIGINAL_PROMPT.md): seek a genuinely useful new combination, derive and test its limits before building, keep it fast on local CPU under 8 GiB peak process memory, and maintain a separately measured quantized profile under 4 GiB. “Beats existing models” means a paired, same-task, same-hardware comparison with uncertainty intervals; it is not yet demonstrated.
+Research snapshot: 27 September 2026. This plan follows the original mission: try hard to find a novel idea, reason from first principles, challenge it against literature and evidence, and spend compute only after a cheap test shows a reason. The main deployment goal is local typed decisions under 8 GiB peak process RSS; a separate quantized build must fit under 4 GiB.
 
-## What the literature and our results say
+## Updated research verdict
 
-**Enough has been reviewed to choose the next experiments, not enough to claim novelty or select a winning architecture.** The latest primary-source review materially narrows the contribution:
+The earlier rubric/fact-memory proposal is too close to newly identified work to lead as a novelty claim. Nimble publishes counterfactual evidence pairs for typed choices, yes/no and score tasks; RULERS compiles criteria, checks evidence and calibrates scores; Primus Decision already gives a very small CPU typed-decision model; RSI-Jev is a sub-billion-parameter open typed scorer; Typical and other systems already reuse one state across questions.
 
-| Proposed ingredient | Closest existing work | Consequence |
-| --- | --- | --- |
-| Encode shared state once; branch questions from reused state | Kev's block-causal packed pass and pointer head; Laya also reuses a pooled state representation | State reuse alone is not a novelty claim. Compare exact released implementations and costs. |
-| Shortlist options from a pooled representation before typed decision | Laya `predict_shortlist` | Must include this as a direct baseline, with top-k recall and full route cost. |
-| Token-level evidence matching, compression, distillation and hard negatives | ColBERT / ColBERTv2 | These are known techniques. Only test token interaction if pooled evidence has a measured failure it can fix. |
-| Aggregate evidence over long documents and use NLI scores for selection | SENTLI and ContractNLI work | Long-document aggregation and clause selection are prior art. Include same-evidence cross scoring. |
-| Hierarchical evidence pruning / graph pooling | DocInfer | Evidence pruning is not itself new. Test whether the proposed gate adds value over its simple controls. |
-| Budgeted cascades, confidence-based verification, abstention | Cascade Transformer; BoundaryMORPH; selective prediction literature | A bounded verifier needs a distinct measurable objective, not a newness claim. |
-| Fixed-hypothesis evidence prototype plus not-mentioned decision | Direct pieces exist; our ContractNLI screens show strong retrieval but weak stance/aggregation evidence | Current data do not justify neural shared-encoder training. |
+**One focused hypothesis remains worth a low-cost test:** use a shared state pass, but let each question branch stop at a different layer when a statistically calibrated check says its output matches the same model's full-depth answer. Early exit and multi-task adaptive compute are established. The possible contribution is this particular combination of (a) reusable state across independent request-time questions, (b) separate exit depth per question, and (c) bundle-level calibration across all questions and exit layers. This is a search target, not a certified novelty gap.
 
-The possible research question worth testing is narrower: **can a decision system predict when its current evidence is incomplete or contradicted, and buy a bounded extra evidence/verification pass only in those cases—while improving the paired quality–latency frontier over direct cross scoring, Laya's shortlist, Kev's state reuse, and confidence-only routing?** This is a hypothesis, not a claim of a new architecture. It becomes interesting only if coverage-aware routing beats those controls under negation, exceptions, missing evidence, and domain shift at equal memory and compute budgets.
-
-The current ContractNLI results are a concrete warning: pooled evidence retrieval reached 95.11% positive `any-gold@5` and 63.52% `all-gold@5`, yet the matched ternary classifier was only 70.20% accurate versus a 68.08% hypothesis-only prior, with an uncertain paired gain. Frozen NLI cross-scoring did not improve it. The marked-span diagnostic showed that evidence availability helps one restricted positive-only view, but did not meet the registered balanced gap and did not cover the full three-way task. Thus neither more retrieval complexity nor another GPU run is presently supported.
+The proposed method can at most preserve the full-depth model's answer while reducing compute. It cannot make an incorrect full-depth answer correct. Its useful result would be lower local latency at non-inferior task quality, probability quality and memory.
 
 ## Ordered execution plan and gates
 
-### 0. Freeze the comparison contract
+### 0. Freeze the task and claim
 
-Write one machine-readable manifest for each task: exact source/version/license, document-level split and hashes, input and output schema, label mapping, truncation policy, allowed calibration data, and one primary quality metric plus safety/abstention metrics. Keep the ContractNLI test unopened. Preserve the existing CLINC/ContractNLI development results as exploratory; do not tune a new model repeatedly against them and call them held-out evidence.
+Write a request manifest for state, question set, answer type, options, missing-evidence behavior, context limit and truncation policy. Distinguish whole-process RSS from host RAM. Fix the target workload, CPU, batch/concurrency, primary task mix, quality margins, calibration coverage and timing boundary before using a locked test.
 
-Before external comparisons, choose the actual target CPU(s) and specify whether 8 GiB includes only the model process or the full host. If no target device is specified, report CPU/model/task measurements by named reference machine and make no universal fastest claim. Keep a distinct 4 GiB quantized acceptance profile. Pin competitor checkpoint commits, tokenizer, runtime, precision and adapters; do not compare author GPU timing to our CPU timing.
+**Exit gate:** every model adapter receives semantically identical requests and returns the same typed output contract. The test set and any sealed benchmark results stay unopened.
 
-**Exit gate:** all methods can consume identical normalized examples and produce identical typed output records; quality thresholds, candidate option counts, route budgets and hardware are written before looking at new scores.
+### 1. Close the nearest prior-art gap
 
-### 1. Establish matched baseline quality and CPU cost
+Read the implementation and release materials for Primus Decision, RSI-Jev, Typical, Nimble, RULERS, Laya, Kev, Rev and Decider. Pin exact commit/checkpoint revisions, licenses, tokenizers, supported schema, state length, model size, memory and local runtime. Add early-exit papers CATs, CALM, LEAP and AdaMTL to the overlap map. Search specifically for multi-query or task-set adaptive exits over a shared state, not just generic early exit.
 
-Run the inexpensive controls first on frozen splits: current lexical and MiniLM baselines; direct cross scoring; official Laya (including `predict_shortlist`); and Kev where its license, checkpoint, runtime and hardware footprint permit. Do not treat hosted Jev latency as local inference latency. Measure both cold start and steady-state, complete tokenization-to-output wall time, p50/p95, throughput under stated batching, peak process RSS, model artifact size and quality. Use identical examples and record failures, not only successful timing rows.
+**Exit gate:** either find an identical mechanism and reframe as replication/evaluation, or document precisely which tested property remains distinct without calling it new. Do not download multi-gigabyte weights until license, runtime, memory and a valid comparison path are known.
 
-Stress the workload dimensions separately: 2, 5, 20 and 77 options; short and long states; one versus many questions per state; option order permutations; and memory profile. For Kev/Laya, test supported input contracts directly rather than forcing unsupported modes into a misleading comparison. The full process, tokenizer and runtime count toward memory.
+### 2. Audit data and build the workload bundle
 
-**Exit gate:** reproducible baselines and uncertainty intervals; a real local CPU bottleneck or quality gap is identified. If a baseline already meets the goal, do not train a duplicate model.
+Use Typed Decisions for its five-questions-per-state interface and probability plumbing, while treating its small synthetic, teacher-labeled test as secondary evidence. Use RuleTaker/ProofWriter for exact held-out operator combinations. Consider RuleArena, AgentCoMa and JevBench only when schema and label provenance are clean. Keep ContractNLI as a long-document/evidence stress test, not as the sole primary task; earlier evidence-use gates failed.
 
-### 2. Add one independent evidence-grounded workload
+Create splits grouped by state, source, template, option/rubric family and counterfactual sibling. Build workload bundles with Q=1/5/20 questions, 2/5/20 options and 128/512/2,048 state-token strata. Lock calibration and test manifests separately. Audit rights, duplicates, label provenance and benchmark exposure first.
 
-ContractNLI is useful but fixed-hypothesis and domain-specific. Audit MultiRC as a shorter, varied question-plus-paragraph workload. Treat each candidate answer as its own binary decision because MultiRC permits multiple correct answers; do not silently turn it into single-label softmax. Audit QASPER as a possible long-document extension, but only use a preregistered yes/no or answerable/not-answerable slice with evidence and an explicit mapping; its free-form answer cases do not naturally fit our output contract. Check licensing, annotation, length, split leakage and overlap before selection.
+**Exit gate:** one exact-label composition test and one independent natural typed workload support valid matched comparisons. If not, make narrower claims about the one usable task.
 
-For whichever dataset passes, report performance by question count per state, evidence length, answerability, negation/exception and whether all gold evidence was retrieved. Keep source-disjoint results separate from within-source generalization. A tiny manually adjudicated challenge set can supplement published data, but must be documented and not tuned into the test set.
+### 3. Run the no-training exit-headroom probe
 
-**Exit gate:** at least one non-CLINC workload with independent questions and evidence supports the same typed contract; otherwise limit claims to the workloads actually measured.
+Select the smallest open model that supports per-layer hidden states and a reproducible CPU path. Extract representations/logits at candidate depths on training and development partitions. Fit only lightweight per-depth readout probes or use the model's native candidate scorer; do not update the backbone yet.
 
-### 3. Test the proposed mechanism without training
+Measure:
 
-On the same frozen examples compare: (a) direct cross encoder; (b) pooled state/question or option shortlist; (c) shortlist plus fixed top-k evidence; (d) confidence-only extra verification; and (e) coverage/counterevidence-triggered extra retrieval or verification. Start with fixed, transparent gates and an existing scorer. Measure option `Recall@k`, evidence `any-gold@k` and `all-gold@k`, contradiction/negation slices, abstention risk, and paired latency/quality. Fit any threshold only on training/calibration documents; report development once after preregistration.
+- final-layer quality versus each early exit by typed question and source;
+- whole-bundle maximum probability drift over layers and questions;
+- top-answer stability as Q grows;
+- number of questions that could exit at each depth under a 95% calibrated stability target;
+- score-question expected-value drift and probability metrics separately;
+- storage/RSS and the cost of producing each layer's probe.
 
-Counterfactual checks: reorder questions/options; swap support and contradiction evidence; move a negation/exception beyond the initial window; insert irrelevant boilerplate; remove all evidence; shuffle evidence across documents; and compare the same state with different hypotheses. For a valid verifier, report the hard ceiling imposed by shortlist recall and the number of essential evidence clauses excluded. The route must treat candidates symmetrically and cannot use answer order as a shortcut.
+**Exit gate:** a useful fraction of question branches exits materially before full depth on an independent source, with a non-vacuous bundle calibration bound. If exits occur only near the final layer or the calibrated bound is too wide, stop before writing a serving path.
 
-A cheap upper bound helps decide whether routing can pay: if the first stage retains the correct answer with probability `R@k`, a verifier restricted to those candidates has closed-set accuracy at most `R@k` on that slice, even with a perfect verifier. For the gated route, the maximum possible average gain over the baseline is bounded by `P(gate) × P(baseline-wrong and recoverable | gate)`; the realized gain is smaller after verifier error. Measure these terms on the frozen sample before tuning a gate. Similarly, a route that invokes verification on fraction `p` has expected cost `C_first + p·C_verify + C_gate`; compare this measured end-to-end cost and its p95 to always-verify and confidence-only controls. If the bound is below the registered quality margin, stop without training.
+### 4. Establish matched CPU baselines
 
-**Decision gate:** retain a coverage-aware route only if it beats both confidence-only routing and always-verify on the paired quality–latency frontier, has no material regression on missing-evidence/negation slices, and stays within the fixed local memory/compute budgets. Otherwise reject this mechanism and update the idea ledger.
+Run small lexical/encoder controls and eligible direct models: Primus, RSI-Jev 0.8B, Laya, Kev, Typical-small, Decider and Rev where exact revisions and runtimes permit. Treat Nimble's 9B model as a reference only if an 8 GiB profile can be validated. Include fixed full-depth, fixed shallow tap, independent question exits and shared-state fixed depth.
 
-### 4. Only then consider one small training experiment
+Use the same CPU, software versions, thread count, request bundles and timing boundaries. If the user's machine is not known, use a named reproducible runner and label it as such; do not generalize its speed to the user's laptop.
 
-If and only if step 3 shows a repeatable failure that training can plausibly address, create one small candidate with one hypothesis and one changed variable. Start with a batch-level forward/backward/save/load/export smoke. Then run one short pilot on training data; estimate full-run time and memory from that pilot. A sensible first model is a compact encoder or student, not ModernBERT-large or a 0.8B generative model by default. Compare trained pooling against the frozen direct scorer; add contrastive hard negatives, teacher distillation, token interaction or a learned evidence-coverage gate **one at a time**, based on error slices. Use grouped document splits, fixed seeds and a prewritten stop rule.
+**Exit gate:** the adaptive shared-state path has measurable compute headroom over the strongest fitted baseline and a realistic chance to beat its end-to-end p95 at the registered quality margin. If an existing compact model already meets the target, stop rather than duplicate it.
 
-Do not spend Kaggle GPU quota until the CPU controls identify the target change and the run's maximum duration is estimated. Kaggle is the low-cost training venue, not proof of local CPU speed. Log GPU model/time separately from CPU inference and memory measurements.
+### 5. Build one bounded candidate and train only if needed
 
-**Exit gate:** a reproducible paired gain on development, retained on the independent-source workload, before calibration and the sealed test are touched. Stop after a failed registered gate; do not add architecture pieces to rescue it post hoc.
+Only after the probe and baseline gates pass, add per-depth decision heads to one small open model. Start with distillation from the model's own final-depth distributions plus exact/human labels. Add one change per arm: exit-head supervision, then optionally set-level stability calibration, then separately criterion/evidence alignment or counterfactual examples.
 
-### 5. Red-team, calibrate, and measure deployment profiles
+Use the free Kaggle T4 bridge only for a short, registered experiment: first a one-batch forward/backward/export smoke, then a capped pilot sized from measured step time. No paid training. Report GPU training separately from CPU inference. Preserve seed, checkpoint revision, code commit, data hashes, peak GPU memory and elapsed time.
 
-Calibrate on disjoint calibration data and evaluate Brier score, expected calibration error with binning details, selective risk at fixed coverage, abstention/OOS recall, and reliability by domain and option count. Red-team negation, exception clauses, multiple valid choices, no valid choice, contradictory passages, long-tail truncation, duplicate candidates, candidate-order changes, adversarial paraphrases and source shift. A prediction that is fast but confidently wrong on an unsupported state fails.
+**Exit gate:** on a held-out source and held-out question bundles, the candidate meets quality and calibration margins and saves end-to-end CPU time after all checks. If a neural adaptation fails once under a prespecified gate, record it and stop that arm.
 
-Export only a passing candidate. First profile the full-precision 8 GiB CPU process. Then independently export and validate a quantized profile under 4 GiB; report task quality deltas and full-process RSS, not just weight-file size. Require output parity within registered tolerance and repeat latency/RSS measurements after export. Keep test locked until the candidate, thresholds and comparison margin are frozen.
+### 6. Calibrate, quantize and red-team
 
-### 6. Publish evidence, including failures
+Fit calibration only on its own partition. Test counterfactual evidence swaps/removals, question/rubric changes, negation, option order and distractors, state truncation, source shift, question count, a single hard question in an easy bundle, and malformed/unsupported schemas. Compare early decisions with both the full model and task labels.
 
-For every experiment commit the preregistration, exact config/source hashes, scripts, machine-readable metrics and concise interpretation. Link reader-friendly interpretation to the technical method and raw records. A winning claim must state workload, competitor revision, CPU, precision, batching, memory definition, timing distribution, quality uncertainty and excluded cases. “Fastest” without these bounds is not a research result.
+Profile the full-precision process under 8 GiB, then separately export and profile the quantized build under 4 GiB. Measure answer, probability, latency and RSS changes.
+
+**Final gate:** state only the named task, CPU, runtime, model revision and precision where paired quality and p95 latency pass. The full model's own correctness is not a formal guarantee of correctness for early exits.
+
+### 7. Keep both reader levels connected
+
+For every experiment, write a plain-English summary and a compact diagram that link to the model equations, source pins, configuration, result record and failed variants. Keep the original prompt untouched and preserve negative results. Update the Codex handoff when a gate or research hypothesis changes.
 
 ## Immediate next actions
 
-1. Keep neural shared-encoder training paused.
-2. Refresh the exact current Laya and Kev checkpoint/repository revisions, licenses, local inference support and benchmark commands; run a CPU smoke only if the full route is reproducible.
-3. Select/record a reference CPU. If the user has not specified hardware, start with an explicitly named available runner and report it as a reference, not the target device.
-4. Draft the matched baseline manifest and run inference-only baseline measurements. Do not download multi-gigabyte weights until their license, storage, memory fit and benchmark path are established.
-5. Audit MultiRC/QASPER schema and licensing, choose at most one for the next cheap evaluation.
-6. Preregister and run the no-training routing discriminator; only its result can unlock another training proposal.
+1. Add Primus Decision, RSI-Jev, Nimble and RULERS to the direct prior-art and baseline matrix with their limits.
+2. Finish a targeted overlap search for shared-state, question-specific early exits with bundle-level calibration; retain only exact primary sources.
+3. Choose one small checkpoint and name a reproducible CPU after verifying local runtime and licensing; obtain the user's CPU model later before claiming device relevance.
+4. Audit Typed Decisions and a controlled RuleTaker/ProofWriter composition split without opening locked test labels.
+5. Register and run the no-training layerwise probe, including its bundle-level calibration and timing costs.
+6. If the probe survives, run the direct matched CPU baselines, then one capped Kaggle pilot only if training materially improves the projected result.
+7. Update this plan from the measured probe; stop if the prior art or exit headroom defeats the hypothesis.
 
-## Research and benchmark sources
-
-See the [full source ledger](sources.md). Key overlaps reviewed for this plan:
-
-- [Laya repository and shortlist interface](https://github.com/NandhaKishorM/laya), including the reported top-20 Banking77 example (author issue; not independently reproduced by us).
-- [Kev implementation](https://github.com/jaredpalmer/kev) and [0.8B model card](https://github.com/jaredpalmer/kev/blob/main/docs/model-cards/kev-0.8b.md).
-- [ColBERTv2](https://arxiv.org/abs/2112.01488), [SENTLI](https://aclanthology.org/2022.findings-emnlp.28/), [DocInfer](https://aclanthology.org/2022.acl-long.180/), and [ContractNLI](https://aclanthology.org/2021.findings-emnlp.164/).
-- [MultiRC](https://cogcomp.seas.upenn.edu/multirc/) and [QASPER](https://aclanthology.org/2021.naacl-main.365/) for alternative evidence-grounded workloads.
-- [NevIR](https://aclanthology.org/2024.eacl-long.139/) for negation-sensitive retrieval; [selective prediction evaluation](https://aclanthology.org/2022.acl-long.223/) for risk/coverage reporting.
+The source pins are in [sources](sources.md), equations and controls in [architecture](architecture.md), and measured prior experiments in [research](research.md). Nothing here authorizes paid compute.
