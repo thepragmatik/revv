@@ -1,0 +1,17 @@
+{
+  "kaggle_ref": "rathworx/revv-gpu-smoke/3",
+  "kind": "gpu_availability_probe_not_model_benchmark",
+  "gpu": "Tesla T4",
+  "gpu_total_bytes": 15636037632,
+  "peak_allocated_bytes": 12713984,
+  "torch_version": "2.10.0+cu128",
+  "python_version": "3.12.13",
+  "seed": 17,
+  "matrix_shape": [
+    512,
+    512
+  ],
+  "timed_multiplications": 8,
+  "elapsed_seconds": 0.000841148000006342,
+  "checksum": -4865.55126953125
+}

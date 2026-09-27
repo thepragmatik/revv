@@ -1,6 +1,6 @@
-# Kaggle GPU connectivity, first attempt
+# Kaggle GPU connectivity, first attempts and success
 
-**Date:** 27 September 2026. **Status:** GPU unavailable in the submitted session; no model experiment was run.
+**Date:** 27 September 2026. **Status:** CUDA connectivity confirmed on a Tesla T4 after account verification and a probe fix. No decision model was trained or benchmarked.
 
 ## What we tried
 
@@ -14,4 +14,12 @@ A [quota check](https://github.com/thepragmatik/revv/actions/runs/36290063376) r
 
 ## Decision
 
-Do not label this as a GPU benchmark or model performance result. Complete account phone verification in Kaggle, reload the notebook editor, and confirm GPU is selectable. Retry the same bounded probe only then; inspect the artifact for an actual device name. The [runner](../../analysis/kaggle_smoke.py) includes the Kaggle execution log in its error when a submitted session fails.
+## After verification
+
+The [second run](https://github.com/thepragmatik/revv/actions/runs/36290661389) reached CUDA but failed when the probe reset its peak-memory counter before allocating tensors. This is a probe implementation error. We removed that optional reset, leaving the calculation and post-run memory read intact.
+
+The [third run](https://github.com/thepragmatik/revv/actions/runs/36290758927) succeeded and uploaded [this raw JSON report](2026-09-27-gpu-smoke.json). It identifies one **Tesla T4** with 15,636,037,632 bytes of device memory, PyTorch `2.10.0+cu128`, eight 512 × 512 matrix multiplications, a finite checksum, and 12,713,984 bytes of peak PyTorch tensor allocation. The reported 0.000841148 seconds is a tiny warmed-up device computation; it is **not an end-to-end latency benchmark**, CPU comparison, model inference result, or process memory measurement. The JSON is pinned to Kaggle kernel version `rathworx/revv-gpu-smoke/3` and the Actions run used commit `c1f906bc152abaaa85483e5f4eb1e2c5b1c39fda`.
+
+## Decision
+
+The free GPU path is ready for a *bounded, preregistered pilot* after data and baseline gates. Keep the 8 GiB local CPU inference target separate from the Kaggle T4's device memory. Use the [runner](../../analysis/kaggle_smoke.py) and GitHub Actions artifact path as the template for collecting future results; a successful smoke does not validate the proposed architecture or a performance claim.
