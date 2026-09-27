@@ -15,11 +15,11 @@ flowchart LR
 | Friendly explanation | [The idea](docs/start-here.md) | [Roadmap](docs/roadmap.md) |
 | Evidence and competitors | [Research landscape](docs/research.md) | [Source ledger](docs/sources.md) |
 | Technical design | [Architecture](docs/architecture.md) | [Evaluation contract](docs/evaluation.md) |
-| Novel hypotheses to test | [Idea ledger](docs/ideas.md) | [Research charter](codex/MISSION.md) |
+| Novel hypotheses to test | [Idea ledger](docs/ideas.md) | [Next steps and gates](docs/next-steps.md) |
 | Challenge a promising result | [Red-team ledger](docs/red-team.md) | [Evaluation contract](docs/evaluation.md) |
 | Feasibility and compute costs | [Analytical screen](docs/feasibility.md) | [Roadmap](docs/roadmap.md) |
 | Free GPU setup | [Kaggle connection](docs/kaggle.md) | [Roadmap](docs/roadmap.md) |
-| To review an experiment | [Roadmap](docs/roadmap.md) | [Experiment template](templates/experiment.md) |
+| To review an experiment | [Next steps and gates](docs/next-steps.md) | [Experiment template](templates/experiment.md) |
 | See what happened so far | [Findings in plain English](docs/start-here.md#what-the-first-experiments-found) | [Raw experimental records](codex/RESUME.md#verified-evidence-and-current-status) |
 | To resume in Codex | [Codex handoff](codex/README.md) | [Current brief](codex/RESUME.md) |
 

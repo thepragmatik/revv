@@ -1,6 +1,6 @@
 # Research landscape and adversarial reading
 
-**[Home](../README.md) · [Plain explanation](start-here.md) · [Design](architecture.md) · [Sources](sources.md)**
+**[Home](../README.md) · [Plain explanation](start-here.md) · [Design](architecture.md) · [Sources](sources.md) · [Next steps](next-steps.md)**
 
 This is a synthesis of primary sources checked 27 September 2026, not an independently reproduced leaderboard. See the [source ledger](sources.md).
 
@@ -23,3 +23,8 @@ The [analytical feasibility screen](feasibility.md) checks weight floors, shared
 Critical questions before scaling: does reuse actually reduce end-to-end time for 1 versus 8 questions and 2 versus 20 options? Can it spot negation and missing evidence? Does contrastive training improve genuinely unseen label descriptions? Is calibration reliable after a domain or language shift? What happens at 2,048 tokens and beyond? Each question has a slice in the [evaluation contract](evaluation.md).
 
 Laya's calibration and option-order notes and Kev's held-out new-source results are authors' measurements on different setups. They motivate hypotheses; they do not establish that the proposed model will outperform either one.
+
+
+## Updated novelty assessment
+
+A primary-source overlap pass finds that state reuse and pointer-style decision scoring (Kev), pooled candidate shortlisting (Laya), late interaction/compression/distillation (ColBERTv2), long-document evidence selection (SENTLI/DocInfer), and bounded cascades/selective prediction all have close prior art. These remain useful components and baselines, but their combination alone does not establish novelty. Our best current candidate is a narrower experiment: test whether measured evidence coverage and counterevidence can route a bounded extra evidence pass more effectively than confidence-only routing. Current ContractNLI controls are weak and training stays paused. See the [gated plan](next-steps.md) for matched CPU measurement, alternative dataset selection, mathematical ceilings, and stop rules.

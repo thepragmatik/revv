@@ -28,3 +28,16 @@ Primary papers, author repositories and official documentation consulted **27 Se
 | <a id="s20"></a>S20 | [QASPER paper](https://aclanthology.org/2021.naacl-main.365/), [data](https://huggingface.co/datasets/allenai/qasper) | Alternative multiple-question evidence workload; free-form answers need a typed-task mapping. |
 | <a id="s21"></a>S21 | [Schuster et al. long-document NLI](https://aclanthology.org/2022.findings-emnlp.28/), [NevIR negation retrieval benchmark](https://aclanthology.org/2024.eacl-long.139/) | Existing evidence selection / aggregation controls and polarity-sensitive retrieval stress test; lexical evidence ranking is prior art. |
 | <a id="s22"></a>S22 | [NLI MiniLM cross-encoder model card](https://huggingface.co/cross-encoder/nli-MiniLM2-L6-H768) | Frozen 82.1M-parameter Apache-2.0 sentence-pair NLI control, logits contradiction/entailment/neutral; checkpoint access and local suitability require measurement. |
+
+## Additional overlap and evaluation sources
+
+| ID | Primary source | Use |
+| --- | --- | --- |
+| <a id="s23"></a>S23 | [Laya shortlist implementation](https://github.com/NandhaKishorM/laya) and [issue reporting top-20 Banking77 results](https://github.com/NandhaKishorM/laya/issues/102) | Direct baseline for pooled candidate shortlist; issue numbers are author-reported, not independently reproduced here. Pin live commit before comparing. |
+| <a id="s24"></a>S24 | [Kev source](https://github.com/jaredpalmer/kev), [model card](https://github.com/jaredpalmer/kev/blob/main/docs/model-cards/kev-0.8b.md) | Packed question branches, shared state and pointer-style option scoring overlap with generic state reuse. Verify current license/runtime/checkpoint before inclusion. |
+| <a id="s25"></a>S25 | [ColBERTv2](https://arxiv.org/abs/2112.01488) | Late interaction, hard-negative training, teacher distillation and residual compression are established retrieval techniques. |
+| <a id="s26"></a>S26 | [DocInfer](https://aclanthology.org/2022.acl-long.180/) | Hierarchical document evidence retrieval and pruning prior art; compare simpler controls before proposing a new selector. |
+| <a id="s27"></a>S27 | [MultiRC task and data](https://cogcomp.seas.upenn.edu/multirc/) | Alternative evidence-grounded evaluation. Multiple answers may be correct; model each answer as a separate binary decision or report appropriate multi-label metrics. |
+| <a id="s28"></a>S28 | [Selective prediction evaluation](https://aclanthology.org/2022.acl-long.223/) | Report risk versus coverage and calibration with explicit selective-prediction controls. |
+
+The architecture overlap review and next experiment sequence are summarized in the [next-steps plan](next-steps.md). URLs point to primary or project sources; live software/model pages must be pinned by exact revision before an experiment.
