@@ -1,8 +1,8 @@
 # Edit-aware typed-output refresh screen
 
-**Status: pre-score power check passed; first private T4 submission is queue-blocked; read-only recovery is monitoring the same kernel. No model or verifier scores yet.**
+**Status: pre-score power check passed; both Kaggle collection windows expired while the same private kernel remained QUEUED. No inference, model scores, or result artifact.**
 
-**Execution log:** [GitHub Actions run 36314796409](https://github.com/thepragmatik/revv/actions/runs/36314796409) submitted private kernel rathworx/revv-intervention-risk-probe/1, which remained QUEUED for the full 14-minute collector window. The job ended before inference and produced no result artifact. The exact observations and terminal error are preserved in the [machine-readable queue record](2026-09-27-intervention-risk-queue-timeout.json). [Recovery run 36315661095](https://github.com/thepragmatik/revv/actions/runs/36315661095) checks that exact kernel version for up to 25 minutes; it does not submit a duplicate or change the preregistered method/gates.
+**Execution log:** [Initial Action 36314796409](https://github.com/thepragmatik/revv/actions/runs/36314796409) submitted private kernel `rathworx/revv-intervention-risk-probe/1`; it stayed QUEUED for the full 14-minute collector window and ended before inference. [Recovery Action 36315661095](https://github.com/thepragmatik/revv/actions/runs/36315661095) checked the same version 99 times over 25 minutes; every observation was QUEUED. It timed out at 11:50:18 UTC, before inference. Neither attempt produced model scores or a result artifact, and no duplicate kernel was submitted. Details: [initial queue record](2026-09-27-intervention-risk-queue-timeout.json) · [recovery timeout record](2026-09-27-intervention-risk-recovery-timeout.json). This is provider scheduling, not a model result; preregistered methods and gates remain unchanged.
 
 **[Plain-English overview](../../docs/start-here.md) · [Idea ledger](../../docs/ideas.md) · [Research gates](../../docs/next-steps.md) · [Codex handoff](../../codex/RESUME.md)**
 
@@ -26,7 +26,7 @@ The input slate must repeat the previously scored questions. This experiment doe
 | Frozen verifier | `cross-encoder/nli-MiniLM2-L6-H768`, revision `c4d86af4493123990d7762712de9ed730c876161`; canonical labels are entailment→true, contradiction→false, neutral→unknown |
 | Learned components | Two CPU logistic readouts only: a shared pre-edit ternary head and a class-balanced edit-risk ranker. Both use frozen MiniLM vectors; no backbone training or quantization |
 | Calibration | Route cutoffs for each Q and budget fit on calibration compositions only; no held-out labels used for routing |
-| Compute | One private Kaggle T4 inference run; no paid compute; initial collector cap 14 minutes, no-resubmit recovery cap 25 minutes, Actions job cap 35 minutes |
+| Compute | One private Kaggle T4 kernel submission; no inference ran and no paid compute was used. Initial collector cap 14 minutes, no-resubmit recovery cap 25 minutes, Actions job cap 35 minutes |
 
 The generated-record audit and inference screen are content-pinned: generator SHA-256 `0203b3157c322ecf5050af898b71ba8a78512e0bdb1f05e8c42a155c9a5422ae`, generated-record SHA-256 `6612571e3625e412eb24f3549e0d21dd3bcc0a609990a13e34ed3314aaa794d1`, and screen SHA-256 `e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c`. The collector rejects any mismatch.
 
