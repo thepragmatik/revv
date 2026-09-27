@@ -39,6 +39,17 @@ $V_j=\mathbb{E}[\ell(a_j^0,y_j')-\ell(a_j^1,y_j')\mid s,e,q_j].$
 
 With additive per-field cost $c_j$ and a Lagrange price $\lambda$, refresh field $j$ only when $V_j>\lambda c_j$. Under a fixed cardinality budget, sorting by expected loss reduction is optimal by an exchange argument; with a shared batch/setup cost, the cost is coupled and this separability no longer holds. A change-probability head $P(y_j'\ne y_j)$ is only a proxy: it can rank a field high even when the verifier is likely to make a correct cached answer wrong, or low when the cache is already wrong but a verifier could fix it. This motivates a later repair-value head only if the current frozen screen shows a real quality/savings gap. It is a derivation and test proposal, not a novelty or empirical claim.
 
+## Follow-on candidate: local rebase, then verifier-value routing
+
+This is a **separate, untested architecture hypothesis**. It does not change the frozen screen above.
+
+1. When a fact changes, first refresh the edited sentence/span representation and any explicitly dependent local features. Do not ask a learned router whether to leave an answer-relevant edit wholly unrepaired. If dependencies are not bounded, widen the re-encoding region or fall back to full recomputation.
+2. Recompute cheap typed outputs from the refreshed local state. For each field, estimate verifier value as expected reduction in gold-task loss, $V_j=\mathbb E[\ell(p_j^{local},y'_j)-\ell(p_j^{verify},y'_j)\mid x_j]$.
+3. Spend the expensive verifier budget on fields with the largest positive value relative to measured cost. Compare against unconditional local repair, confidence routing, random routing, and full recomputation. When retrieval or batching creates shared costs, choose the subset using measured joint cost rather than independent thresholds.
+4. Treat a low-rank edit-to-logit correction as an optional ablation, not a presumed contribution. Test exactness and calibration after repeated edits; Delta Networks show that thresholded delta approximations can accumulate drift. Keep a periodic exact rebase or a calibrated full-recompute fallback.
+
+This weave combines local representation repair with cost-sensitive decision-theoretic verification. Incremental encoders, stale-cache repair, adaptive revision, shared task routing and expected-value allocation are all established ingredients. The possible remaining claim is only their interaction for typed outputs after arbitrary state edits, and it survives only if an independent workload shows lower gold loss and lower end-to-end CPU cost at the same budget. The current Q20 synthetic screen does not test this full design.
+
 ## Secondary quality weave: intervention-local bundle learning
 
 For a valid state edit $e$ with known affected field set $A(e)$, train on both typed answer vectors and penalize distribution changes on unaffected fields:
