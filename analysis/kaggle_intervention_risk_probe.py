@@ -17,6 +17,7 @@ EXPECTED_KIND = "frozen_synthetic_intervention_risk_vs_confidence_screen_not_ben
 EXPECTED_GENERATOR_SHA256 = "0203b3157c322ecf5050af898b71ba8a78512e0bdb1f05e8c42a155c9a5422ae"
 EXPECTED_RECORDS_SHA256 = "6612571e3625e412eb24f3549e0d21dd3bcc0a609990a13e34ed3314aaa794d1"
 EXPECTED_SCREEN_SHA256 = "07b54ccace7a190fa36ddd1b853021a45a76305f782d7ba29f366859c7361482"
+EXPECTED_BUNDLE_SHA256 = "3ff1b04460b4fa05b8382c8ccff2d11f2a13fc72ef60cafe0bbc08f406d3477c"
 
 
 def _require(condition: bool, message: str) -> None:
@@ -168,6 +169,8 @@ def main() -> None:
         bundle = build_standalone_script(screen_source, generator_source, generator_sha256)
         bundle_bytes = bundle.encode("utf-8")
         bundle_sha256 = hashlib.sha256(bundle_bytes).hexdigest()
+        _require(bundle_sha256 == EXPECTED_BUNDLE_SHA256,
+                 "Standalone Kaggle script differs from the locally validated bundle")
         (work / "intervention_risk_probe.py").write_bytes(bundle_bytes)
         metadata_path = Path(api.kernels_initialize(str(work)))
         metadata = json.loads(metadata_path.read_text())
@@ -192,6 +195,7 @@ def main() -> None:
             raise RuntimeError(f"Kaggle rejected intervention screen: {submission.error}")
         version = getattr(submission, "version_number", None)
         pinned = f"{reference}/{version}" if version else reference
+        print(f"Submitted Kaggle version {pinned}", flush=True)
         deadline = time.monotonic() + 14 * 60
         while time.monotonic() < deadline:
             response = api.kernels_status(pinned)
