@@ -2,8 +2,12 @@
 
 import hashlib
 import json
+import math
 import platform
+import statistics
 import time
+import unicodedata
+import urllib.request
 from collections import defaultdict
 from pathlib import Path
 
@@ -13,15 +17,78 @@ import torch.nn.functional as F
 import transformers
 from transformers import AutoModel, AutoTokenizer
 
-from frozen_matching import DATA_COMMIT, MODEL, REVISION, encode, fetch_data, normal, split, wilson
-
-
 OUT = Path("/kaggle/working/revv-prototype-screen.json")
+MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+REVISION = "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+DATA_COMMIT = "828f8093932c8fe6ca7936c3d2e52903b1c523de"
+DATA_BLOB = "7a7b26c5f2dfbbf213f3e67d2dd0727e1af545aa"
 DATA_SHA256 = "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0"
 SEED = "revv-clinc-calibration-v1"
 STATE_LIMIT = 64
 LABEL_LIMIT = 16
 BATCH = 64
+
+
+def normal(text):
+    return " ".join(unicodedata.normalize("NFKC", text).casefold().split())
+
+
+def fold_key(label, text):
+    return hashlib.sha256(f"{SEED}\0{label}\0{normal(text)}".encode()).hexdigest()
+
+
+def fetch_data():
+    url = f"https://raw.githubusercontent.com/clinc/oos-eval/{DATA_COMMIT}/data/data_full.json"
+    with urllib.request.urlopen(url, timeout=45) as response:
+        raw = response.read(4_000_001)
+    if len(raw) > 4_000_000:
+        raise ValueError("CLINC source exceeds 4 MB cap")
+    actual_blob = hashlib.sha1(f"blob {len(raw)}\0".encode() + raw).hexdigest()
+    if actual_blob != DATA_BLOB:
+        raise ValueError("Pinned CLINC Git blob mismatch")
+    return json.loads(raw), hashlib.sha256(raw).hexdigest()
+
+
+def split(dataset):
+    train_normal = {normal(text) for text, _ in dataset["train"] + dataset["oos_train"]}
+    clean = [(text, label) for text, label in dataset["val"] + dataset["oos_val"] if normal(text) not in train_normal]
+    if len(clean) != 3097:
+        raise ValueError("CLINC validation overlap count changed")
+    grouped = defaultdict(list)
+    for row in clean:
+        grouped[row[1]].append(row)
+    dev, cal = [], []
+    for label in sorted(grouped):
+        ordered = sorted(grouped[label], key=lambda row: fold_key(label, row[0]))
+        dev.extend(ordered[:len(ordered) // 2])
+        cal.extend(ordered[len(ordered) // 2:])
+    dev.sort(key=lambda row: fold_key(row[1], row[0]))
+    cal.sort(key=lambda row: fold_key(row[1], row[0]))
+    labels = sorted({label for _, label in dataset["train"]})
+    if (len(dev), len(cal), len(labels)) != (1547, 1550, 150):
+        raise ValueError("Unexpected validation fold or label sizes")
+    if {normal(row[0]) for row in dev} & {normal(row[0]) for row in cal}:
+        raise ValueError("Duplicate text crosses development and calibration")
+    return labels, dev, cal
+
+
+def encode(model, tokenizer, texts, limit, device):
+    enc = tokenizer(texts, return_tensors="pt", padding=True, truncation=True,
+                    max_length=limit, return_special_tokens_mask=True)
+    enc.pop("special_tokens_mask")
+    enc = {name: value.to(device) for name, value in enc.items()}
+    mask = enc["attention_mask"].bool()
+    hidden = model(**enc).last_hidden_state
+    pooled = (hidden * mask.unsqueeze(-1)).sum(dim=1) / mask.sum(dim=1).clamp(min=1).unsqueeze(-1)
+    return F.normalize(pooled, dim=-1)
+
+
+def wilson(hits, total):
+    z = statistics.NormalDist().inv_cdf(0.975)
+    p = hits / total
+    mid = (p + z * z / (2 * total)) / (1 + z * z / total)
+    half = z * math.sqrt(p * (1 - p) / total + z * z / (4 * total * total)) / (1 + z * z / total)
+    return [mid - half, mid + half]
 
 
 def pooled_vectors(model, tokenizer, rows, limit, device):
@@ -32,8 +99,7 @@ def pooled_vectors(model, tokenizer, rows, limit, device):
             texts = [text for text, _ in rows[offset:offset + BATCH]]
             raw_lengths = [len(ids) for ids in tokenizer(texts, truncation=False)["input_ids"]]
             truncations += sum(length > limit for length in raw_lengths)
-            pool, _, _ = encode(model, tokenizer, texts, limit, device)
-            vectors.append(pool)
+            vectors.append(encode(model, tokenizer, texts, limit, device))
     return torch.cat(vectors), truncations
 
 

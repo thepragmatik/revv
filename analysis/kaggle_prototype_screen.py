@@ -17,8 +17,7 @@ def main():
     api.authenticate()
     with tempfile.TemporaryDirectory(prefix="revv-prototype-") as directory:
         work = Path(directory)
-        for name in ("prototype_screen.py", "frozen_matching.py"):
-            shutil.copyfile(Path("experiments/kaggle") / name, work / name)
+        shutil.copyfile(Path("experiments/kaggle/prototype_screen.py"), work / "prototype_screen.py")
         metadata_path = Path(api.kernels_initialize(str(work)))
         metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
         owner = metadata["id"].split("/", 1)[0]

@@ -1,4 +1,4 @@
-name: Kaggle frozen prototype screen
+name: Kaggle frozen prototype screen (self-contained correction)
 
 on:
   push:
