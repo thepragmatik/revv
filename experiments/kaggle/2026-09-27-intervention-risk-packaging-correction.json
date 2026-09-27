@@ -29,6 +29,12 @@
       "kaggle_kernel_slug": "rathworx/revv-intervention-risk-probe",
       "outcome": "standalone script executed; torch.cuda.is_available() passed, then the run failed at reset_peak_memory_stats(0) with RuntimeError: Invalid device argument before model loading or scoring; no result artifact",
       "diagnosis": "CUDA context/allocator had not been initialized before the memory-stat reset"
+    },
+    {
+      "github_actions_run": 36319051136,
+      "github_job": 108619205826,
+      "kaggle_kernel": "rathworx/revv-intervention-risk-probe/3",
+      "outcome": "all 56 status checks returned QUEUED during the 14-minute collector window; collector timed out at 12:41:53 UTC before inference; no result artifact"
     }
   ],
   "diagnosis": {
@@ -66,21 +72,24 @@
     "pinned_standalone_bundle_sha256": "3ff1b04460b4fa05b8382c8ccff2d11f2a13fc72ef60cafe0bbc08f406d3477c",
     "model_inference_run_locally": false
   },
-  "next_action": "Finish the no-resubmit recovery poll. If version 3 completes, download, validate and record the aggregate. If it remains queued for the collector window, stop this GPU screen and keep all queue/runtime failures separate from model evidence.",
+  "next_action": "Finish the read-only recovery poll for version 3. If it completes, validate and save the result. If it remains queued through the 25-minute window, stop this GPU screen; do not submit a fourth version or use paid compute.",
   "current_submission": {
     "github_actions_run": 36319051136,
     "github_job": 108619205826,
-    "kernel_slug": "rathworx/revv-intervention-risk-probe/3",
-    "status": "timed_out_after_56_queued_observations",
+    "kernel": "rathworx/revv-intervention-risk-probe/3",
+    "status": "collector_timed_out_while_kernel_queued",
     "last_observed_status": "QUEUED",
-    "no_inference_or_artifact": true
+    "checks": 56,
+    "inference_started": false,
+    "artifact_created": false
   },
   "read_only_recovery": {
     "github_actions_run": 36319968934,
-    "kernel_slug": "rathworx/revv-intervention-risk-probe/3",
+    "kernel": "rathworx/revv-intervention-risk-probe/3",
     "mode": "poll_and_collect_only",
     "new_kernels_submitted": 0,
     "status": "running",
-    "intent": "Recover the same queued version if Kaggle schedules it later."
+    "collector_seconds": 1500,
+    "validated_locally": true
   }
 }
