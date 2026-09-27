@@ -1,0 +1,26 @@
+{
+  "record_kind": "pre_inference_provider_queue_timeout",
+  "experiment": "frozen_synthetic_intervention_risk_vs_confidence_screen",
+  "github_action_run_id": 36314796409,
+  "github_action_url": "https://github.com/thepragmatik/revv/actions/runs/36314796409",
+  "github_commit_sha": "6bb42f8a49330b0373a2e1ea2e38c02fa5142d07",
+  "github_job_id": 108607358991,
+  "kaggle_kernel_ref": "rathworx/revv-intervention-risk-probe/1",
+  "kernel_submitted_at_utc": "2026-09-27T11:09:13Z",
+  "first_status_observed_at_utc": "2026-09-27T11:09:15Z",
+  "last_status_observed_at_utc": "2026-09-27T11:23:10Z",
+  "status_observation_count": 56,
+  "status_observations": [
+    "QUEUED"
+  ],
+  "collector_timeout_minutes": 14,
+  "terminal_action_error_at_utc": "2026-09-27T11:23:25Z",
+  "terminal_error": "TimeoutError: Kaggle collector window exceeded: rathworx/revv-intervention-risk-probe/1",
+  "inference_started": false,
+  "model_scores_computed": false,
+  "result_artifact_uploaded": false,
+  "recovery_action_run_id": 36315661095,
+  "recovery_action_url": "https://github.com/thepragmatik/revv/actions/runs/36315661095",
+  "interpretation": "Infrastructure scheduling timeout before the kernel left QUEUED. This is not a model result and does not change any preregistered gate.",
+  "source_log": "https://github.com/thepragmatik/revv/actions/runs/36314796409"
+}
