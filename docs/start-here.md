@@ -19,6 +19,18 @@ The sharper idea we will screen combines a shared state encoding, cheap typed/ev
 
 Our next small experiment asks: after one fact changes, can we pick which saved answers need checking better than confidence or a simple similarity score? The fresh synthetic sample-size check found enough changed Q20 answers to run the planned screen (74 fields in 22 held-out rule groups). No model scores exist yet. Even a positive result would be an early synthetic clue, not proof that the idea is new or faster on your device. [Friendly experiment note](../experiments/kaggle/2026-09-27-intervention-risk-probe.md) · [Power check](../experiments/kaggle/2026-09-27-intervention-risk-power-check.json).
 
+```mermaid
+flowchart TD
+    E["One fact changes"] --> R["Rank saved answers"]
+    R --> B{"Use a fixed check budget?"}
+    B -->|selected| V["Recheck with edited evidence"]
+    B -->|not selected| C["Keep cached answer"]
+    V --> M["Compare accuracy and CPU time"]
+    C --> M
+```
+
+
+
 The main local limit is **under 8 GiB peak memory for the entire process**, including the tokenizer, runtime and working buffers. We will also test a **quantized under-4 GiB version** for smaller devices. This is a separate profile: quantization might change both speed and answers. A small model file alone does not prove either version fits. The first reference device is a laptop-class CPU. We will measure cold start, warm requests, multiple questions and long text separately; GPU and hosted API timings get their own comparisons. [See the memory and compute arithmetic](feasibility.md).
 
 The first phase covers **English text**, yes/no, choices among supplied options, and ordered scores. It must be able to say “none of these” or “insufficient evidence” where appropriate. “Decision” here means judging supplied text against a criterion; it does not mean open-ended planning or unlimited factual recall. We will measure other languages before claiming to support them.
