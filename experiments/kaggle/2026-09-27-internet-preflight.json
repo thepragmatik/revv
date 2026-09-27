@@ -1,0 +1,16 @@
+{
+  "kaggle_ref": "rathworx/revv-internet-preflight/1",
+  "kind": "kaggle_cpu_external_access_preflight_not_model_result",
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "model_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+  "model_config_sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41",
+  "tokenizer_sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+  "data_commit": "828f8093932c8fe6ca7936c3d2e52903b1c523de",
+  "data_sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0",
+  "data_blob_sha1": "7a7b26c5f2dfbbf213f3e67d2dd0727e1af545aa",
+  "model_hidden_size": 384,
+  "transformers_version": "5.0.0",
+  "python_version": "3.12.13",
+  "ready_for_gpu_pilot": true,
+  "limits": "Checks external access and package presence only; no model weights downloaded, GPU allocated, examples published or decision predictions made."
+}

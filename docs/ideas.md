@@ -43,3 +43,5 @@ Use a shared path only when **measured** time including tokenization and gate ov
 | Calibration and abstention | Same architecture without gate; explicit `NONE` | Domain-shift Brier, OOS recall and selective risk; confident wrong answers fail. |
 
 The first [CLINC audit](../experiments/data/2026-09-27-clinc-audit.md) supports testing many candidate labels and an OOS answer, but a single utterance has no multi-question long document. Require a second evidence-grounded, multi-question dataset before claiming that the complete design works. Pause after each cheap falsifier; train only the part whose potential gain survives its control.
+
+The first discriminating [frozen encoder pilot](../experiments/kaggle/2026-09-27-frozen-matching.md) isolates pooled versus token evidence under one pretrained checkpoint and fixed public development split. It is a cheap component screen, not a trained CER-1 evaluation or evidence for local CPU superiority.
