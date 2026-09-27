@@ -84,7 +84,7 @@ Every experiment gets a friendly summary/diagram linked to exact config, data ha
 ## Immediate next actions
 
 1. Update the prior-art audit for the exact overlap in AdaMTL (task-specific policies plus OR-combined shared execution), Nimble (multi-field context reuse and fact-edit data), and cascade rankers.
-2. Freeze a small RuleTaker/ProofWriter bundle slice with theorem-prover labels, proof evidence, minimal fact edits and verified affected-field sets.
+2. Resolve data rights separately from code. The official RuleTaker README describes a separate dataset download and a Problog-backed labeled-example/proof generator; its Apache-2.0 section covers repository software, while the linked data package's terms remain unconfirmed. I have not verified ProofWriter's canonical data terms either. For the first mechanism probe, use a small transparent in-repo synthetic generator and deterministic reasoner, mark it diagnostic-only, group Q=1/5/20 bundles, and hold out rule compositions. Use or redistribute external datasets only after their terms are confirmed.
 3. Profile one compact CPU backbone and test the retrieval floor plus per-field verifier cost; do not train.
 4. Compare cheap-only, fixed verifier, margin-gated and task-risk-gated stages on Q=1/5/20, with source/rule-composition held out.
 5. Use the results to decide whether CLIP-style evidence loss, intervention-local training, or any free Kaggle T4 pilot is justified.
