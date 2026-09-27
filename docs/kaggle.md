@@ -8,4 +8,6 @@ The first [Kaggle GPU smoke](../.github/workflows/kaggle-smoke.yml) runs when it
 
 The secret belongs in **repository Settings → Secrets and variables → Actions → Repository secrets**. Do not put its value in source files, notebook metadata, issue comments, or Actions logs. If authentication fails, verify that the secret was created in this repository with the exact name `KAGGLE_API_TOKEN` and that the token is an API token from the intended Kaggle account.
 
+**First attempt (27 September 2026):** authentication and script submission succeeded, but the Kaggle session had no CUDA GPU and the probe failed. The quota command reported 30 GPU hours remaining. See the [experiment record](../experiments/kaggle/2026-09-27-gpu-connectivity.md). Before running it again, inspect the private notebook's **Settings → Accelerator** in Kaggle and select GPU if it shows CPU. Kaggle [documents this setting](https://www.kaggle.com/docs/notebooks). We have not confirmed whether account eligibility, a Kaggle API setting, or a transient service behavior caused the CPU session.
+
 See [the roadmap](roadmap.md) for the model experiment stages and [the evaluation contract](evaluation.md) for what counts as a decision model result.

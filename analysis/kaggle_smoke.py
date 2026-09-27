@@ -56,7 +56,8 @@ def main():
             if status == "COMPLETE":
                 break
             if status in {"ERROR", "FAILED", "CANCELLED", "CANCELED"}:
-                raise RuntimeError(f"Kaggle GPU probe ended with status {status}")
+                log = api.kernels_logs(pinned_reference)
+                raise RuntimeError(f"Kaggle GPU probe ended with status {status}; kernel log: {log[-3000:]}")
             time.sleep(POLL_SECONDS)
         else:
             raise TimeoutError("Kaggle probe did not finish within 12 minutes; check Kaggle session status")
