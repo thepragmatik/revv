@@ -1,0 +1,22 @@
+{
+  "kaggle_ref": "rathworx/revv-nli-access-preflight/1",
+  "kind": "kaggle_cpu_nli_access_preflight_no_gpu_no_model_weights",
+  "model": "cross-encoder/nli-MiniLM2-L6-H768",
+  "revision": "c4d86af4493123990d7762712de9ed730c876161",
+  "config_sha256": "8e5e5a78c49ae3de93ba511c07fe76b895e148b486829429b2027d11e97be1f1",
+  "tokenizer_json_sha256": "ff6f6cebf55bcccc4a80b52e956f16ae9d11b0bad02c7db4e7b36975488bf840",
+  "num_hidden_layers": 6,
+  "hidden_size": 768,
+  "id2label": {
+    "0": "contradiction",
+    "1": "entailment",
+    "2": "neutral"
+  },
+  "weights_head_content_length_bytes": 328499560,
+  "auto_sequence_classification_imported": true,
+  "transformers_version": "5.0.0",
+  "sklearn_version": "1.6.1",
+  "python_version": "3.12.13",
+  "ready_for_frozen_gpu_pilot": true,
+  "limits": "No weights downloaded, GPU allocated, model inference, training, ContractNLI content or local CPU serving measurements."
+}

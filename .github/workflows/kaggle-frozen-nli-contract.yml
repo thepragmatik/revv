@@ -1,0 +1,38 @@
+name: Kaggle frozen ContractNLI cross scoring control
+
+on:
+  push:
+    branches: [research/decision-model-plan]
+    paths: [.github/workflows/kaggle-frozen-nli-contract.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Kaggle CLI
+        run: python -m pip install --disable-pip-version-check kaggle==2.2.4
+      - name: Score frozen NLI cross pairs on same train-evidence spans
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "KAGGLE_API_TOKEN missing from Actions secrets" >&2
+            exit 1
+          fi
+          python analysis/kaggle_frozen_nli_contract.py
+      - name: Preserve aggregate NLI control results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaggle-frozen-nli-contract
+          path: results/kaggle-frozen-nli-contract.json
+          if-no-files-found: ignore
