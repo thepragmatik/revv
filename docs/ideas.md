@@ -80,3 +80,15 @@ This combines shared state encoding, typed heads and contrastive/counterfactual 
 - Gains appear only against the backbone's own errors, not task labels, or disappear on an independent source/composition split.
 
 Continue prior-art search and small probes; do not start training to validate novelty.
+
+## Cost-aware repair target: useful test, not novelty
+
+For field (i), the relevant target is the expected *signed* change in task loss after verification:
+
+[
+v_i = mathbb{E}left[ell(hat{y}^{\mathrm{cached}}_i,y_i)-ell(hat{y}^{\mathrm{refresh}}_i,y_i)\mid z_i\right],
+]
+
+where (z_i) contains the pre-edit state, query, edit and available cached evidence. Positive (v_i) means refreshing is expected to correct more loss than it introduces. Under an equal-cost fixed budget, route the largest positive (v_i); with different per-field costs (c_i), choose a subset maximizing (sum_i a_i v_i) subject to (sum_i a_i c_i\leq B). Charge shared edit encoding once, outside the per-field branch cost.
+
+This is a decision-theoretic evaluation target, not a novel routing principle: adaptive model/sample routing, theoretically analyzed cost/quality cascades, and feature-cost-aware cascades already exist. The specific unresolved question is whether solver-verified before/after labels for arbitrary edits make (v_i) predictable for cached typed outputs, and whether that beats confidence and unconditional local repair on an independent workload. The current screen predicts label changes only and cannot establish this.
