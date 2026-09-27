@@ -1,0 +1,34 @@
+{
+  "check_kind": "pre_inference_synthetic_sample_size_audit",
+  "seed": 20260928,
+  "states": 1024,
+  "composition_group_size": 8,
+  "composition_groups": 128,
+  "split_rule": "whole composition groups: heldout if int(group_id[:8],16)%4==0; else calibration if int(group_id[8:16],16)%5==0; else fit",
+  "groups_by_split": {
+    "fit": 81,
+    "calibration": 17,
+    "heldout": 30
+  },
+  "states_by_split": {
+    "fit": 648,
+    "calibration": 136,
+    "heldout": 240
+  },
+  "heldout_q20_changed_fields": 74,
+  "heldout_q20_changed_rule_groups": 22,
+  "heldout_states_with_any_q20_change": 51,
+  "sample_size_gate": {
+    "minimum_changed_fields": 50,
+    "minimum_changed_rule_groups": 10,
+    "pass": true
+  },
+  "generator_sha256": "0203b3157c322ecf5050af898b71ba8a78512e0bdb1f05e8c42a155c9a5422ae",
+  "generated_records_sha256": "6612571e3625e412eb24f3549e0d21dd3bcc0a609990a13e34ed3314aaa794d1",
+  "model_scores_computed": false,
+  "limitations": [
+    "This inspects only synthetic change-mask prevalence and group membership.",
+    "It is a power screen, not a predictor, verifier, quality, novelty, or deployment result.",
+    "The generated grammar is reused by the registered model-scoring run."
+  ]
+}
