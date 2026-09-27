@@ -17,7 +17,7 @@ The user has ChatGPT Pro and wants Codex to research, orchestrate and evaluate G
 | Kaggle authentication and GPU access | Verified; third smoke run executed on one T4 | [Run 36290758927](https://github.com/thepragmatik/revv/actions/runs/36290758927), [raw JSON](../experiments/kaggle/2026-09-27-gpu-smoke.json) |
 | Decision model weights, real dataset benchmark, CPU RSS | **Not yet measured** | [Evaluation gates](../docs/evaluation.md) |
 | Synthetic forward-pass crossover pilot | **Complete.** Original T4 kernel recovered without a second GPU run: cross faster for 128 tokens/2 options; shared faster on four other slices. No accuracy or CPU result. | [Experiment record](../experiments/kaggle/2026-09-27-forward-pilot.md), [raw JSON](../experiments/kaggle/2026-09-27-forward-pilot.json), [recovery run 36291800978](https://github.com/thepragmatik/revv/actions/runs/36291800978) |
-| First public labelled dataset integrity | CLINC train/validation audit registered; CPU run pending. Test examples remain uninspected. | [Audit plan](../experiments/data/2026-09-27-clinc-audit.md), [script](../analysis/audit_clinc.py) |
+| First public labelled dataset integrity | First CPU audit found three exact train/validation text overlaps (two conflicting labels) but omitted separately stored OOS rows. Corrected rerun pending. Test examples remain uninspected. | [Audit record](../experiments/data/2026-09-27-clinc-audit.md), [script](../analysis/audit_clinc.py) |
 
 The smoke run performed eight tiny matrix multiplications. Its submillisecond GPU time and memory counters are **not** model or CPU numbers. Do not turn it into a performance headline.
 

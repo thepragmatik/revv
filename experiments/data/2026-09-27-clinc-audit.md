@@ -15,4 +15,4 @@ The [CLINC authors' dataset](https://github.com/clinc/oos-eval) has 150 in-scope
 
 ## Result
 
-Pending. Add the Actions run, raw aggregate JSON and a candid interpretation here; then update [Codex's resume brief](../../codex/RESUME.md).
+The [first audit attempt](https://github.com/thepragmatik/revv/actions/runs/36292009816) verified both source hashes but its code counted only `train` and `val`, missing the source's separate `oos_train` and `oos_val` fields. This is an **invalid answerability audit**. It nevertheless detected three exact normalized utterances across the in-scope train/validation boundary, two with conflicting labels. The script now includes both OOS fields and reruns the same registered checks. Keep the first attempt as a recorded failure; add the corrected raw aggregate result here.

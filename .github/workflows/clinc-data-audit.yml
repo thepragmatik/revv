@@ -3,7 +3,7 @@ name: CLINC public data integrity audit
 on:
   push:
     branches: [research/decision-model-plan]
-    paths: [.github/workflows/clinc-data-audit.yml]
+    paths: [.github/workflows/clinc-data-audit.yml, analysis/audit_clinc.py]
   workflow_dispatch:
 
 permissions:

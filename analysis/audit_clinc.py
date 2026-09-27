@@ -50,9 +50,13 @@ def examine(records):
 def main():
     dataset, data_sha256 = fetch_pinned("data_full.json")
     domains, domain_sha256 = fetch_pinned("domains.json")
-    # Deliberately use only train and validation examples. The original test is held out.
-    train_labels, train_texts = examine(dataset["train"])
-    val_labels, val_texts = examine(dataset["val"])
+    # OOS lives in separate source fields; deliberately leave test and oos_test untouched.
+    train_rows = dataset["train"] + dataset["oos_train"]
+    val_rows = dataset["val"] + dataset["oos_val"]
+    train_labels, train_texts = examine(train_rows)
+    val_labels, val_texts = examine(val_rows)
+    if any(row[1] != "oos" for row in dataset["oos_train"] + dataset["oos_val"]):
+        raise ValueError("Unexpected label in an out-of-scope source field")
     mapped = [name for labels in domains.values() for name in labels]
     if len(mapped) != 150 or len(set(mapped)) != 150:
         raise ValueError("Domain mapping is not one-to-one across 150 intents")
@@ -70,18 +74,18 @@ def main():
         "domains_blob_sha1": BLOBS["domains.json"],
         "domains_sha256": domain_sha256,
         "license": "CC BY 3.0 (upstream LICENSE); attribute original authors; do not commit raw examples",
-        "examined_partitions": ["train", "val"],
+        "examined_partitions": ["train", "val", "oos_train", "oos_val"],
         "locked_test_examples_examined": 0,
-        "train_examples": len(dataset["train"]),
-        "val_examples": len(dataset["val"]),
+        "train_examples": len(train_rows),
+        "val_examples": len(val_rows),
         "train_oos": train_labels["oos"],
         "val_oos": val_labels["oos"],
         "in_scope_intents": len(train_intents),
         "domain_intent_counts": {name: len(labels) for name, labels in domains.items()},
         "train_in_scope_min_max": [min(train_labels[k] for k in train_intents), max(train_labels[k] for k in train_intents)],
         "val_in_scope_min_max": [min(val_labels[k] for k in val_intents), max(val_labels[k] for k in val_intents)],
-        "train_normalized_duplicate_rows": len(dataset["train"]) - len(train_texts),
-        "val_normalized_duplicate_rows": len(dataset["val"]) - len(val_texts),
+        "train_normalized_duplicate_rows": len(train_rows) - len(train_texts),
+        "val_normalized_duplicate_rows": len(val_rows) - len(val_texts),
         "train_conflicting_label_texts": sum(len(v) > 1 for v in train_texts.values()),
         "val_conflicting_label_texts": sum(len(v) > 1 for v in val_texts.values()),
         "train_val_exact_normalized_overlap_texts": len(overlap),
@@ -90,7 +94,7 @@ def main():
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print(f"Pinned CLINC train/val audit completed: {len(dataset['train'])} train, {len(dataset['val'])} val; {len(overlap)} exact normalized overlaps. JSON artifact only; no texts printed.")
+    print(f"Pinned CLINC train/val + OOS audit completed: {len(train_rows)} train, {len(val_rows)} val; {len(overlap)} exact normalized overlaps. JSON artifact only; no texts printed.")
 
 
 if __name__ == "__main__":
