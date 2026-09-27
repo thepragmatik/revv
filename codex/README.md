@@ -25,5 +25,6 @@ flowchart TD
 | Review the experiment | [Forward-pass pilot](../experiments/kaggle/2026-09-27-forward-pilot.md) | Preregistration and eventual verdict. |
 | Check first labelled dataset | [CLINC audit](../experiments/data/2026-09-27-clinc-audit.md) | Rights, splits and overlap before model training. |
 | Review measured decisions and weaknesses | [CLINC prototype](../experiments/kaggle/2026-09-27-prototype-screen.md), [ContractNLI evidence](../experiments/data/2026-09-27-contractnli-evidence-prototypes.md) | Follow real errors and registered gates. |
+| Adversarially review a claimed gain | [Red-team ledger](../docs/red-team.md) | Check shortcuts, missing clauses and deployment gaps. |
 
 When Codex finishes a milestone, update `RESUME.md` and the relevant experiment record with exact run and artifact links, measured outcomes, failures and one concrete next action. Preserve unsuccessful results. Keep this folder concise and link to durable source documents instead of copying them.

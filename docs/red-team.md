@@ -1,0 +1,25 @@
+# Red-team ledger: how this research could fool us
+
+**[Home](../README.md) · [Plain explanation](start-here.md) · [Hypotheses](ideas.md) · [Evaluation contract](evaluation.md) · [Current runs](../codex/RESUME.md)**
+
+This is the adversarial companion to the [user's original mission](../codex/ORIGINAL_PROMPT.md). Treat a convincing development number as a claim to attack. The exact experiment pages say what was measured; this page says what would undermine the interpretation. It does **not** allege that any untested failure occurred.
+
+| Tempting story | Present evidence that resists it | Cheap falsifier before a large build |
+| --- | --- | --- |
+| “Our candidate architecture beats existing decision models.” | We have only public development results and a synthetic GPU workload; no matched Laya/Kev task, local CPU latency, entire-process RSS, or locked test. | Register one common input/output contract, compare eligible baselines on the same CPU, precision, calibration and quality slices; include uncertainty. |
+| “The encoder understands the task because CLINC reached 91.12%.” | This uses 100 labelled training utterances per intent. Bare label-name matching was only 70.94%; the lexical classifier already reached 82.43%. | Compare matched training budgets and independent domains. The [character-similarity screen](../experiments/data/2026-09-27-clinc-similarity-sensitivity.md) finds the prototype gain below 0.8 nearest-train cosine, but low character overlap is not semantic independence. |
+| “A short evidence list guarantees a grounded answer.” | ContractNLI pooled training evidence has **95.11% any-gold@5** but **63.52% all-gold@5** on positives. Some contradictions require an exception elsewhere. | Count gold spans and separately report any/all recall by class, document length, and negation. Insert a late counterexample or duplicate irrelevant boilerplate. Measure answer changes, not only retrieval. |
+| “Separate support/refute prototypes solve polarity.” | They produced **zero** contradiction any-gold@5 gain over a single pooled evidence prototype. | Keep the simpler pooled route until a calibrated stance classifier or hard-negative objective yields a paired improvement against it. |
+| “High evidence recall already makes a decision model.” | A lexical ternary head on top-five pooled evidence reached **70.20%**, only 2.12 points above a **68.08% prior that never reads the contract**; its 1.35-point gain over query retrieval has an interval spanning zero. | Compare to the same-evidence frozen NLI cross scorer and perform a hypothesis-text shuffle/prior-only ablation. Require contradiction and not-mentioned recall, not just overall accuracy. |
+| “Scores can be used as probabilities or abstention risk.” | CLINC cosine thresholds merely target 5% known deferral; lexical ContractNLI head probabilities have not been independently calibrated. | Use document/source-disjoint calibration, NLL/Brier/reliability and risk–coverage curves; test after quantization and routing, including changed option count. |
+| “State reuse is automatically faster and fits 8 GiB.” | T4 synthetic crossover reversed for short two-option inputs; no complete local CPU process profile exists. | Measure end-to-end tokenizer, encoder, retrieval, verification and calibration time under 1/2/5/17/40 options and long/short documents on the same CPU; include cold start, p95 and peak **whole-process** RSS. |
+| “The result transfers beyond fixed ContractNLI questions.” | The dataset has only **17 fixed hypotheses** and related legal document language; exact document/URL overlap is zero but boilerplate can recur. | Hold out document families or a different domain, randomize hypothesis order, and compare to prior-only, shuffled-question and shared-training controls. A test that requires changing hypothesis types is a separate zero-shot task. |
+
+## Decision discipline
+
+1. **Freeze the comparison.** Record task, source version, fold, candidate budget, preprocessor, timing hardware and acceptance margin before a run. Do not tune on locked test.
+2. **Keep the negative controls.** An apparent gain that vanishes against a per-hypothesis prior, a train-derived prototype, or a same-evidence cross scorer does not warrant a new architectural claim.
+3. **Change one mechanism at a time.** The frozen CLINC screens rejected untrained token MaxSim; the ContractNLI screen rejected separate polarity centroids. Preserve these failed ablations.
+4. **Report the whole workload.** Retrieval, ternary quality, missing evidence, calibration, p95 latency, and memory must be jointly acceptable. A development accuracy gain without a CPU deployment measurement is an intermediate finding.
+
+The [working rules](../codex/WORK_RULES.md) define how to keep this ledger and the experiment records current when the research moves to trained models.

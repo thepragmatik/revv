@@ -16,6 +16,7 @@ flowchart LR
 | Evidence and competitors | [Research landscape](docs/research.md) | [Source ledger](docs/sources.md) |
 | Technical design | [Architecture](docs/architecture.md) | [Evaluation contract](docs/evaluation.md) |
 | Novel hypotheses to test | [Idea ledger](docs/ideas.md) | [Research charter](codex/MISSION.md) |
+| Challenge a promising result | [Red-team ledger](docs/red-team.md) | [Evaluation contract](docs/evaluation.md) |
 | Feasibility and compute costs | [Analytical screen](docs/feasibility.md) | [Roadmap](docs/roadmap.md) |
 | Free GPU setup | [Kaggle connection](docs/kaggle.md) | [Roadmap](docs/roadmap.md) |
 | To review an experiment | [Roadmap](docs/roadmap.md) | [Experiment template](templates/experiment.md) |
