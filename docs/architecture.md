@@ -15,7 +15,7 @@ flowchart TD
     N --> T["Held-out calibration"]
 ```
 
-Start with existing pretrained small text encoders. Use ModernBERT-base (149M parameters) as a **quality reference**, not an automatic final choice. A roughly 30–100M-parameter student is a research target, subject to checkpoint and license review. Encode the state once; encode each `(question, option description)` through shared weights or a smaller branch; compare it with the state summary and, optionally, selected token vectors. First test a pooled dual encoder and a conventional concatenated cross encoder as controls.
+Start with existing pretrained small text encoders. Use ModernBERT-base (149M parameters) and a larger encoder as **quality references**, not automatic final choices. A roughly 30–100M-parameter student remains a possible speed target, subject to checkpoint and license review; the 8 GiB limit permits stronger models if they justify their latency. Encode the state once; encode each `(question, option description)` through shared weights or a smaller branch; compare it with the state summary and, optionally, selected token vectors. First test a pooled dual encoder and a conventional concatenated cross encoder as controls. [Screen their theoretical costs first](feasibility.md).
 
 Let state vectors be summary `u` and tokens `h_i`, and option/question vector be `v_j`. A candidate logit could be `z_j = wᵀ[u; v_j; u⊙v_j; max_i(h_iᵀWv_j)] + b`. The token interaction is an **ablation** to test evidence sensitivity. For `K` choices, `p_j = softmax(z_j/T)`. Train an explicit `NONE` option and separate answerability judgement with real missing-evidence cases. For ordinal levels `r=0…R−1`, return a distribution and expected normalized score `Σ_r r·p_r/(R−1)`. Yes/no can use two explicit candidates or a binary head; compare both.
 
@@ -38,6 +38,6 @@ Supervised log loss is a proper scoring objective; Brier or decision-focused los
 
 ## Memory and implementation language
 
-149M parameters at 16 bits represent roughly 298 MB of weights, or 149 MB at 8 bits (decimal MB). Tokenizers, libraries, activations, mappings and concurrency add to this. Likewise a nominal 0.8B model at 4 bits starts near 400 MB of weights but may have much higher resident use. The **actual peak process RSS** decides eligibility.
+149M parameters at 16 bits represent roughly 298 MB of weights, or 149 MB at 8 bits (decimal MB). A 4B model at 16 bits needs at least 7.45 GiB of weight bytes alone, leaving too little room under an 8 GiB total-process target; 4-bit weights start at 1.86 GiB before scales and runtime. Tokenizers, libraries, activations, mappings and concurrency add to this. The **actual peak process RSS** decides eligibility for both 8 GiB primary and 4 GiB quantized profiles. [Exact arithmetic and caveats](feasibility.md).
 
 Use **Python** for research, data preparation, PyTorch training, calibration and reproducible evaluation. Try **ONNX Runtime** first for local CPU inference and dynamic INT8 quantization because its [official guide](sources.md#s11) recommends that path for transformers. Compare exported and reference outputs. Add **Rust** for a thin service or tokenizer boundary only if profiling shows measurable overhead, retaining golden-vector parity. English first keeps failure analysis tractable; multilingual routing, weights and calibration have their own gate.
