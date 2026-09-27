@@ -102,3 +102,12 @@ The possible contribution is now scoped to typed decision bundles where interven
 | <a id="s61"></a>S61 | [Exploring Contrast Consistency of Open-Domain QA on Minimally Edited Questions](https://aclanthology.org/2023.tacl-1.61/) | Query-side contrastive loss for factual minimally edited QA questions; close prior art for contrast consistency and retrieval sensitivity. |
 | <a id="s62"></a>S62 | [Adaptive Computation Depth via Learned Token Routing](https://arxiv.org/abs/2605.05222) | 2026 preprint learns token-level residual gates and reports measured sparse inference; further establishes dynamic depth as prior art. Validate scale beyond its reported small character-LM experiments before relying on reported generality. |
 | <a id="s63"></a>S63 | [Logic-Guided Data Augmentation and Regularization for Consistent QA](https://arxiv.org/abs/2006.05556) | Uses known question relationships for consistency augmentation/regularization; close prior art for cross-question consistency. |
+
+## Dataset provenance and rights follow-up
+
+| ID | Primary source | Use and limit |
+| --- | --- | --- |
+| <a id="s64"></a>S64 | [Official RuleTaker README and generator](https://github.com/allenai/ruletaker/blob/master/README.md) | Documents a separate latest-dataset download and a Problog-backed generator for labeled theory/assertion examples, with natural-language, logical-form, logic-program, proof-depth and proof-structure fields. Its Apache-2.0 section licenses the repository software; the README does not clearly assign terms to the separately linked data package. Verify those terms independently before redistribution. |
+| <a id="s65"></a>S65 | [ProofWriter paper](https://aclanthology.org/2021.findings-acl.317/) and [official data page](https://allenai.org/data/proofwriter) | Establishes the task and proof-generation setup. The canonical data terms were not confirmed in this review; do not infer them from a sibling code repository or third-party mirror metadata. |
+
+For the first mechanism probe, prefer a small, transparent, in-repo synthetic generator and deterministic reasoner. Label it diagnostic-only; do not present its results as benchmark performance or redistribute external dataset artifacts until their rights are confirmed.
