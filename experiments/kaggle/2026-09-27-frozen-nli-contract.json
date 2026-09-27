@@ -1,0 +1,99 @@
+{
+  "kaggle_ref": "rathworx/revv-frozen-nli-contract/1",
+  "kind": "frozen_nli_cross_on_selected_contract_spans_dev_control_not_local_win",
+  "model": "cross-encoder/nli-MiniLM2-L6-H768",
+  "revision": "c4d86af4493123990d7762712de9ed730c876161",
+  "model_parameters": 82120707,
+  "source_sha256": "e03fc77bbf8b53e2976a250e81d8a294bc3d5e5fb014521e477dee9340d6287b",
+  "calibration_retrieval_fit_documents": 347,
+  "development_retrieval_and_prior_fit_documents": 423,
+  "calibration_documents": 76,
+  "development_documents": 61,
+  "hypotheses_per_document": 17,
+  "evidence_k": 5,
+  "evidence_recall_calibration": {
+    "all": {
+      "positive": 803,
+      "any_gold_at_5": 0.9613947696139477,
+      "all_gold_at_5": 0.6811955168119551
+    },
+    "Entailment": {
+      "positive": 664,
+      "any_gold_at_5": 0.9623493975903614,
+      "all_gold_at_5": 0.6716867469879518
+    },
+    "Contradiction": {
+      "positive": 139,
+      "any_gold_at_5": 0.9568345323741008,
+      "all_gold_at_5": 0.7266187050359713
+    }
+  },
+  "evidence_recall_development": {
+    "all": {
+      "positive": 614,
+      "any_gold_at_5": 0.9511400651465798,
+      "all_gold_at_5": 0.6351791530944625
+    },
+    "Entailment": {
+      "positive": 519,
+      "any_gold_at_5": 0.9518304431599229,
+      "all_gold_at_5": 0.6377649325626205
+    },
+    "Contradiction": {
+      "positive": 95,
+      "any_gold_at_5": 0.9473684210526315,
+      "all_gold_at_5": 0.6210526315789474
+    }
+  },
+  "token_max_length": 256,
+  "truncated_nli_pairs": 20,
+  "nli_pairs": 11645,
+  "gpu": "Tesla T4",
+  "torch_version": "2.10.0+cu128",
+  "transformers_version": "5.0.0",
+  "sklearn_version": "1.6.1",
+  "python_version": "3.12.13",
+  "peak_torch_gpu_allocated_bytes": 618408960,
+  "loaded_seconds_including_source_and_weights": 9.304128014000014,
+  "frozen_pair_batch_inference_seconds": 45.983084964,
+  "aggregation_head_iterations": 43,
+  "training_only_prior_fit_423": {
+    "accuracy": 0.6808100289296046,
+    "macro_f1": 0.632527291333521,
+    "class_recall": {
+      "Entailment": 0.7745664739884393,
+      "Contradiction": 0.5894736842105263,
+      "NotMentioned": 0.5862884160756501
+    },
+    "class_f1": {
+      "Entailment": 0.7528089887640449,
+      "Contradiction": 0.5161290322580645,
+      "NotMentioned": 0.6286438529784537
+    },
+    "multiclass_brier_sum": 0.43570932220572195,
+    "nll": 0.7026037156541571
+  },
+  "frozen_nli_with_calibration_head": {
+    "accuracy": 0.7000964320154291,
+    "macro_f1": 0.6457924664891879,
+    "class_recall": {
+      "Entailment": 0.8169556840077071,
+      "Contradiction": 0.5684210526315789,
+      "NotMentioned": 0.5862884160756501
+    },
+    "class_f1": {
+      "Entailment": 0.7723132969034608,
+      "Contradiction": 0.5192307692307693,
+      "NotMentioned": 0.6458333333333334
+    },
+    "multiclass_brier_sum": 0.39496357784261205,
+    "nll": 0.6519995028096693
+  },
+  "paired_nli_minus_prior_accuracy": 0.01928640308582452,
+  "paired_document_cluster_bootstrap95": [
+    0.0,
+    0.037608486017357765
+  ],
+  "test_documents_examined": 0,
+  "limitations": "Frozen SNLI/MultiNLI NLI checkpoint; calibration examples use 347-document evidence prototypes excluding themselves, dev evidence and prior use all 423 training documents. Shared retrieval vocabulary fits training spans including the 76 calibration texts without their labels. Same 61 public dev documents. NotMentioned can have similar spans. No local CPU latency/RSS, no separate probability calibration holdout, no locked test or full-document cross control."
+}

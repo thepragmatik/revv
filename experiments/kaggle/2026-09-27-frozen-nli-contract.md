@@ -2,7 +2,7 @@
 
 **[Plain explanation](../../docs/start-here.md) · [Same evidence retriever](../data/2026-09-27-contractnli-evidence-prototypes.md) · [Ternary lexical head](../data/2026-09-27-contractnli-lexical-heads.md) · [Checkpoint CPU preflight](2026-09-27-nli-access-preflight.md) · [CER-2 architecture](../../docs/ideas.md) · [Codex handoff](../../codex/RESUME.md)**
 
-**Status: registered; one bounded free T4 result pending.** The [CPU-only access preflight](2026-09-27-nli-access-preflight.md) passed with `transformers 5.0.0`, fast tokenizer, model weight HEAD and the exact three-logit mapping. A frozen 82.1M-parameter [Apache-2.0 NLI cross encoder](https://huggingface.co/cross-encoder/nli-MiniLM2-L6-H768), revision `c4d86af4493123990d7762712de9ed730c876161`, provides a stronger **answer-quality control** than a lexical stance head. It is not the proposed CER-2 architecture or a local speed claim.
+**Status: complete, 27 September 2026.** The [CPU-only access preflight](2026-09-27-nli-access-preflight.md) passed with `transformers 5.0.0`, fast tokenizer, model weight HEAD and the exact three-logit mapping. A frozen 82.1M-parameter [Apache-2.0 NLI cross encoder](https://huggingface.co/cross-encoder/nli-MiniLM2-L6-H768), revision `c4d86af4493123990d7762712de9ed730c876161`, provides an established **answer-quality control**. It is not the proposed CER-2 architecture or a local speed claim.
 
 ## Fixed source, split, inference and scoring
 
@@ -13,3 +13,19 @@ Score each chosen span as premise with its hypothesis as second input to the sam
 **Cost:** one private, free internet-enabled Kaggle T4 kernel, 600-second cap, 480-second internal budget, collector 14 minutes, Actions 25 minutes. Log exact versions, checkpoint, GPU, peak PyTorch CUDA allocation, model/data acquisition and frozen batch inference time. No pretrained weight updates, paid infra, local CPU RSS/p50/p95 or locked test. Fail closed on data hash, fold size, checkpoint mapping, pair count, unchanged dev retrieval or missing GPU. A pre-inference packaging failure may justify one minimal corrected run; do not repeat full GPU runs without a diagnosed reason.
 
 **Decision gate:** advance CER-2 shared-state training only if this frozen cross quality control beats **both** the 68.08% no-reading prior and 70.20% lexical head in accuracy and macro F1, preserves/improves contradiction and not-mentioned recall, and does not rely on severe pair truncation. Report document-bootstrap uncertainty, not merely point estimates. If it fails, investigate domain transfer, all-clause coverage and calibration on training-only splits before allocating a training epoch. Even success on public development does not beat Laya, Kev or a matched local CPU comparator.
+
+## Observed and decision
+
+The [Actions run](https://github.com/thepragmatik/revv/actions/runs/36294903112) collected one private Kaggle `rathworx/revv-frozen-nli-contract/1` T4 run. [Aggregate metrics and hashes](2026-09-27-frozen-nli-contract.json) verify the identical development top-five evidence recall **95.114%** any-gold / **63.518%** all-gold, 76 document-disjoint calibration cases, 11,645 scored pairs, 20 truncated pair inputs (0.17%) and unchanged checkpoint logit mapping. No model weights were updated; one logistic aggregation head fit calibration documents only.
+
+| Development result, 1,037 decisions | No-reading prior | Lexical head, same dev evidence | Frozen NLI + aggregation |
+| --- | ---: | ---: | ---: |
+| Three-way accuracy | 68.08% | **70.20%** | 70.01% |
+| Macro F1 | 63.25% | **65.88%** | 64.58% |
+| Contradiction recall | 58.95% | **61.05%** | 56.84% |
+| Not-mentioned recall | 58.63% | 57.68% | **58.63%** |
+| Raw Brier score | 0.4357 | **0.3865** | 0.3950 |
+
+NLI versus the same full-train prior gains **1.93 points** in accuracy, with a 1,000-document-bootstrap 95% interval **0.00 to 3.76** points. Its comparison to the existing lexical head is descriptive because those systems fit different aggregation splits; the dev evidence shortlist itself is identical. The NLI head misses the preregistered accuracy, macro-F1 and contradiction gate; **do not advance CER-2 neural training yet**. The frozen model was trained on SNLI/MultiNLI sentence pairs, so domain transfer, legal exceptions, not-mentioned aggregation and incomplete multi-clause evidence are plausible competing causes, not proven diagnoses. On a T4, frozen batch inference for 11,645 pairs took **45.98 seconds**, model/data acquisition **9.30 seconds**, peak PyTorch CUDA allocation **618 MB**. None is entire-process CPU RSS or request p95. Classifier probabilities are not independently calibrated.
+
+**Next discriminating check:** on only the author-marked positive development pairs, compare conditional entailment-versus-contradiction stance with the *same frozen scorer* given retrieved top-five versus author-marked evidence spans. A small bounded diagnostic can tell whether the scorer fails even with provided evidence. Those gold spans are an **oracle analysis**, never deployable input or a candidate benchmark. If gold stance remains poor, first prioritize a task-matched stance model; if gold is strong but retrieval is weak, inspect missing clauses and retrieval. Keep test sealed.
