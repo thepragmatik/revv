@@ -1,0 +1,31 @@
+name: ContractNLI train-supervised evidence prototype screen
+
+on:
+  push:
+    branches: [research/decision-model-plan]
+    paths: [.github/workflows/contractnli-evidence-prototypes.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned CPU dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.2.6 scipy==1.15.3 scikit-learn==1.7.2
+      - name: Compare evidence prototypes against same-vocabulary controls
+        run: python analysis/contractnli_evidence_prototypes.py
+      - name: Preserve aggregate evidence recall
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contractnli-evidence-prototypes
+          path: results/contractnli-evidence-prototypes.json
+          if-no-files-found: ignore

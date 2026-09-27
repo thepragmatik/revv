@@ -1,0 +1,93 @@
+{
+  "kind": "contractnli_train_dev_cpu_priors_and_full_span_retrieval_not_model_claim",
+  "source_sha256": "e03fc77bbf8b53e2976a250e81d8a294bc3d5e5fb014521e477dee9340d6287b",
+  "train_documents": 423,
+  "development_documents": 61,
+  "hypotheses_per_document": 17,
+  "test_documents_examined": 0,
+  "baseline_per_hypothesis_laplace_prior": {
+    "accuracy": 0.6808100289296046,
+    "macro_f1": 0.632527291333521,
+    "class_f1": {
+      "Entailment": 0.7528089887640449,
+      "Contradiction": 0.5161290322580645,
+      "NotMentioned": 0.6286438529784537
+    },
+    "class_recall": {
+      "Entailment": 0.7745664739884393,
+      "Contradiction": 0.5894736842105263,
+      "NotMentioned": 0.5862884160756501
+    },
+    "multiclass_brier_sum": 0.43570932220572195,
+    "nll": 0.7026037156541571,
+    "global_majority_label": "Entailment",
+    "global_majority_accuracy": 0.5004821600771456,
+    "document_cluster_bootstrap95_accuracy": [
+      0.6451301832208293,
+      0.7136210221793635
+    ]
+  },
+  "evidence_word_unigram_bigram_tfidf": {
+    "min_df": 2,
+    "max_features": 30000,
+    "features_fit": 30000,
+    "train_spans_for_vocab": 32895,
+    "development_spans": 5102,
+    "positive_any_and_all": {
+      "all_positive": {
+        "positive": 614,
+        "gold_span_mean": 2.0,
+        "at_least_one_gold_at_k": {
+          "1": 0.30781758957654726,
+          "3": 0.5602605863192183,
+          "5": 0.6612377850162866,
+          "10": 0.8143322475570033
+        },
+        "all_gold_at_k": {
+          "1": 0.11400651465798045,
+          "3": 0.23127035830618892,
+          "5": 0.31596091205211724,
+          "10": 0.4820846905537459
+        }
+      },
+      "Entailment": {
+        "positive": 519,
+        "gold_span_mean": 2.001926782273603,
+        "at_least_one_gold_at_k": {
+          "1": 0.3468208092485549,
+          "3": 0.5953757225433526,
+          "5": 0.6917148362235067,
+          "10": 0.8323699421965318
+        },
+        "all_gold_at_k": {
+          "1": 0.12909441233140656,
+          "3": 0.24470134874759153,
+          "5": 0.33140655105973027,
+          "10": 0.4932562620423892
+        }
+      },
+      "Contradiction": {
+        "positive": 95,
+        "gold_span_mean": 1.9894736842105263,
+        "at_least_one_gold_at_k": {
+          "1": 0.09473684210526316,
+          "3": 0.3684210526315789,
+          "5": 0.49473684210526314,
+          "10": 0.7157894736842105
+        },
+        "all_gold_at_k": {
+          "1": 0.031578947368421054,
+          "3": 0.15789473684210525,
+          "5": 0.23157894736842105,
+          "10": 0.42105263157894735
+        }
+      }
+    }
+  },
+  "libraries": {
+    "numpy": "2.2.6",
+    "sklearn": "1.7.2"
+  },
+  "elapsed_seconds": 2.586183840999979,
+  "limitations": "Only public development, lexical evidence similarity and label priors; no classifier using evidence, no retrieved-span reranking, no learned state encoder, no local CPU latency/RSS, no probability calibration on separate data or locked-test access."
+}
