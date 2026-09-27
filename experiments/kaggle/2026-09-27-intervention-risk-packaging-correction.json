@@ -1,7 +1,7 @@
 {
   "record_type": "pre-inference Kaggle packaging correction",
   "recorded_on": "2026-09-27",
-  "status": "corrected_free_submission_running",
+  "status": "cuda_initialization_order_fixed_locally_validated_ready_for_one_free_run",
   "scope": "Packaging correction only. The frozen hypothesis, data, models, seed, splits, metrics, thresholds, and analysis plan are unchanged.",
   "failed_attempts": [
     {
@@ -22,27 +22,39 @@
       "github_job": 108614289184,
       "kaggle_kernel": "rathworx/revv-intervention-risk-probe/1",
       "outcome": "kernel reached RUNNING then ERROR before inference; ModuleNotFoundError: No module named 'intervention_probe'; no scores or output artifact"
+    },
+    {
+      "github_actions_run": 36318581843,
+      "github_job": 108617886796,
+      "kaggle_kernel_slug": "rathworx/revv-intervention-risk-probe",
+      "outcome": "standalone script executed; torch.cuda.is_available() passed, then the run failed at reset_peak_memory_stats(0) with RuntimeError: Invalid device argument before model loading or scoring; no result artifact",
+      "diagnosis": "CUDA context/allocator had not been initialized before the memory-stat reset"
     }
   ],
   "diagnosis": {
     "cause": "The Kaggle script kernel executes metadata.code_file; copying a sibling Python helper did not make that helper importable.",
     "observed_error": "ModuleNotFoundError: No module named 'intervention_probe'",
-    "failure_stage": "before model loading and before inference"
+    "failure_stage": "before model loading and before inference",
+    "second_failure": "The GPU availability guard passed, but the CUDA memory allocator had not yet been initialized by any tensor allocation. The earlier smoke probe allocated CUDA tensors before reading GPU memory stats.",
+    "runtime_fix": "Call torch.cuda.init(), select cuda:0, allocate and release a one-element warm-up tensor, synchronize, then reset peak memory stats. This does not change the experiment or measured task path.",
+    "source_reference": "PyTorch 2.10.0 reset_peak_memory_stats delegates to the native CUDA stats reset; torch.cuda.init is the public explicit initializer: https://github.com/pytorch/pytorch/blob/v2.10.0/torch/cuda/memory.py and https://github.com/pytorch/pytorch/blob/v2.10.0/torch/cuda/__init__.py"
   },
   "correction": {
     "builder": "analysis/kaggle_intervention_risk_probe.py::build_standalone_script",
     "method": "Concatenate reusable definitions from the frozen generator (excluding its CLI) with the frozen screen; replace the sibling import and file lookup with the already-validated generator SHA embedded in the script.",
     "bundle_format": "standalone_concat_v1",
-    "standalone_script_bytes": 58074,
-    "standalone_script_sha256": "acf78eee1b2a88e9a792f45219b06e23f082b341f76b121b07265c7fd090265d"
+    "standalone_script_bytes": 58296,
+    "standalone_script_sha256": "3ff1b04460b4fa05b8382c8ccff2d11f2a13fc72ef60cafe0bbc08f406d3477c",
+    "runtime_change": "Explicitly initialize the CUDA context and allocator before resetting peak counters; print the CUDA device after preflight."
   },
   "frozen_inputs": {
-    "screen_sha256": "e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c",
+    "screen_sha256": "07b54ccace7a190fa36ddd1b853021a45a76305f782d7ba29f366859c7361482",
     "generator_sha256": "0203b3157c322ecf5050af898b71ba8a78512e0bdb1f05e8c42a155c9a5422ae",
     "generated_records_sha256": "6612571e3625e412eb24f3549e0d21dd3bcc0a609990a13e34ed3314aaa794d1",
     "seed": 20260928,
     "states": 1024,
-    "composition_groups": 128
+    "composition_groups": 128,
+    "previous_screen_sha256": "e73d3784f1dd000b19aeb266734864593e5f450a8a7d04f3bde305a9421aec9c"
   },
   "local_pre_submission_checks": {
     "python_compile": "passed",
@@ -50,14 +62,16 @@
     "regenerated_all_1024_records": true,
     "generated_records_sha256_matches_frozen_audit": true,
     "groups_match_frozen_audit": true,
+    "collector_validation_unit_tests": "3 passed",
+    "pinned_standalone_bundle_sha256": "3ff1b04460b4fa05b8382c8ccff2d11f2a13fc72ef60cafe0bbc08f406d3477c",
     "model_inference_run_locally": false
   },
-  "next_action": "Poll this one corrected run, capture its Kaggle reference and artifact or exact failure log, then stop or proceed according to the preregistered gates.",
+  "next_action": "Submit exactly one further corrected private Kaggle T4 version through the existing free GitHub Actions workflow. The script now initializes CUDA before resetting allocator stats. Print and record the exact Kaggle version. No paid compute.",
   "current_submission": {
     "github_actions_run": 36318581843,
     "github_job": 108617886796,
-    "github_head_sha": "25f8b7f29ad127ee280facb87ce7ea250259ae05",
-    "kaggle_kernel_version": "pending_submitter_output",
-    "cost": "free private Kaggle T4 through existing GitHub Actions secret; no paid compute"
+    "kernel_slug": "rathworx/revv-intervention-risk-probe",
+    "reported_version": "not emitted by this attempt",
+    "status": "failed_before_model_loading"
   }
 }
