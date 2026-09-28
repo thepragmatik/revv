@@ -6,6 +6,8 @@
 
 Invent and rigorously test **novel architectural ideas** for a fast local text **decision model**: given a state and independent typed questions, return choice, yes/no or ordered-score probabilities, with a way to abstain when evidence is missing. Research ModernBERT, CLIP-style contrastive learning, Laya, Kev and adjacent prior art; combine ideas only with a falsifiable reason and adversarial review. Favor a single state encoding reused across questions only when it earns its speed *and* quality. Deployment gate is peak entire local CPU process RSS **below 8 GiB**; a separate quantized compact profile is **below 4 GiB**. English text is phase one; do not infer image, language or open-ended planning support. See the [reader-friendly overview](../docs/start-here.md), [research charter](MISSION.md) and [technical architecture](../docs/architecture.md).
 
+> **Mission status: paused by the user on 28 September 2026.** Do not start experiments, Kaggle jobs, training, data acquisition, or paid compute unless the user explicitly resumes this work. See the [pause decision](../docs/mission-status.md).
+
 The user has ChatGPT Pro and wants Codex to research, orchestrate and evaluate GPU experiments. Kaggle supplies free GPU capacity separately; Codex is the controller. The user has verified the Kaggle account by phone and already set `KAGGLE_API_TOKEN` as a **GitHub Actions repository secret**. The Actions bridge works; do not ask for the token again. Free Colab agent integration is optional and unvalidated here. Never spend money or start a long train cycle without a specific registered budget.
 
 ## Verified evidence and current status
@@ -42,14 +44,17 @@ The smoke run performed eight tiny matrix multiplications. Its submillisecond GP
 
 The working GitHub branch is `research/decision-model-plan`; [draft PR #1](https://github.com/thepragmatik/revv/pull/1) targets `main`. The pilot recovery ran at `d7cdbe3934d73db871c62c5bc7846a1d274ad618`; the result-record commit is newer. **Fetch the live PR head before editing.** The GitHub connector has been used to commit to the PR branch; this scratch workspace need not be a Git clone.
 
-## Next concrete actions
+## Status: paused
 
-The closest prior art now includes append-only incremental encoding, edit-local KV-cache repair, solver-verified paired answer-change worlds, confidence-versus-update-regression routing, and Contrast Sets for small-edit local-boundary evaluation (S81). Edit sensitivity itself is established prior art; see the eighth overlap pass in the novelty audit. This makes broad edit sensitivity or cache reuse non-novel; the active, unproven question is typed-output-level refresh selection under equal verifier budget. The count screen passed its minimum, but no prospective power analysis for the +10pp/CI gate exists. Versions 1 and 2 failed before scoring; version 3 includes both fixes but remained QUEUED across its full 14-minute collector window. Read-only recovery Action 36319968934 then polled that version for 25 minutes: all 100 checks were QUEUED, it timed out before inference, and no artifact was created. The screen is inconclusive; there are no model scores. The separate CPU mechanism screen now shows why the next predictor matters: 610/620 uniform held-out stale errors were already present before edits; the weak one-round symbolic cache dominates the totals. It is a reproducible control, not evidence for model value or novelty.
+No active experiment is queued. The Kaggle edit-refresh screen is inconclusive because it never reached inference. The model-free CPU screen is a reproducible diagnostic, but its baseline confound prevents a model-level conclusion. No result justifies paid compute or a training cycle.
 
-1. Keep the Kaggle model-based screen closed as inconclusive: the exact version remained QUEUED in 100/100 checks for 25 minutes, timed out before inference, and produced no artifact. Do not submit a fourth screen kernel or use paid compute.
-2. Keep the existing synthetic generator and CPU screen as mechanism controls; do not create a duplicate fixture or treat their template cues as model evidence. Next build a credible, distinct imperfect cached predictor/refresher, and score pre-edit errors separately from new edit-induced regressions. Compare confidence, label change, edit/query similarity, local refresh and full recomputation first at equal call budgets, then at measured CPU cost. Pair this with a rights-clear relevant-edit workload. The [NormWorlds-CF access preflight](../experiments/data/2026-09-27-normworlds-cf-access-preflight.md) found no official public release or separate dataset/code terms; treat it as prior art only. The [CF-TriviaQA access/fit preflight](../experiments/data/2026-09-27-cf-triviaqa-access-preflight.md) found an Apache-2.0 archive, but upstream content rights and original/edit pairing are unresolved. Contrast Sets establishes small-edit boundary evaluation as prior art; its collection is not assumed rights-cleared. The [benchmark rights/fit preflight](../experiments/data/2026-09-27-edit-benchmark-selection.md) found no ready-made primary set. Keep ContractNLI as a no-edit real-text baseline until paired labels are independently verified.
-3. Before any future GPU experiment, require a minimal free-provider availability preflight to start promptly. Keep the paid-compute prohibition in force.
-4. After a rights-clear workload is established, compare eligible compact models on the same declared local CPU task. Require matched quality and latency with whole-process RSS below 8 GiB; measure a separate quantized profile below 4 GiB.
+## Re-entry checklist (inactive until the user resumes)
+
+1. Reconfirm a concrete target task and why local speed matters.
+2. Establish rights-clear data and a fair comparison with eligible compact decision models.
+3. Run a low-cost, preregistered quality/latency test before training or architecture work; separate old errors from edit-induced regressions.
+4. Set an explicit spending limit for any paid work. Before free GPU use, require provider availability preflight.
+
 
 No paid compute is authorized. The 8 GiB / 4 GiB targets remain deployment gates, not claims from Kaggle.
 
