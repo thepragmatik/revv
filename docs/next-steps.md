@@ -81,7 +81,11 @@ Profile full precision under 8 GiB, then a separate quantized artifact under 4 G
 
 Every experiment gets a friendly summary/diagram linked to exact config, data hashes, source pins, raw aggregates and failure analysis. Preserve the original prompt and negative results. Update the [Codex handoff](../codex/RESUME.md) when the hypothesis or a gate changes.
 
-## Immediate next actions
+## Re-entry plan (inactive while paused)
+
+The user paused this mission on 28 September 2026 and is redirecting attention to other work. No experiments, Kaggle submissions, training, data purchases, or paid compute are scheduled. The following gates are for a future resumption only; see the [pause decision and evidence](mission-status.md).
+
+
 
 1. **Close the Kaggle screen as inconclusive.** The no-resubmit [recovery Action 36319968934](https://github.com/thepragmatik/revv/actions/runs/36319968934) checked the exact version-3 kernel for 25 minutes; all 100 checks returned QUEUED. It timed out before inference and produced no artifact. Do not submit a fourth screen kernel or use paid compute.
 2. **Keep the new CPU screen in its proper scope.** The [model-free value-of-refresh screen](../experiments/data/2026-09-28-refresh-value-screen.md) reused the in-repo paired-edit generator, evaluated 256 states over 32 compositions, and passed 10 unit tests; a repeated run produced the same row hash. On held-out Q20 at half budget, the unproved-output signal appeared to avoid 443/620 stale errors versus 310 expected at random. The red-team split showed 610 of those 620 were already wrong before the edit; only 10 were new edit-induced errors. The one-round symbolic cache is too weak to support a model or architecture claim.
