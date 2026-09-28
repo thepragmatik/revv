@@ -1,0 +1,72 @@
+{
+  "kind": "contractnli_author_train_dev_integrity_audit_no_test_read",
+  "source_url": "https://raw.githubusercontent.com/stanfordnlp/contract-nli/eced6528dd3c1d14d73f9a87df8f7bdbc03126f9/resources/contract-nli.zip",
+  "source_commit": "eced6528dd3c1d14d73f9a87df8f7bdbc03126f9",
+  "source_git_blob": "757fd1dafd29a997fba00c60c6d40b2930a36159",
+  "archive_sha256": "e03fc77bbf8b53e2976a250e81d8a294bc3d5e5fb014521e477dee9340d6287b",
+  "archive_bytes": 65362913,
+  "archive_member_count": 613,
+  "train_dev_members": {
+    "train": "contract-nli/train.json",
+    "dev": "contract-nli/dev.json"
+  },
+  "train_dev_json_sha256": {
+    "train": "dbceb356cd6203b35b27be94a5fa85e499a81c34c42c89ad53060b39f0257ba5",
+    "dev": "310af7d661d2ab50ee3700169cef524c75f39fb296bbf5a515c229eb0f42e68e"
+  },
+  "fixed_hypothesis_description_sha256": "ada5e9e4103e2aefd89bddfc85a21e049e7069dbe9a3da0e5917af86228afeda",
+  "splits": {
+    "train": {
+      "documents": 423,
+      "hypotheses": 17,
+      "choices": {
+        "NotMentioned": 2820,
+        "Entailment": 3530,
+        "Contradiction": 841
+      },
+      "missing_annotations": {},
+      "with_nonempty_evidence": {
+        "NotMentioned": 0,
+        "Entailment": 3530,
+        "Contradiction": 841
+      },
+      "document_words_min_median_p95_max": [
+        211,
+        1504,
+        3645,
+        8428
+      ],
+      "documents_over_512_words": 401
+    },
+    "dev": {
+      "documents": 61,
+      "hypotheses": 17,
+      "choices": {
+        "Entailment": 519,
+        "Contradiction": 95,
+        "NotMentioned": 423
+      },
+      "missing_annotations": {},
+      "with_nonempty_evidence": {
+        "Entailment": 519,
+        "Contradiction": 95,
+        "NotMentioned": 0
+      },
+      "document_words_min_median_p95_max": [
+        342,
+        1727,
+        3608,
+        4796
+      ],
+      "documents_over_512_words": 59
+    }
+  },
+  "train_dev_overlap": {
+    "document_ids": 0,
+    "normalized_document_texts": 0,
+    "source_urls": 0
+  },
+  "locked_test_documents_examined": 0,
+  "elapsed_seconds": 0.7655372229999955,
+  "limits": "Word-count length proxy, no tokenizer inference, no content excerpts, test JSON and original PDFs unopened. Audit only; no decision benchmark or local memory/latency claim."
+}

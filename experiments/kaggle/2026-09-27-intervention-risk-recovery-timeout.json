@@ -1,0 +1,26 @@
+{
+  "record_kind": "pre_inference_provider_queue_timeout",
+  "experiment": "frozen_synthetic_intervention_risk_vs_confidence_screen",
+  "github_action_run_id": 36315661095,
+  "github_action_url": "https://github.com/thepragmatik/revv/actions/runs/36315661095",
+  "github_commit_sha": "1e5f9ab5691025536bd0116fe5042cff274cb6dc",
+  "github_job_id": 108609762126,
+  "kaggle_kernel_ref": "rathworx/revv-intervention-risk-probe/1",
+  "recovery_started_at_utc": "2026-09-27T11:25:14.626Z",
+  "last_status_observed_at_utc": "2026-09-27T11:50:03.1268673Z",
+  "status_observation_count": 99,
+  "status_observations": [
+    "QUEUED"
+  ],
+  "collector_timeout_minutes": 25,
+  "terminal_action_error_at_utc": "2026-09-27T11:50:18.128Z",
+  "terminal_error": "TimeoutError: Existing Kaggle kernel remained queued/running: rathworx/revv-intervention-risk-probe/1",
+  "action_conclusion": "failure",
+  "inference_started": false,
+  "model_scores_computed": false,
+  "result_artifact_uploaded": false,
+  "github_artifact_count": 0,
+  "duplicate_kernel_submitted": false,
+  "interpretation": "The original private kernel remained QUEUED throughout the complete no-resubmit recovery window. This is a provider scheduling timeout, not a model result; no preregistered model gate can be evaluated.",
+  "source_log": "https://github.com/thepragmatik/revv/actions/runs/36315661095"
+}

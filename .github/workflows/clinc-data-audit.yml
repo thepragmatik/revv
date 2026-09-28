@@ -1,0 +1,29 @@
+name: CLINC public data integrity audit
+
+on:
+  push:
+    branches: [research/decision-model-plan]
+    paths: [.github/workflows/clinc-data-audit.yml, analysis/audit_clinc.py]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify pinned public data and summarize train and validation
+        run: python analysis/audit_clinc.py
+      - name: Preserve aggregate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clinc-integrity-audit
+          path: results/clinc-audit.json
+          if-no-files-found: ignore

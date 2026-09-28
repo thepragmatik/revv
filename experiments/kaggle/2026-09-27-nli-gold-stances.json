@@ -1,0 +1,88 @@
+{
+  "kaggle_ref": "rathworx/revv-nli-gold-stances/1",
+  "kind": "frozen_nli_contract_gold_span_stance_oracle_diagnostic_not_deployable",
+  "source_sha256": "e03fc77bbf8b53e2976a250e81d8a294bc3d5e5fb014521e477dee9340d6287b",
+  "model": "cross-encoder/nli-MiniLM2-L6-H768",
+  "revision": "c4d86af4493123990d7762712de9ed730c876161",
+  "development_documents": 61,
+  "positive_decisions": 614,
+  "positive_class_counts": {
+    "Entailment": 519,
+    "Contradiction": 95
+  },
+  "entailment_only_accuracy_floor": 0.8452768729641694,
+  "evidence_any_gold_at_5": 0.9511400651465798,
+  "gold_evidence_span_count_min_mean_max": [
+    1,
+    2,
+    10
+  ],
+  "methods": {
+    "retrieved": {
+      "binary_positive_only_accuracy": 0.5765472312703583,
+      "binary_positive_only_wilson95": [
+        0.5371074416451733,
+        0.6150351487524064
+      ],
+      "balanced_accuracy": 0.6893215698205051,
+      "by_true_label": {
+        "Entailment": {
+          "n": 519,
+          "recall": 0.5260115606936416,
+          "wilson95": [
+            0.48301993794614223,
+            0.568620955377238
+          ]
+        },
+        "Contradiction": {
+          "n": 95,
+          "recall": 0.8526315789473684,
+          "wilson95": [
+            0.7677140150925396,
+            0.9101391934638322
+          ]
+        }
+      },
+      "nli_pairs": 3070,
+      "truncated_pairs": 6
+    },
+    "gold": {
+      "binary_positive_only_accuracy": 0.6791530944625407,
+      "binary_positive_only_wilson95": [
+        0.6412143410584448,
+        0.7148640619997206
+      ],
+      "balanced_accuracy": 0.762914511712808,
+      "by_true_label": {
+        "Entailment": {
+          "n": 519,
+          "recall": 0.6416184971098265,
+          "wilson95": [
+            0.5994617444542705,
+            0.6816942303063556
+          ]
+        },
+        "Contradiction": {
+          "n": 95,
+          "recall": 0.8842105263157894,
+          "wilson95": [
+            0.8044550567755693,
+            0.9341014241888357
+          ]
+        }
+      },
+      "nli_pairs": 1228,
+      "truncated_pairs": 3
+    }
+  },
+  "paired_gold_minus_retrieved_binary_accuracy": 0.10260586319218234,
+  "paired_document_cluster_bootstrap95": [
+    0.06964121699196327,
+    0.13654620691999184
+  ],
+  "gpu": "Tesla T4",
+  "nli_inference_seconds_for_both_arms": 19.381976281999982,
+  "peak_torch_gpu_allocated_bytes": 618408960,
+  "test_documents_examined": 0,
+  "limitations": "Gold spans from positive development labels are an oracle diagnostic, impossible as deployable inputs. Binary stance conditional on Entailment/Contradiction ignores NotMentioned and uses no trained aggregation or calibration. No local CPU latency/RSS or locked test."
+}

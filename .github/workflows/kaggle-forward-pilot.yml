@@ -1,0 +1,40 @@
+name: Kaggle shared-state forward pilot
+run-name: Bounded T4 shared-state versus cross-encoder screen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kaggle-forward-pilot
+  cancel-in-progress: false
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Kaggle CLI
+        run: python -m pip install --disable-pip-version-check kaggle==2.2.4
+      - name: Submit and collect private bounded pilot
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "KAGGLE_API_TOKEN missing from repository Actions secrets." >&2
+            exit 1
+          fi
+          python analysis/kaggle_forward_pilot.py
+      - name: Upload raw pilot JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaggle-forward-pilot
+          path: results/kaggle-forward-pilot.json
+          if-no-files-found: ignore

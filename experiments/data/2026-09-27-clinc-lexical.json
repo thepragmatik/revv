@@ -1,0 +1,47 @@
+{
+  "kind": "clinc_lexical_cpu_development_baseline_not_model_win",
+  "source_commit": "828f8093932c8fe6ca7936c3d2e52903b1c523de",
+  "source_sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0",
+  "seed": "revv-clinc-calibration-v1",
+  "split_rule": "exclude exact normalized train/val overlaps; per-label SHA-256 order, first floor(n/2) development, remainder calibration",
+  "locked_test_examples_examined": 0,
+  "quarantined_val_examples": 3,
+  "development_examples": 1547,
+  "calibration_examples": 1550,
+  "development_oos": 50,
+  "calibration_oos": 50,
+  "vectorizer": {
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 2,
+    "max_features": 40000,
+    "sublinear_tf": true,
+    "features_fit": 11860
+  },
+  "majority_label": "accept_reservations",
+  "majority_accuracy_all_dev": 0.006464124111182934,
+  "calibration_known_fpr_target": 0.05,
+  "calibration_threshold_max_known_cosine": 0.1561034095109695,
+  "development_known_closed_accuracy": 0.824315297261189,
+  "development_known_closed_wilson95": [
+    0.8042144942482266,
+    0.8427559064515089
+  ],
+  "development_known_accuracy_with_defer": 0.8069472277889111,
+  "development_known_defer_rate": 0.04208416833667335,
+  "development_oos_recall": 0.36,
+  "development_oos_wilson95": [
+    0.2413874965184674,
+    0.498589831238873
+  ],
+  "fit_seconds": 0.18295949599999517,
+  "development_batch_score_seconds": 0.02361974799998734,
+  "python_and_libraries": {
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "sklearn": "1.7.2"
+  },
+  "limitations": "Public benchmark development only; no paraphrase grouping, calibrated probabilities, CPU process RSS, per-request latency, or locked test evaluation. OOS threshold uses calibration known-score quantile."
+}

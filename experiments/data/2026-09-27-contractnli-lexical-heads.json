@@ -1,0 +1,71 @@
+{
+  "kind": "contractnli_crossfit_lexical_evidence_three_way_cpu_controls_not_neural_model",
+  "source_sha256": "e03fc77bbf8b53e2976a250e81d8a294bc3d5e5fb014521e477dee9340d6287b",
+  "train_documents": 423,
+  "development_documents": 61,
+  "hypotheses": 17,
+  "train_rows": 7191,
+  "development_rows": 1037,
+  "crossfit_document_fold_counts": {
+    "2": 80,
+    "1": 96,
+    "0": 76,
+    "4": 73,
+    "3": 98
+  },
+  "evidence_k": 5,
+  "retriever_features_fit": 30000,
+  "classifier_features_fit": 30000,
+  "classifier": "shared multinomial logistic regression, C=1, lbfgs max_iter=250; same question text, word unigram/bigram TF-IDF vocabulary and hypothesis onehot in both arms",
+  "classifier_iterations": {
+    "hypothesis": 67,
+    "pooled_evidence": 65
+  },
+  "methods": {
+    "hypothesis": {
+      "accuracy": 0.6885245901639344,
+      "macro_f1": 0.6360034652862799,
+      "class_f1": {
+        "Entailment": 0.7644444444444445,
+        "Contradiction": 0.5238095238095238,
+        "NotMentioned": 0.6197564276048715
+      },
+      "class_recall": {
+        "Entailment": 0.8285163776493256,
+        "Contradiction": 0.5789473684210527,
+        "NotMentioned": 0.541371158392435
+      },
+      "multiclass_brier_sum": 0.40167394627579317,
+      "nll": 0.6654066173145861
+    },
+    "pooled_evidence": {
+      "accuracy": 0.7020250723240116,
+      "macro_f1": 0.6587908259170189,
+      "class_f1": {
+        "Entailment": 0.7675675675675676,
+        "Contradiction": 0.5658536585365853,
+        "NotMentioned": 0.6429512516469038
+      },
+      "class_recall": {
+        "Entailment": 0.8208092485549133,
+        "Contradiction": 0.6105263157894737,
+        "NotMentioned": 0.5768321513002365
+      },
+      "multiclass_brier_sum": 0.38654395862504337,
+      "nll": 0.6386870194479048
+    }
+  },
+  "paired_pooled_evidence_minus_hypothesis_accuracy": 0.013500482160077154,
+  "paired_document_cluster_bootstrap95": [
+    -0.008678881388621022,
+    0.037608486017357765
+  ],
+  "test_documents_examined": 0,
+  "libraries": {
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "sklearn": "1.7.2"
+  },
+  "elapsed_seconds": 24.12798165999999,
+  "limitations": "Public development, author spans, fixed 17 hypotheses and sparse lexical classifier. Word vocabulary fit on training texts including crossfit held fold without labels; train evidence prototype excluded each held document fold. Classifier probabilities not separately calibrated; no GPU or deployment CPU per-request latency/RSS or locked test."
+}

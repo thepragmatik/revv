@@ -1,0 +1,38 @@
+name: Kaggle CPU frozen NLI source preflight
+
+on:
+  push:
+    branches: [research/decision-model-plan]
+    paths: [.github/workflows/kaggle-nli-access-preflight.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Kaggle API CLI
+        run: python -m pip install --disable-pip-version-check kaggle==2.2.4
+      - name: Verify source, labels and package access in a private Kaggle CPU session
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "KAGGLE_API_TOKEN missing from Actions secrets" >&2
+            exit 1
+          fi
+          python analysis/kaggle_nli_access_preflight.py
+      - name: Preserve CPU preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaggle-nli-access-preflight
+          path: results/kaggle-nli-access-preflight.json
+          if-no-files-found: ignore

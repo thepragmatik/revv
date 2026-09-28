@@ -1,0 +1,22 @@
+# Preregistered support/refute evidence prototype screen
+
+**[Plain explanation](../../docs/start-here.md) · [ContractNLI controls](2026-09-27-contractnli-controls.md) · [Hypothesis ledger](../../docs/ideas.md) · [Codex handoff](../../codex/RESUME.md)**
+
+**Status: complete, 27 September 2026.** A verifier restricted to five query-matched ContractNLI spans sees a marked contradiction span in only 49.47% of positive contradiction cases. This screen tests whether examples of *supporting and refuting evidence* learned from the training split help rank the right spans. This is an inexpensive supervised lexical component, not a new neural model.
+
+Use the pinned author archive, **train/dev only**, identical word unigram/bigram TF-IDF vocabulary and full-document author spans from the [completed CPU control](2026-09-27-contractnli-controls.md). For each fixed hypothesis average unit TF-IDF vectors of all marked **training** evidence spans: (A) no training, direct hypothesis-text query; (B) a single pooled evidence centroid of entailment plus contradiction spans; (C) two separate entailment/refutation centroids, score each development span by the maximum cosine to either. Normalize all centroids; do not use dev labels to fit them. Match the direct-query control's prior any@5 value exactly. Each method ranks every span with stable position tie breaks; report at least-one and all-gold evidence recall at `k=1,3,5,10` overall and by entailment/contradiction. Include training evidence counts per polarity, 1,000 **document-cluster** bootstrap samples for C-minus-B contradiction any@5, exact versions and aggregate data only. One free CPU Actions job, 15-minute cap. No test or original PDFs opened.
+
+**Falsifier:** carry separate polarity centroids into neural evidence experiments only if contradiction any@5 improves by **at least 10 percentage points** over a single pooled centroid, overall positive any@5 meets or exceeds the fixed direct-query 66.12%, and entailment any@5 falls by no more than 5 points from the pooled centroid. A cluster interval that overlaps zero weakens even a nominal gain. If this fails, prioritize NLI-trained cross span ranking or contrastive hard negatives instead. Any-gold recall understates the importance of retrieving *all* clauses for negation/exception cases; report both. A successful dev screen is still selection on a public split and does not validate CER-1 or beat an existing model.
+
+## Observed and decision
+
+The [CPU Actions run](https://github.com/thepragmatik/revv/actions/runs/36294233060) verified the author archive and reproduced the prior direct-query 66.12% positive any@5 value exactly. [Aggregate metrics](2026-09-27-contractnli-evidence-prototypes.json) retain all predeclared top-`k` and class-specific values. The 32,895 train spans include a median 463 marked entailment span instances per hypothesis, but only seven contradiction instances at the median, with **zero** for some hypotheses; this makes separate contradiction centroids especially fragile.
+
+| Evidence @5 on development | Fixed hypothesis words | Pooled training evidence | Separate support/refute evidence |
+| --- | ---: | ---: | ---: |
+| At least one marked span, all 614 positives | 66.12% | **95.11%** | 95.11% |
+| At least one marked span, 95 contradictions | 49.47% | **94.74%** | 94.74% |
+| **All** marked spans, all positives | 31.60% | 63.52% | 63.84% |
+| **All** marked spans, contradictions | 23.16% | 62.11% | 62.11% |
+
+The predeclared polarity-minus-pooled contradiction any@5 effect is exactly **zero** on this development set (document-cluster bootstrap interval `[0, 0]` for that metric). **Reject the separate polarity centroids.** The plain pooled training evidence centroid clears the minimum retrieval screen and is a sensible cheap shortlist control for a future **same-evidence** classifier comparison. The positive result does not show that the five spans support the right *ternary decision*: both classes can reuse similar language, not-mentioned has no gold evidence, and over a third of positives lack all marked clauses in the top five. Fixed hypotheses and recurring contract language may favor these training prototypes; document-disjoint exact checks cannot exclude templated boilerplate. Audit train/dev near-duplicate families and test a shifted source before claiming robust evidence selection. No GPU, local CPU serving, end-to-end model quality or locked test was measured here.

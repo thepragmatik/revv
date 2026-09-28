@@ -1,0 +1,140 @@
+{
+  "kaggle_ref": "rathworx/revv-bounded-forward-pilot/1",
+  "kind": "synthetic_t4_forward_crossover_not_quality_or_cpu_benchmark",
+  "seed": 271,
+  "model": {
+    "type": "same_untrained_transformer_encoder_both_paths",
+    "layers": 2,
+    "width": 256,
+    "heads": 4,
+    "ff_width": 1024,
+    "parameters": 1579520
+  },
+  "gpu": "Tesla T4",
+  "gpu_total_bytes": 15636037632,
+  "torch_version": "2.10.0+cu128",
+  "python_version": "3.12.13",
+  "warmup_pairs": 2,
+  "timed_pairs": 5,
+  "elapsed_wall_seconds": 1.0408809079999628,
+  "time_cap_seconds": 210,
+  "completed_all_slices": true,
+  "rows": [
+    {
+      "state_tokens": 128,
+      "candidates": 2,
+      "option_tokens": 32,
+      "shared_ms": [
+        1.4624059999732708,
+        1.3801860000057786,
+        1.36184999996658,
+        1.3366349999159866,
+        1.3314300000502044
+      ],
+      "cross_ms": [
+        1.1516700000129276,
+        1.1577699999634206,
+        1.139061000003494,
+        1.1495470000681962,
+        1.1398030000009385
+      ],
+      "median_shared_ms": 1.36184999996658,
+      "median_cross_ms": 1.1495470000681962,
+      "cross_over_shared": 0.8441069134606647,
+      "linear_proxy_cross_over_shared": 1.6666666666666667
+    },
+    {
+      "state_tokens": 128,
+      "candidates": 40,
+      "option_tokens": 32,
+      "shared_ms": [
+        3.043193999928917,
+        3.0124759999807793,
+        3.0103399999461544,
+        3.009829000006903,
+        3.003604000014093
+      ],
+      "cross_ms": [
+        10.360062000017933,
+        10.356977000014922,
+        10.340007000081641,
+        10.346667000021625,
+        10.369337000042833
+      ],
+      "median_shared_ms": 3.0103399999461544,
+      "median_cross_ms": 10.356977000014922,
+      "cross_over_shared": 3.4404675220075394,
+      "linear_proxy_cross_over_shared": 4.545454545454546
+    },
+    {
+      "state_tokens": 512,
+      "candidates": 2,
+      "option_tokens": 32,
+      "shared_ms": [
+        2.1385309999004676,
+        2.1363659999451556,
+        2.1241140000256564,
+        2.125654999986182,
+        2.134307999995144
+      ],
+      "cross_ms": [
+        2.905082999973274,
+        2.9124879999926634,
+        2.9063140000289422,
+        2.9008630000362245,
+        2.9015709999384853
+      ],
+      "median_shared_ms": 2.134307999995144,
+      "median_cross_ms": 2.905082999973274,
+      "cross_over_shared": 1.361135787327735,
+      "linear_proxy_cross_over_shared": 1.8888888888888888
+    },
+    {
+      "state_tokens": 512,
+      "candidates": 40,
+      "option_tokens": 32,
+      "shared_ms": [
+        2.57273800002622,
+        2.5719479999679606,
+        2.5675340000361757,
+        2.635010000062721,
+        2.6378800000657066
+      ],
+      "cross_ms": [
+        27.893871000060244,
+        28.340576999994482,
+        28.48059899997679,
+        28.803533999962383,
+        28.767678000008345
+      ],
+      "median_shared_ms": 2.57273800002622,
+      "median_cross_ms": 28.48059899997679,
+      "cross_over_shared": 11.070151332816062,
+      "linear_proxy_cross_over_shared": 12.142857142857142
+    },
+    {
+      "state_tokens": 2048,
+      "candidates": 8,
+      "option_tokens": 32,
+      "shared_ms": [
+        6.177675000003546,
+        6.037914999978966,
+        6.056974999978593,
+        6.443984000043201,
+        6.381838000038442
+      ],
+      "cross_ms": [
+        38.37906600006136,
+        38.11414400001922,
+        38.044087000002946,
+        40.008935000059864,
+        38.646312999958354
+      ],
+      "median_shared_ms": 6.177675000003546,
+      "median_cross_ms": 38.37906600006136,
+      "cross_over_shared": 6.212542097154564,
+      "linear_proxy_cross_over_shared": 7.222222222222222
+    }
+  ],
+  "limitations": "Synthetic vectors; no tokenizer, training, labels, probabilities, CPU latency or process RSS. Outputs are different functions."
+}

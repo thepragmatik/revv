@@ -1,0 +1,176 @@
+{
+  "kind": "contractnli_train_supervised_lexical_evidence_prototype_development_only",
+  "source_sha256": "e03fc77bbf8b53e2976a250e81d8a294bc3d5e5fb014521e477dee9340d6287b",
+  "train_documents": 423,
+  "development_documents": 61,
+  "train_spans": 32895,
+  "development_spans": 5102,
+  "hypotheses": 17,
+  "training_evidence_span_counts": {
+    "Entailment": {
+      "min": 34,
+      "median": 463,
+      "max": 739
+    },
+    "Contradiction": {
+      "min": 0,
+      "median": 7,
+      "max": 649
+    }
+  },
+  "methods": {
+    "hypothesis": {
+      "all_positive": {
+        "positive": 614,
+        "at_least_one_gold_at_k": {
+          "1": 0.30781758957654726,
+          "3": 0.5602605863192183,
+          "5": 0.6612377850162866,
+          "10": 0.8143322475570033
+        },
+        "all_gold_at_k": {
+          "1": 0.11400651465798045,
+          "3": 0.23127035830618892,
+          "5": 0.31596091205211724,
+          "10": 0.4820846905537459
+        }
+      },
+      "Entailment": {
+        "positive": 519,
+        "at_least_one_gold_at_k": {
+          "1": 0.3468208092485549,
+          "3": 0.5953757225433526,
+          "5": 0.6917148362235067,
+          "10": 0.8323699421965318
+        },
+        "all_gold_at_k": {
+          "1": 0.12909441233140656,
+          "3": 0.24470134874759153,
+          "5": 0.33140655105973027,
+          "10": 0.4932562620423892
+        }
+      },
+      "Contradiction": {
+        "positive": 95,
+        "at_least_one_gold_at_k": {
+          "1": 0.09473684210526316,
+          "3": 0.3684210526315789,
+          "5": 0.49473684210526314,
+          "10": 0.7157894736842105
+        },
+        "all_gold_at_k": {
+          "1": 0.031578947368421054,
+          "3": 0.15789473684210525,
+          "5": 0.23157894736842105,
+          "10": 0.42105263157894735
+        }
+      }
+    },
+    "pooled_evidence": {
+      "all_positive": {
+        "positive": 614,
+        "at_least_one_gold_at_k": {
+          "1": 0.750814332247557,
+          "3": 0.9250814332247557,
+          "5": 0.9511400651465798,
+          "10": 0.9690553745928339
+        },
+        "all_gold_at_k": {
+          "1": 0.30456026058631924,
+          "3": 0.5618892508143323,
+          "5": 0.6351791530944625,
+          "10": 0.7328990228013029
+        }
+      },
+      "Entailment": {
+        "positive": 519,
+        "at_least_one_gold_at_k": {
+          "1": 0.7649325626204239,
+          "3": 0.9267822736030829,
+          "5": 0.9518304431599229,
+          "10": 0.9710982658959537
+        },
+        "all_gold_at_k": {
+          "1": 0.30828516377649323,
+          "3": 0.5606936416184971,
+          "5": 0.6377649325626205,
+          "10": 0.7475915221579962
+        }
+      },
+      "Contradiction": {
+        "positive": 95,
+        "at_least_one_gold_at_k": {
+          "1": 0.6736842105263158,
+          "3": 0.9157894736842105,
+          "5": 0.9473684210526315,
+          "10": 0.9578947368421052
+        },
+        "all_gold_at_k": {
+          "1": 0.28421052631578947,
+          "3": 0.5684210526315789,
+          "5": 0.6210526315789474,
+          "10": 0.6526315789473685
+        }
+      }
+    },
+    "polarity_evidence": {
+      "all_positive": {
+        "positive": 614,
+        "at_least_one_gold_at_k": {
+          "1": 0.744299674267101,
+          "3": 0.9299674267100977,
+          "5": 0.9511400651465798,
+          "10": 0.9690553745928339
+        },
+        "all_gold_at_k": {
+          "1": 0.30781758957654726,
+          "3": 0.5618892508143323,
+          "5": 0.6384364820846905,
+          "10": 0.737785016286645
+        }
+      },
+      "Entailment": {
+        "positive": 519,
+        "at_least_one_gold_at_k": {
+          "1": 0.7552986512524085,
+          "3": 0.9325626204238922,
+          "5": 0.9518304431599229,
+          "10": 0.9710982658959537
+        },
+        "all_gold_at_k": {
+          "1": 0.3063583815028902,
+          "3": 0.5664739884393064,
+          "5": 0.6416184971098265,
+          "10": 0.7456647398843931
+        }
+      },
+      "Contradiction": {
+        "positive": 95,
+        "at_least_one_gold_at_k": {
+          "1": 0.6842105263157895,
+          "3": 0.9157894736842105,
+          "5": 0.9473684210526315,
+          "10": 0.9578947368421052
+        },
+        "all_gold_at_k": {
+          "1": 0.3157894736842105,
+          "3": 0.5368421052631579,
+          "5": 0.6210526315789474,
+          "10": 0.6947368421052632
+        }
+      }
+    }
+  },
+  "contradiction_any_at_5_paired_polarity_minus_pooled": 0.0,
+  "contradiction_any_at_5_document_cluster_bootstrap95": [
+    0.0,
+    0.0
+  ],
+  "test_documents_examined": 0,
+  "libraries": {
+    "numpy": "2.2.6",
+    "sklearn": "1.7.2"
+  },
+  "elapsed_seconds": 2.5319558750000013,
+  "limitations": "Fixed 17 hypotheses with train-supervised lexical span centroids, public dev only; no ternary classifier, learned neural encoder, probability calibration, CPU per-request RSS/latency, or test access. At least one marked span is a weak evidence criterion."
+}
