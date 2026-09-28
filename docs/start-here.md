@@ -2,6 +2,8 @@
 
 **[Home](../README.md) · [Technical design](architecture.md) · [Evaluation](evaluation.md)**
 
+> **Current status: paused.** We are not running experiments or spending money on this mission. [Why and what would justify resuming](mission-status.md).
+
 A help desk receives: “My parcel is late, and I was charged twice.” A decision model can answer “Which team should see this?” and “Does this need urgent review?” It returns answer probabilities; ordinary program rules or a person choose the action. A probability is useful only if it reflects real error rates on the work at hand.
 
 ```mermaid
@@ -19,7 +21,7 @@ The sharper idea we will screen combines a shared state encoding, cheap typed/ev
 
 The first model-based edit-refresh screen is still inconclusive: the free Kaggle job stayed queued through 100 checks and timed out before inference, so it produced no model scores. We then completed a preregistered, model-free screen using the existing original synthetic generator (256 states, 32 rule-composition groups). On held-out 20-question bundles at a half-refresh budget, 610 of 620 stale errors in the uniform-edit case were already present before the edit; only 10 were newly caused by it. That means this run mostly diagnoses a weak symbolic starting point, not a useful learned decision model. The edit-specific clues also exploit repeated vocabulary in the synthetic templates. [Read the result and limits](../experiments/data/2026-09-28-refresh-value-screen.md), [frozen protocol](../experiments/data/2026-09-28-refresh-value-screen-prereg.md), and [next steps](next-steps.md).
 
-The closest related real-data checks remain constrained: NormWorlds-CF has no verified public release or separate use terms, and CF-TriviaQA's upstream content rights and original/edit pairing remain unresolved. We have not used either in the primary screen. [NormWorlds-CF access note](../experiments/data/2026-09-27-normworlds-cf-access-preflight.md) · [CF-TriviaQA access note](../experiments/data/2026-09-27-cf-triviaqa-access-preflight.md). The next discriminator needs a credible, distinct imperfect cached predictor and refresher, a separate count of edit-induced errors, and rights-cleared paired edits.
+The closest related real-data checks remain constrained: NormWorlds-CF has no verified public release or separate use terms, and CF-TriviaQA's upstream content rights and original/edit pairing remain unresolved. We have not used either in the primary screen. [NormWorlds-CF access note](../experiments/data/2026-09-27-normworlds-cf-access-preflight.md) · [CF-TriviaQA access note](../experiments/data/2026-09-27-cf-triviaqa-access-preflight.md). If the mission resumes, a later discriminator would need a credible, distinct imperfect cached predictor and refresher, a separate count of edit-induced errors, and rights-cleared paired edits.
 
 ```mermaid
 flowchart TD
